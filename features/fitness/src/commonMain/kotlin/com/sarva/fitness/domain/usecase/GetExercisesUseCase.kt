@@ -1,9 +1,9 @@
 package com.sarva.fitness.domain.usecase
 
+import com.sarva.core.domain.util.Result
 import com.sarva.fitness.domain.model.FitnessExercise
 import com.sarva.fitness.domain.repository.FitnessRepository
 import kotlinx.datetime.LocalDateTime
-import com.sarva.core.domain.util.Result
 
 class GetExercisesUseCase(
     private val repository: FitnessRepository

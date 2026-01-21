@@ -1,12 +1,12 @@
 package com.sarva.fitness.presentation.activity_history.components
 
 import com.sarva.core.presentation.util.UiText
-import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.features.fitness.generated.resources.Res
 import com.sarva.features.fitness.generated.resources.day
 import com.sarva.features.fitness.generated.resources.month
 import com.sarva.features.fitness.generated.resources.week
 import com.sarva.features.fitness.generated.resources.year
+import com.sarva.fitness.domain.model.ActivityPeriod
 
 data class PeriodTabItem(
     val activityPeriod: ActivityPeriod,

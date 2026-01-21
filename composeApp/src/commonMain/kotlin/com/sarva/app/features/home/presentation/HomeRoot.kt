@@ -36,14 +36,14 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarva.core.presentation.util.ObserveAsEvents
+import com.sarva.app.features.home.presentation.components.HealthPermissionEffect
 import com.sarva.app.features.home.presentation.components.widgets.CalendarWidget
 import com.sarva.app.features.home.presentation.components.widgets.ExpensesWidget
 import com.sarva.app.features.home.presentation.components.widgets.FitnessWidget
 import com.sarva.app.features.home.presentation.components.widgets.NotesWidget
 import com.sarva.app.features.home.presentation.components.widgets.PlacesWidget
 import com.sarva.app.features.home.presentation.components.widgets.TaskWidget
-import com.sarva.app.features.home.presentation.components.HealthPermissionEffect
+import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.designsystem.theme.SarvaTheme
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeSource

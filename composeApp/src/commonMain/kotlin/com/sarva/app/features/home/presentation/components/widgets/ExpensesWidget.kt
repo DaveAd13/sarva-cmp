@@ -33,9 +33,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.app.features.home.domain.model.SpentInfo
 import com.sarva.app.features.home.presentation.HomeState
+import com.sarva.designsystem.theme.SarvaTheme
 
 
 @Composable

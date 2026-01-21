@@ -2,6 +2,7 @@ package com.sarva.app.features.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarva.core.domain.util.Result
 import com.sarva.fitness.domain.usecase.CheckHealthPermissionsUseCase
 import com.sarva.fitness.domain.usecase.GetDailyRecordsUseCase
 import kotlinx.coroutines.channels.Channel
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.sarva.core.domain.util.Result
 
 class HomeViewModel(
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,

@@ -33,12 +33,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sarva.app.features.calendar.domain.model.CalendarEvent
+import com.sarva.app.features.home.presentation.HomeState
 import com.sarva.core.presentation.util.formatToShortDate
 import com.sarva.core.presentation.util.formatToTime
 import com.sarva.core.presentation.util.getFormattedToday
 import com.sarva.designsystem.theme.SarvaTheme
-import com.sarva.app.features.calendar.domain.model.CalendarEvent
-import com.sarva.app.features.home.presentation.HomeState
 
 @Composable
 fun CalendarWidget(

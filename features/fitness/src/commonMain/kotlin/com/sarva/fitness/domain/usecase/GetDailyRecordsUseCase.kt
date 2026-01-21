@@ -1,8 +1,8 @@
 package com.sarva.fitness.domain.usecase
 
+import com.sarva.core.domain.util.Result
 import com.sarva.fitness.domain.model.FitnessRecords
 import com.sarva.fitness.domain.repository.FitnessRepository
-import com.sarva.core.domain.util.Result
 
 class GetDailyRecordsUseCase(
     private val repository: FitnessRepository

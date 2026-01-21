@@ -2,10 +2,14 @@ package com.sarva.fitness.presentation.daily_activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarva.fitness.domain.usecase.GetExercisesUseCase
+import com.sarva.core.domain.util.Result
+import com.sarva.core.presentation.util.formatNumber
 import com.sarva.fitness.domain.usecase.GetDailyRecordsUseCase
+import com.sarva.fitness.domain.usecase.GetExercisesUseCase
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,10 +22,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock.System.now
-import com.sarva.core.domain.util.Result
-import com.sarva.core.presentation.util.formatNumber
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 
 class DailyActivityViewModel(
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,

@@ -1,5 +1,6 @@
 package com.sarva.fitness.domain.usecase
 
+import com.sarva.core.domain.util.Result
 import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.fitness.domain.model.FitnessActivity
 import com.sarva.fitness.domain.model.calculateRange
@@ -8,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
-import com.sarva.core.domain.util.Result
 
 class GetActivityHistoryUseCase(
     private val repository: FitnessRepository

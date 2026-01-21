@@ -2,7 +2,6 @@ package com.sarva.common.logger
 
 import java.util.logging.Level
 import java.util.logging.Logger
-import kotlin.jvm.java
 
 actual object AppLogger {
     private val logger: Logger = Logger.getLogger(AppLogger::class.java.name)

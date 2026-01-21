@@ -1,7 +1,7 @@
 package com.sarva.expenses.domain.usecase
 
-import com.sarva.core.domain.util.Result
 import com.sarva.core.domain.repository.ExpenseRepository
+import com.sarva.core.domain.util.Result
 
 class DeleteExpenseUseCase(
     private val repository: ExpenseRepository

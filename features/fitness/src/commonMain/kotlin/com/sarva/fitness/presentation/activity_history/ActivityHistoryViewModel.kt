@@ -2,7 +2,13 @@ package com.sarva.fitness.presentation.activity_history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarva.core.domain.util.Result
+import com.sarva.core.presentation.util.UiText
 import com.sarva.core.presentation.util.formatNumber
+import com.sarva.features.fitness.generated.resources.Res
+import com.sarva.features.fitness.generated.resources.cal
+import com.sarva.features.fitness.generated.resources.km
+import com.sarva.features.fitness.generated.resources.steps
 import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.fitness.domain.model.ChartTransition
 import com.sarva.fitness.domain.model.FitnessRecordType
@@ -18,17 +24,11 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import com.sarva.core.domain.util.Result
-import com.sarva.core.presentation.util.UiText
-import com.sarva.features.fitness.generated.resources.Res
-import com.sarva.features.fitness.generated.resources.cal
-import com.sarva.features.fitness.generated.resources.km
-import com.sarva.features.fitness.generated.resources.steps
-import kotlinx.datetime.minus
-import kotlinx.datetime.plus
 
 //@OptIn(ExperimentalCoroutinesApi::class)
 //class ActivityHistoryViewModel(

@@ -32,9 +32,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sarva.app.features.home.presentation.HomeState
 import com.sarva.core.presentation.util.formatNumber
 import com.sarva.designsystem.theme.SarvaTheme
-import com.sarva.app.features.home.presentation.HomeState
 
 @Composable
 fun FitnessWidget(

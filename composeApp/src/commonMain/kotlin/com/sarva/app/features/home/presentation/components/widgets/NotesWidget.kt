@@ -33,9 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.app.features.home.presentation.HomeState
 import com.sarva.app.features.notes.domain.model.Note
+import com.sarva.designsystem.theme.SarvaTheme
 
 @Composable
 fun NotesWidget(

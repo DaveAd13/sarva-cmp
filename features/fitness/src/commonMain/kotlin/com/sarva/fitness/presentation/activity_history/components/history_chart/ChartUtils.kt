@@ -5,6 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.sarva.features.fitness.generated.resources.Res
+import com.sarva.features.fitness.generated.resources.months
 import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.fitness.domain.model.BarItem
 import com.sarva.fitness.domain.model.ChartTransition
@@ -12,8 +14,6 @@ import com.sarva.fitness.domain.model.ChartUiData
 import com.sarva.fitness.domain.model.FitnessActivity
 import com.sarva.fitness.domain.model.FitnessRecordType
 import com.sarva.fitness.domain.model.FitnessRecords
-import com.sarva.features.fitness.generated.resources.Res
-import com.sarva.features.fitness.generated.resources.months
 import com.sarva.fitness.presentation.activity_history.ActivityHistoryState
 import com.sarva.fitness.presentation.util.getDaysInMonth
 import com.sarva.fitness.presentation.util.getShortDayName
