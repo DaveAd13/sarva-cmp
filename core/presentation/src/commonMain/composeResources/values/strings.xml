@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hour_symbol">h</string>
+    <string name="minute_symbol">m</string>
+    <string name="second_symbol">s</string>
+
+    <string name="food">Food</string>
+    <string name="transport">Transport</string>
+    <string name="shopping">Shopping</string>
+    <string name="groceries">Groceries</string>
+    <string name="health">Health</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="travel">Travel</string>
+    <string name="sports">Sports</string>
+    <string name="education">Education</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="bills">Bills</string>
+    <string name="household">Household</string>
+    <string name="other">Other</string>
+</resources>

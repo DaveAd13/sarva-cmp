@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>NSHealthShareUsageDescription</key>
+    <string>We need access to your health data to track your daily steps and fitness progress.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>We need access to update your health data.</string>
+</dict>
+<array>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>hy</string>
+    </array>
+</array>
+</plist>

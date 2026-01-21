@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission
+        android:name="android.permission.health.READ_STEPS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.health.READ_DISTANCE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.health.READ_EXERCISE"
+        tools:ignore="ProtectedPermissions" />
+
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
+
+    <application
+        android:name=".SarvaApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="${appName}"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App.Starting"
+        android:localeConfig="@xml/locales_config">
+        <activity-alias
+            android:name=".ViewPermissionUsageActivity"
+            android:exported="true"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,149 @@
+[versions]
+agp = "9.0.0-beta05"
+android-compileSdk = "36"
+android-minSdk = "29"
+android-targetSdk = "36"
+androidx-activity = "1.12.2"
+androidx-lifecycle = "2.10.0-alpha07"
+componentsResources = "1.10.0"
+composeHotReload = "1.0.0"
+composeShimmer = "1.3.3"
+coreSplashscreen = "1.2.0"
+foundation = "1.10.0"
+jetbrainsCompose = "1.10.0"
+connectClient = "1.1.0"
+kotlin = "2.3.0"
+kotlinx-coroutines = "1.10.2"
+kotlinx-collections-immutable = "0.4.0"
+
+# Architecture & Injection
+koin = "4.1.1"
+
+# Navigation3
+# For native Android
+material3 = "1.9.0"
+materialIconsExtended = "1.7.3"
+navigation3 = "1.0.0"
+
+# DB
+room = "2.8.4"
+runtime = "1.10.0"
+sqlite = "2.6.2"
+ksp = "2.3.3"
+
+# For Compose Multiplatform
+cmpNavigation3 = "1.0.0-alpha06"
+
+#Maps
+mapsCompose = "7.0.0"
+
+# Date
+kotlinxDatetime = "0.7.1"
+
+# haze
+haze = "1.7.1"
+
+material = "1.13.0"
+activity = "1.12.2"
+constraintlayout = "2.2.1"
+kotlinStdlib = "2.3.0"
+runner = "1.7.0"
+core = "1.7.0"
+uiToolingPreview = "1.10.0"
+
+[libraries]
+androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
+compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
+foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "foundation" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
+
+# Dependency Injection
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+
+# Navigation3
+# For Compose Multiplatform
+jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "cmpNavigation3" }
+jetbrains-lifecycle-viewmodel-nav3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
+jetbrains-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+
+# DB
+androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+
+# For native Android
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+
+# Date
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+
+# Map
+maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+
+# Haze
+haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
+haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.9.0" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
+material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "runtime" }
+ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiToolingPreview" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "uiToolingPreview" }
+ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiToolingPreview" }
+
+[plugins]
+# Android
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+composeHotReload = { id = "org.jetbrains.compose.hot-reload", version.ref = "composeHotReload" }
+
+# Language & Runtime
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+
+# UI Framework & Compose
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "jetbrainsCompose" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+# Serialization
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version = "0.6.6" }
+
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
+android-lint = { id = "com.android.lint", version.ref = "agp" }
+
+
+[bundles]
+# Dependency Injection
+koin-common = [
+    "koin-core",
+    "koin-compose",
+    "koin-compose-viewmodel"
+]
+
+koin-android = [
+    "koin-core",
+    "koin-android",
+    "koin-compose",
+    "koin-compose-viewmodel"
+]

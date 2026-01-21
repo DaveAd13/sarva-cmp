@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hour_symbol">ժ</string>
+    <string name="minute_symbol">ր</string>
+    <string name="second_symbol">վ</string>
+
+    <string name="food">Սնունդ</string>
+    <string name="transport">Տրանսպորտ</string>
+    <string name="shopping">Գնումներ</string>
+    <string name="groceries">Մթերք</string>
+    <string name="health">Առողջություն</string>
+    <string name="entertainment">Ժամանց</string>
+    <string name="travel">Ճամփորդություն</string>
+    <string name="sports">Սպորտ</string>
+    <string name="education">Կրթություն</string>
+    <string name="subscriptions">Բաժանորդագրություններ</string>
+    <string name="bills">Վճարումներ</string>
+    <string name="household">Տուն</string>
+    <string name="other">Այլ</string>
+</resources>

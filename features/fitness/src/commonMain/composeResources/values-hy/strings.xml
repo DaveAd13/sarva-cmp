@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_exercises">Մարզումներ չկան</string>
+    <string name="recent_exercises">Մարզումներ</string>
+    <string name="hour_symbol">ժ</string>
+    <string name="minute_symbol">ր</string>
+    <string name="second_symbol">վ</string>
+    <string name="day">Օր</string>
+    <string name="week">Շաբաթ</string>
+    <string name="month">Ամիս</string>
+    <string name="year">Տարի</string>
+    <string name="my_activity">Իմ ակտիվությունը</string>
+    <string name="today">Այսօր</string>
+    <string name="steps">Քայլեր</string>
+    <string name="calories">Կալորիաներ</string>
+    <string name="distance">Հեռավորություն</string>
+    <string name="cal">կալ</string>
+    <string name="km">կմ</string>
+    <string name="daily_activity">Օրվա ակտիվությունը</string>
+
+    <string-array name="months">
+        <item>Հուն</item>
+        <item>Փետ</item>
+        <item>Մար</item>
+        <item>Ապր</item>
+        <item>Մայ</item>
+        <item>Հուն</item>
+        <item>Հուլ</item>
+        <item>Օգօ</item>
+        <item>Սեպ</item>
+        <item>Հոկ</item>
+        <item>Նոյ</item>
+        <item>Դեկ</item>
+    </string-array>
+</resources>
