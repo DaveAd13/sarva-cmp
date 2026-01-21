@@ -18,6 +18,7 @@
     <string name="item_name">Անվանում</string>
     <string name="amount">Գումար</string>
     <string name="save">Պահպանել</string>
+    <string name="failed_to_load_expense">Չհաջողվեց բեռնել ծախսի</string>
 
     <string name="all">Բոլորը</string>
     <string name="food">Սնունդ</string>

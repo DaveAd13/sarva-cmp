@@ -2,33 +2,47 @@ package com.sarva.expenses.presentation.expense_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarva.core.domain.util.Result
+import com.sarva.expenses.domain.usecase.GetExpenseUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class ExpenseDetailsViewModel : ViewModel() {
-
-    private var hasLoadedInitialData = false
+class ExpenseDetailsViewModel(
+    private val expenseId: Int,
+    private val getExpenseUseCase: GetExpenseUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow(ExpenseDetailsState())
-    val state = _state
-        .onStart {
-            if (!hasLoadedInitialData) {
-                /** Load initial data here **/
-                hasLoadedInitialData = true
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = ExpenseDetailsState()
-        )
+    val state = _state.asStateFlow()
 
     private val eventChannel = Channel<ExpenseDetailsEvent>()
     val events = eventChannel.receiveAsFlow()
+
+    init {
+        loadExpense()
+    }
+
+    private fun loadExpense() {
+        viewModelScope.launch {
+            when (val result = getExpenseUseCase(expenseId)) {
+                is Result.Success ->  {
+                    _state.update {
+                        it.copy(
+                            expense = result.data
+                        )
+                    }
+                }
+                is Result.Failure -> {
+                    eventChannel.send(ExpenseDetailsEvent.ExpenseLoadingFailed)
+                }
+            }
+
+        }
+    }
 
     fun onAction(action: ExpenseDetailsAction) {
         when (action) {

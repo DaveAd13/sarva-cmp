@@ -24,6 +24,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -181,12 +183,16 @@ fun FitnessChart(
     }
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
 private fun Preview() {
-    SarvaTheme(
-        darkTheme = true
-    ) {
+    SarvaTheme {
         AnimatedFitnessChartContainer(
             data = rememberChartData(
                 fitnessActivity = FitnessActivity(persistentListOf(), persistentListOf()),

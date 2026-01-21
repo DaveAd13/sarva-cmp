@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarva.core.domain.model.ExpenseCategory
@@ -99,35 +101,16 @@ fun CategoryChip(
     )
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        val containerColor = SarvaTheme.colors.expenseContainer
-        val contentColor = SarvaTheme.colors.expenseContent
-        val cardContainerColor = SarvaTheme.colors.expenseCardContainer
-        val category = ExpenseCategory.FOOD
-
-        CategoryChip(
-            label = category.getLabel().asStringC(),
-            categoryIcon = category.getIcon(),
-            onClick = {},
-            clickable = true,
-            isSelected = false,
-            containerColor = cardContainerColor,
-            selectedContainerColor = contentColor,
-            contentColor = contentColor,
-            selectedContentColor = cardContainerColor,
-            iconContainerColor = containerColor,
-            borderColor = contentColor
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
+private fun Preview() {
+    SarvaTheme {
         val containerColor = SarvaTheme.colors.expenseContainer
         val contentColor = SarvaTheme.colors.expenseContent
         val cardContainerColor = SarvaTheme.colors.expenseCardContainer

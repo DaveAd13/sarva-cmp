@@ -34,7 +34,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -48,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -69,6 +70,7 @@ import com.sarva.features.expenses.generated.resources.Res
 import com.sarva.features.expenses.generated.resources.all
 import com.sarva.features.expenses.generated.resources.expense_saved_successfully
 import com.sarva.features.expenses.generated.resources.expenses
+import com.sarva.features.expenses.generated.resources.failed_to_save_expense
 import com.sarva.features.expenses.generated.resources.no_expenses_description
 import com.sarva.features.expenses.generated.resources.no_expenses_title
 import com.valentinilk.shimmer.ShimmerBounds
@@ -92,11 +94,17 @@ fun ExpenseListRoot(
     val scope = rememberCoroutineScope()
 
     val isSaved = resultStore.getResult<Boolean>("expense_saved")
+    val isExpenseLoadingFailed = resultStore.getResult<Boolean>("expense_loading_failed")
+
 
     LaunchedEffect(isSaved) {
         if (isSaved == true) {
             snackbarHostState.showSnackbar(getString(Res.string.expense_saved_successfully))
             resultStore.removeResult("expense_saved")
+        }
+        if (isExpenseLoadingFailed == true) {
+            snackbarHostState.showSnackbar(getString(Res.string.failed_to_save_expense))
+            resultStore.removeResult("expense_loading_failed")
         }
     }
 
@@ -299,8 +307,7 @@ fun ExpenseListScreen(
                         ) { expense ->
                             ExpenseCard(
                                 expense = expense,
-//                                onClick = { onExpenseClick(expense.id) },
-                                onClick = { onAction(ExpenseListAction.ExpenseClicked(expense.id)) },
+                                onClick = { onExpenseClick(expense.id) },
                                 cardContainerColor = cardContainerColor,
                                 contentColor = contentColor,
                                 containerColor = containerColor,
@@ -319,36 +326,23 @@ fun ExpenseListScreen(
     }
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            ExpenseListScreen(
-                state = ExpenseListState(),
-                snackbarHostState = remember { SnackbarHostState() },
-                onAction = {},
-                onExpenseClick = {},
-                onAddExpenseClick = {},
-                onBack = {}
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            ExpenseListScreen(
-                state = ExpenseListState(),
-                snackbarHostState = remember { SnackbarHostState() },
-                onAction = {},
-                onExpenseClick = {},
-                onAddExpenseClick = {},
-                onBack = {}
-            )
-        }
+private fun Preview() {
+    SarvaTheme {
+        ExpenseListScreen(
+            state = ExpenseListState(),
+            snackbarHostState = remember { SnackbarHostState() },
+            onAction = {},
+            onExpenseClick = {},
+            onAddExpenseClick = {},
+            onBack = {}
+        )
     }
 }

@@ -11,7 +11,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -19,11 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.app.features.home.presentation.HomeNavigationAction
 import com.sarva.app.features.home.presentation.HomeRoot
 import com.sarva.designsystem.theme.Transparent
@@ -32,7 +29,6 @@ import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
 import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
-import kotlin.collections.get
 
 @Composable
 fun MainRoot(
@@ -62,7 +58,8 @@ fun MainScreen(
             TopAppBar(
                 title = {
                     val titleText =
-                        TOP_LEVEL_DESTINATIONS[navigationState.topLevelRoute]?.label?.asStringC() ?: navigationState.topLevelRoute.toString()
+                        TOP_LEVEL_DESTINATIONS[navigationState.topLevelRoute]?.label?.asStringC()
+                            ?: navigationState.topLevelRoute.toString()
                     Text(
                         text = titleText,
                         style = MaterialTheme.typography.titleLarge
@@ -139,17 +136,5 @@ fun MainScreen(
                 },
             )
         )
-    }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            MainScreen(
-                onNavigate = {},
-            )
-        }
     }
 }

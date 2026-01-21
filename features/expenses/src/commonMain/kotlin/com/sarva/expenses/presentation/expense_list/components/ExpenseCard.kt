@@ -22,6 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarva.core.domain.model.Expense
@@ -104,10 +106,16 @@ fun ExpenseCard(
     }
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
+private fun Preview() {
+    SarvaTheme {
         val containerColor = SarvaTheme.colors.expenseContainer
         val contentColor = SarvaTheme.colors.expenseContent
         val cardContainerColor = SarvaTheme.colors.expenseCardContainer
@@ -116,7 +124,7 @@ private fun PreviewLight() {
             amount = 370.0,
             currency = "USD",
             category = ExpenseCategory.TRAVEL,
-            dateTime = LocalDateTime.parse("2024-09-10"),
+            dateTime = LocalDateTime.parse("2024-09-10T00:00:00"),
         )
 
         ExpenseCard(
@@ -124,33 +132,7 @@ private fun PreviewLight() {
             onClick = {},
             cardContainerColor = cardContainerColor,
             contentColor = contentColor,
-            containerColor = containerColor
+            containerColor = containerColor,
         )
     }
 }
-
-@Preview
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
-        val containerColor = SarvaTheme.colors.expenseContainer
-        val contentColor = SarvaTheme.colors.expenseContent
-        val cardContainerColor = SarvaTheme.colors.expenseCardContainer
-        val expense = Expense(
-            title = "Trip to Dilijan",
-            amount = 370.0,
-            currency = "USD",
-            category = ExpenseCategory.TRAVEL,
-            dateTime = LocalDateTime.parse("2024-09-10"),
-        )
-
-        ExpenseCard(
-            expense = expense,
-            onClick = {},
-            cardContainerColor = cardContainerColor,
-            contentColor = contentColor,
-            containerColor = containerColor
-        )
-    }
-}
-

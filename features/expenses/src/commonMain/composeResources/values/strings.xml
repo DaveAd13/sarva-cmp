@@ -18,6 +18,7 @@
     <string name="item_name">Item name</string>
     <string name="amount">Amount</string>
     <string name="save">Save</string>
+    <string name="failed_to_load_expense">Failed to load expense</string>
 
 
     <string name="all">All</string>

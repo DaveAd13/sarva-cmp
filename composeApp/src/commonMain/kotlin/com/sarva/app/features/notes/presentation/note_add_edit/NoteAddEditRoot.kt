@@ -1,9 +1,9 @@
 package com.sarva.app.features.notes.presentation.note_add_edit
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarva.core.presentation.util.ObserveAsEvents
@@ -38,15 +38,19 @@ fun NoteAddEditScreen(
 
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
 private fun Preview() {
     SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            NoteAddEditScreen(
-                state = NoteAddEditState(),
-                onAction = {}
-            )
-        }
+        NoteAddEditScreen(
+            state = NoteAddEditState(),
+            onAction = {}
+        )
     }
 }

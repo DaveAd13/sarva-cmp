@@ -37,7 +37,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -51,6 +50,8 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -281,70 +282,40 @@ fun DailyActivityScreen(
     }
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            DailyActivityScreen(
-                state = DailyActivityState(
-                    progress = 0.7f, exercises = persistentListOf(
-                        FitnessExercise(
-                            id = "1",
-                            type = "Walking",
-                            icon = Icons.AutoMirrored.Rounded.DirectionsWalk,
-                            startTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            endTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            durationSeconds = 1576
-                        ),
-                        FitnessExercise(
-                            id = "2",
-                            type = "Running",
-                            icon = Icons.AutoMirrored.Rounded.DirectionsRun,
-                            startTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            endTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            durationSeconds = 30
-                        )
+private fun Preview() {
+    SarvaTheme {
+        DailyActivityScreen(
+            state = DailyActivityState(
+                progress = 0.7f, exercises = persistentListOf(
+                    FitnessExercise(
+                        id = "1",
+                        type = "Walking",
+                        icon = Icons.AutoMirrored.Rounded.DirectionsWalk,
+                        startTime = LocalDateTime.parse("2023-01-02T23:40"),
+                        endTime = LocalDateTime.parse("2023-01-02T23:40"),
+                        durationSeconds = 1576
+                    ),
+                    FitnessExercise(
+                        id = "2",
+                        type = "Running",
+                        icon = Icons.AutoMirrored.Rounded.DirectionsRun,
+                        startTime = LocalDateTime.parse("2023-01-02T23:40"),
+                        endTime = LocalDateTime.parse("2023-01-02T23:40"),
+                        durationSeconds = 30
                     )
-                ),
-                onAction = {},
-                onOpenFitnessDetails = {},
-                onBack = {}
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            DailyActivityScreen(
-                state = DailyActivityState(
-                    progress = 0.7f, exercises = persistentListOf(
-                        FitnessExercise(
-                            id = "1",
-                            type = "Walking",
-                            icon = Icons.AutoMirrored.Rounded.DirectionsWalk,
-                            startTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            endTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            durationSeconds = 1576
-                        ),
-                        FitnessExercise(
-                            id = "2",
-                            type = "Running",
-                            icon = Icons.AutoMirrored.Rounded.DirectionsRun,
-                            startTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            endTime = LocalDateTime.parse("2023-01-02T23:40"),
-                            durationSeconds = 30
-                        )
-                    )
-                ),
-                onAction = {},
-                onOpenFitnessDetails = {},
-                onBack = {}
-            )
-        }
+                )
+            ),
+            onAction = {},
+            onOpenFitnessDetails = {},
+            onBack = {}
+        )
     }
 }

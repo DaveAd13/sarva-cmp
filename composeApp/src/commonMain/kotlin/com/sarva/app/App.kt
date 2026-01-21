@@ -20,7 +20,6 @@ import com.sarva.designsystem.theme.SarvaTheme
 import kotlinx.coroutines.launch
 
 @Composable
-@Preview
 fun App() {
     SarvaTheme {
 

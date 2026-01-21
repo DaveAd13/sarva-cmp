@@ -26,7 +26,7 @@ class ExpenseRepositoryImpl(
             }
     }
 
-    override suspend fun getExpenseById(id: Int): Expense {
+    override suspend fun getExpense(id: Int): Expense {
         return withContext(Dispatchers.IO) {
             expenseDao.getExpenseById(id).toDomain()
         }

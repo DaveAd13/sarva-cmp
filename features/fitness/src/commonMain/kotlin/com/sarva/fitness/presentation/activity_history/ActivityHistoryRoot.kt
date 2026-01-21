@@ -29,7 +29,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
@@ -43,6 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -51,12 +52,12 @@ import com.sarva.core.presentation.util.LocalBackHandler
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.features.fitness.generated.resources.Res
-import com.sarva.features.fitness.generated.resources.my_activity
-import com.sarva.features.fitness.generated.resources.steps
 import com.sarva.features.fitness.generated.resources.calories
 import com.sarva.features.fitness.generated.resources.distance
+import com.sarva.features.fitness.generated.resources.my_activity
 import com.sarva.features.fitness.generated.resources.no_exercises
 import com.sarva.features.fitness.generated.resources.recent_exercises
+import com.sarva.features.fitness.generated.resources.steps
 import com.sarva.fitness.domain.model.FitnessRecordType
 import com.sarva.fitness.presentation.activity_history.components.PERIOD_TABS
 import com.sarva.fitness.presentation.activity_history.components.history_chart.AnimatedFitnessChartContainer
@@ -319,18 +320,22 @@ fun ActivityHistoryScreen(
     }
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
 private fun Preview() {
     SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            ActivityHistoryScreen(
-                state = ActivityHistoryState(
-                    periodDateLabel = "12-19 December",
-                ),
-                onAction = {},
-                onBack = {},
-            )
-        }
+        ActivityHistoryScreen(
+            state = ActivityHistoryState(
+                periodDateLabel = "12-19 December",
+            ),
+            onAction = {},
+            onBack = {},
+        )
     }
 }

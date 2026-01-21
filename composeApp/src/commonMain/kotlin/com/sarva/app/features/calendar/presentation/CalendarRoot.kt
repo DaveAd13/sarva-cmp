@@ -1,9 +1,9 @@
 package com.sarva.app.features.calendar.presentation
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,15 +36,19 @@ fun CalendarScreen(
 
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
 private fun Preview() {
     SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            CalendarScreen(
-                state = CalendarState(),
-                onAction = {}
-            )
-        }
+        CalendarScreen(
+            state = CalendarState(),
+            onAction = {}
+        )
     }
 }

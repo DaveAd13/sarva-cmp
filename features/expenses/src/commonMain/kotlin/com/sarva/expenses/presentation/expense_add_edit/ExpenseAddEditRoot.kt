@@ -75,6 +75,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -107,7 +109,6 @@ import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.time.Clock
 import kotlin.time.Instant
 
 @Composable
@@ -668,36 +669,23 @@ private fun ExpenseDatePicker(
     }
 }
 
-@Preview
+@Preview(
+    name = "Light",
+)
+@Preview(
+    name = "Dark",
+    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
+)
 @Composable
-private fun LightPreview() {
-    SarvaTheme(darkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            ExpenseAddEditScreen(
-                state = ExpenseAddEditState(
-                    dateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                ),
-                snackbarHostState = remember { SnackbarHostState() },
-                onAction = {},
-                onBack = {}
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun DarkPreview() {
-    SarvaTheme(darkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            ExpenseAddEditScreen(
-                state = ExpenseAddEditState(
-                    dateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                ),
-                snackbarHostState = remember { SnackbarHostState() },
-                onAction = {},
-                onBack = {}
-            )
-        }
+private fun Preview() {
+    SarvaTheme {
+        ExpenseAddEditScreen(
+            state = ExpenseAddEditState(
+                dateTime = LocalDateTime.parse("2024-09-10T00:00:00")
+            ),
+            snackbarHostState = remember { SnackbarHostState() },
+            onAction = {},
+            onBack = {}
+        )
     }
 }

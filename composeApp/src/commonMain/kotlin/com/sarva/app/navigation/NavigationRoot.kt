@@ -114,8 +114,11 @@ fun NavigationRoot(
                         )
                     }
 
-                    entry<Route.ExpenseDetails> {
-                        ExpenseDetailsRoot()
+                    entry<Route.ExpenseDetails> { key ->
+                        ExpenseDetailsRoot(
+                            expenseId = key.expenseId,
+                            resultStore = resultStore
+                        )
                     }
 
                     entry<Route.ExpenseAddEdit> { key ->
