@@ -47,11 +47,10 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlin.stdlib)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
 
             // --- Date ---
             implementation(libs.kotlinx.datetime)
-
-            implementation(libs.kotlinx.serialization.json)
         }
 
 
@@ -63,5 +62,4 @@ kotlin {
 
         }
     }
-
 }

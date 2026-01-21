@@ -76,7 +76,6 @@ kotlin {
             }
         }
     }
-
 }
 
 compose.resources {

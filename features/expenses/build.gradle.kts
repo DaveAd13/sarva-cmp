@@ -53,9 +53,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
-
-//                implementation(compose.runtime)
-//                implementation(compose.foundation)
                 implementation(libs.material3)
                 implementation(libs.material.icons.extended)
                 implementation(libs.ui.tooling.preview)
@@ -77,7 +74,7 @@ kotlin {
 
         androidMain {
             dependencies {
-
+                implementation(libs.ui.tooling)
             }
         }
 
@@ -87,7 +84,6 @@ kotlin {
             }
         }
     }
-
 }
 
 compose.resources {

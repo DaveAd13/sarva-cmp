@@ -53,9 +53,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlin.stdlib)
-
-//            implementation(compose.runtime)
-//            implementation(compose.foundation)
             implementation(libs.material3)
             implementation(libs.compose.ui)
             implementation(libs.ui.tooling.preview)
@@ -78,6 +75,7 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.koin.android)
             implementation(libs.androidx.connect.client)
+            implementation(libs.ui.tooling)
         }
 
         iosMain.dependencies {
