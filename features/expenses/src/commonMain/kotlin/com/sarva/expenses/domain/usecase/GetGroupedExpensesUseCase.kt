@@ -1,10 +1,10 @@
 package com.sarva.expenses.domain.usecase
 
-import com.sarva.core.domain.model.Expense
-import com.sarva.core.domain.model.ExpenseCategory
+import com.sarva.common.DispatcherProvider
+import com.sarva.core.domain.model.expense.Expense
+import com.sarva.core.domain.model.expense.ExpenseCategory
 import com.sarva.core.domain.repository.ExpenseRepository
 import com.sarva.core.domain.util.Resource
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 class GetGroupedExpensesUseCase(
-    private val repository: ExpenseRepository
+    private val repository: ExpenseRepository,
+    private val dispatchers: DispatcherProvider
 ) {
     operator fun invoke(category: ExpenseCategory?): Flow<Resource<Map<String, List<Expense>>>> {
         return repository.getExpenses()
             .map { list ->
-                val filtered =
-                    if (category == null) list else list.filter { it.category == category }
-                val grouped = filtered
+                val grouped = list
+                    .filter { category == null || it.category == category }
                     .sortedByDescending { it.dateTime }
                     .groupBy { expense ->
                         val date = expense.dateTime
@@ -31,6 +31,6 @@ class GetGroupedExpensesUseCase(
             }
             .onStart { emit(Resource.Loading) }
             .catch { emit(Resource.Failure(it)) }
-            .flowOn(Dispatchers.Default)
+            .flowOn(dispatchers.default)
     }
 }

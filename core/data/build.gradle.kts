@@ -63,6 +63,9 @@ kotlin {
             implementation(libs.kotlin.stdlib)
             implementation(libs.kotlinx.serialization.json)
 
+            // --- Ktor ---
+            implementation(libs.bundles.ktor)
+
             // --- DI (Koin) ---
             implementation(libs.bundles.koin.common)
 
@@ -73,17 +76,26 @@ kotlin {
             implementation(libs.androidx.room.runtime)
             implementation(libs.androidx.sqlite.bundled)
 
+
             implementation(project(":core:domain"))
+            implementation(project(":core:common"))
         }
 
 
         androidMain.dependencies {
-
+            // --- Ktor ---
+            implementation(libs.ktor.client.okhttp)
         }
 
 
         iosMain.dependencies {
+            // --- Ktor ---
+            implementation(libs.ktor.client.darwin)
+        }
 
+        jvmMain.dependencies {
+            // --- Ktor ---
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }

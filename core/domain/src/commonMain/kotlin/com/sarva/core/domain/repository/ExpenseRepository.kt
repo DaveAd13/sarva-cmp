@@ -1,12 +1,12 @@
 package com.sarva.core.domain.repository
 
-import com.sarva.core.domain.model.Expense
+import com.sarva.core.domain.model.expense.Expense
 import kotlinx.coroutines.flow.Flow
 
 interface ExpenseRepository {
     fun getExpenses(): Flow<List<Expense>>
 
-    suspend fun getExpense(id: Int): Expense
+    fun getExpense(id: Int): Flow<Expense?>
 
     suspend fun insertExpense(expense: Expense)
 

@@ -1,8 +1,12 @@
 package com.sarva.expenses.presentation.expense_list
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +22,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -32,8 +37,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -53,7 +60,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarva.core.domain.model.ExpenseCategory
+import com.sarva.core.domain.model.expense.ExpenseCategory
 import com.sarva.core.presentation.getIcon
 import com.sarva.core.presentation.getLabel
 import com.sarva.core.presentation.util.LocalBackHandler
@@ -62,19 +69,25 @@ import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.core.presentation.util.ResultStore
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.designsystem.theme.sarvaShimmerTheme
+import com.sarva.expenses.presentation.expense_list.ExpenseListAction.UndoDelete
 import com.sarva.expenses.presentation.expense_list.components.CategoryChip
 import com.sarva.expenses.presentation.expense_list.components.ExpenseCard
 import com.sarva.expenses.presentation.expense_list.components.ExpenseCardShimmer
 import com.sarva.expenses.presentation.expense_list.components.MonthHeaderShimmer
+import com.sarva.expenses.presentation.expense_list.components.SearchTopBar
 import com.sarva.features.expenses.generated.resources.Res
 import com.sarva.features.expenses.generated.resources.all
+import com.sarva.features.expenses.generated.resources.expense_deleted_successfully
 import com.sarva.features.expenses.generated.resources.expense_saved_successfully
 import com.sarva.features.expenses.generated.resources.expenses
-import com.sarva.features.expenses.generated.resources.failed_to_save_expense
+import com.sarva.features.expenses.generated.resources.failed_to_load_expense
 import com.sarva.features.expenses.generated.resources.no_expenses_description
 import com.sarva.features.expenses.generated.resources.no_expenses_title
+import com.sarva.features.expenses.generated.resources.undo
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
@@ -91,30 +104,17 @@ fun ExpenseListRoot(
     val onBack = LocalBackHandler.current
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
     val isSaved = resultStore.getResult<Boolean>("expense_saved")
     val isExpenseLoadingFailed = resultStore.getResult<Boolean>("expense_loading_failed")
 
-
     LaunchedEffect(isSaved) {
         if (isSaved == true) {
-            snackbarHostState.showSnackbar(getString(Res.string.expense_saved_successfully))
             resultStore.removeResult("expense_saved")
+            snackbarHostState.showSnackbar(getString(Res.string.expense_saved_successfully))
         }
         if (isExpenseLoadingFailed == true) {
-            snackbarHostState.showSnackbar(getString(Res.string.failed_to_save_expense))
             resultStore.removeResult("expense_loading_failed")
-        }
-    }
-
-    ObserveAsEvents(viewModel.events) { event ->
-        when (event) {
-            is ExpenseListEvent.ShowSnackbar -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(event.message.asString())
-                }
-            }
+            snackbarHostState.showSnackbar(getString(Res.string.failed_to_load_expense))
         }
     }
 
@@ -122,6 +122,7 @@ fun ExpenseListRoot(
         state = state,
         snackbarHostState = snackbarHostState,
         onAction = viewModel::onAction,
+        events = viewModel.events,
         onExpenseClick = onExpenseClick,
         onAddExpenseClick = onAddExpenseClick,
         onBack = onBack
@@ -134,6 +135,7 @@ fun ExpenseListScreen(
     state: ExpenseListState,
     snackbarHostState: SnackbarHostState,
     onAction: (ExpenseListAction) -> Unit,
+    events: Flow<ExpenseListEvent>,
     onExpenseClick: (Int) -> Unit,
     onAddExpenseClick: () -> Unit,
     onBack: () -> Unit
@@ -142,45 +144,96 @@ fun ExpenseListScreen(
     val contentColor = SarvaTheme.colors.expenseContent
     val cardContainerColor = SarvaTheme.colors.expenseCardContainer
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val scope = rememberCoroutineScope()
+    val listState = rememberLazyListState()
+
+    ObserveAsEvents(events) { event ->
+        when (event) {
+            is ExpenseListEvent.ShowSnackbar -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(event.message.asString())
+                }
+            }
+
+            is ExpenseListEvent.ShowUndoSnackbar -> {
+                scope.launch {
+                    val result = snackbarHostState.showSnackbar(
+                        message = getString(Res.string.expense_deleted_successfully),
+                        actionLabel = getString(Res.string.undo),
+                        duration = SnackbarDuration.Short
+                    )
+                    when (result) {
+                        SnackbarResult.ActionPerformed -> {
+                            onAction(UndoDelete(event.expense))
+                        }
+
+                        SnackbarResult.Dismissed -> {
+
+                        }
+                    }
+                }
+            }
+
+            ExpenseListEvent.ScrollToTUp -> {
+                scope.launch {
+                    listState.scrollToItem(0)
+                }
+            }
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = containerColor,
+
         topBar = {
             Column(modifier = Modifier.background(containerColor)) {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(
-                            text = stringResource(Res.string.expenses),
-                            style = MaterialTheme.typography.titleLarge
+                AnimatedContent(
+                    targetState = state.isSearchActive,
+                    transitionSpec = { fadeIn() togetherWith fadeOut() },
+                    label = "TopAppBarAnimation"
+                ) { isSearching ->
+                    if (isSearching) {
+                        SearchTopBar(
+                            state = state.searchTextFieldState,
+                            onCancelSearch = { onAction(ExpenseListAction.ToggleSearch) }
                         )
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = {}) {
-                            Icon(Icons.Rounded.Search, null)
-                        }
-                        IconButton(onClick = {}) {
-                            Icon(Icons.Rounded.BarChart, null)
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = containerColor,
-                        scrolledContainerColor = containerColor,
-                        titleContentColor = contentColor,
-                        navigationIconContentColor = contentColor,
-                        actionIconContentColor = contentColor
-                    ),
-                    scrollBehavior = scrollBehavior
-                )
+                    } else {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(Res.string.expenses),
+                                    style = MaterialTheme.typography.titleLarge
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = onBack) {
+                                    Icon(
+                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = null
+                                    )
+                                }
+                            },
+                            actions = {
+                                IconButton(onClick = { onAction(ExpenseListAction.ToggleSearch) }) {
+                                    Icon(Icons.Rounded.Search, null)
+                                }
+                                IconButton(onClick = {}) {
+                                    Icon(Icons.Rounded.BarChart, null)
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = containerColor,
+                                scrolledContainerColor = containerColor,
+                                titleContentColor = contentColor,
+                                navigationIconContentColor = contentColor,
+                                actionIconContentColor = contentColor
+                            ),
+                            scrollBehavior = scrollBehavior
+                        )
+                    }
+                }
 
                 LazyRow(
                     modifier = Modifier
@@ -257,11 +310,12 @@ fun ExpenseListScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
                     .background(containerColor),
+                state = listState,
                 contentPadding = PaddingValues(
                     start = contentPadding.calculateStartPadding(layoutDirection),
                     end = contentPadding.calculateEndPadding(layoutDirection),
                     top = contentPadding.calculateTopPadding(),
-                    bottom = contentPadding.calculateBottomPadding() + 16.dp
+                    bottom = contentPadding.calculateBottomPadding() + 80.dp
                 ),
             ) {
                 if (state.isLoading) {
@@ -308,6 +362,7 @@ fun ExpenseListScreen(
                             ExpenseCard(
                                 expense = expense,
                                 onClick = { onExpenseClick(expense.id) },
+                                onDelete = { onAction(ExpenseListAction.DeleteExpense(expense)) },
                                 cardContainerColor = cardContainerColor,
                                 contentColor = contentColor,
                                 containerColor = containerColor,
@@ -326,13 +381,8 @@ fun ExpenseListScreen(
     }
 }
 
-@Preview(
-    name = "Light",
-)
-@Preview(
-    name = "Dark",
-    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
-)
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
 private fun Preview() {
     SarvaTheme {
@@ -340,6 +390,7 @@ private fun Preview() {
             state = ExpenseListState(),
             snackbarHostState = remember { SnackbarHostState() },
             onAction = {},
+            events = emptyFlow(),
             onExpenseClick = {},
             onAddExpenseClick = {},
             onBack = {}

@@ -13,12 +13,14 @@ val VitaTertiary = Color(0xFFFF9671)
 // --- Neutral / Backgrounds (Dark) ---
 val DarkBackground = Color(0xFF121212)
 val DarkSurface = Color(0xFF1E1E24)
-val DarkCard = Color(0xFF2B2B36)
+val DarkOnBackground = Color(0xFFE5E5E5)
+val DarkOnSurface = Color(0xFFE5E5E5)
 
 // --- Neutral / Backgrounds (Light) ---
 val LightBackground = Color(0xFFF4F6F8)
 val LightSurface = Color(0xFFFFFFFF)
-val LightCard = Color(0xFFFFFFFF)
+val LightOnBackground = Color(0xFF1C1B1F)
+val LightOnSurface = Color(0xFF1C1B1F)
 
 
 // --- Dark Mode Feature Colors (Deep & Rich) ---

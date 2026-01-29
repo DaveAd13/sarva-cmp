@@ -5,11 +5,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
-import com.sarva.core.data.database.expenses.ExpenseDao
-import com.sarva.core.data.database.expenses.ExpenseEntity
+import com.sarva.core.data.expenses.local.dao.ExpenseDao
+import com.sarva.core.data.expenses.local.entity.ExpenseEntity
 
 
-@Database(entities = [ExpenseEntity::class], version = 5)
+@Database(entities = [ExpenseEntity::class], version = 6)
 @ConstructedBy(AppDatabaseConstructor::class)
 @TypeConverters(RoomConverters::class)
 abstract class AppDatabase : RoomDatabase() {

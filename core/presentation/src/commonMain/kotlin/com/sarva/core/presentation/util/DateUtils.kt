@@ -9,7 +9,7 @@ import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
-fun LocalDate.formatToDisplay(): String {
+fun LocalDate.formatToShortDisplay(): String {
     val day = this.day
     val month = this.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
     val dayOfWeek = this.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
@@ -17,13 +17,25 @@ fun LocalDate.formatToDisplay(): String {
     return "$dayOfWeek, $month $day"
 }
 
-fun LocalDateTime.formatToDisplay(): String {
+fun LocalDateTime.formatToShortDisplay(): String {
     val day = this.day
     val month = this.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
     val dayOfWeek = this.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
 
     return "$dayOfWeek, $month $day"
 }
+
+fun LocalDateTime.formatToLongDisplay(): String {
+    val day = this.day
+    val month = this.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
+    val year = this.year
+    val dayOfWeek = this.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
+    val hour = this.hour.toString().padStart(2, '0')
+    val minute = this.minute.toString().padStart(2, '0')
+
+    return "$dayOfWeek, $month $day, $year at $hour:$minute"
+}
+
 
 @OptIn(ExperimentalTime::class)
 fun getFormattedToday(): String {

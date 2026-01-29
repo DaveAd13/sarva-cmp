@@ -1,24 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="empty">Դատարկ</string>
     <string name="expenses">Ծախսեր</string>
+    <string name="expense_details">Ծախսի նկարագրություն</string>
     <string name="add_expense">Ավելացնել ծախս</string>
     <string name="edit_expense">Խմբագրել ծախսը</string>
     <string name="no_expenses_title">Դեռևս ծախսեր չեն գրանցվել</string>
     <string name="no_expenses_description">Գրանցեք ձեր ծախսերը՝ սեղմելով ստորև նշված + կոճակը։</string>
     <string name="date">Ամսաթիվ</string>
+    <string name="location">Տեղանք</string>
     <string name="breakdown">Բաշխում</string>
-    <string name="ok">OK</string>
+    <string name="ok">Օկ</string>
     <string name="cancel">Չեղարկել</string>
     <string name="amount_cannot_be_empty">Գումարի դաշտը չի կարող դատարկ լինել</string>
     <string name="title_cannot_be_empty">Վերնագիրը չի կարող դատարկ լինել</string>
     <string name="expense_saved_successfully">Ծախսը հաջողությամբ պահպանվեց</string>
+    <string name="expense_updated_successfully">Ծախսը հաջողությամբ թարմացվեց</string>
     <string name="failed_to_save_expense">Չհաջողվեց պահպանել ծախսը</string>
     <string name="total_amount">Ընդհանուր գումար</string>
     <string name="what_is_it_for">Ինչի՞ համար է</string>
     <string name="item_name">Անվանում</string>
     <string name="amount">Գումար</string>
     <string name="save">Պահպանել</string>
-    <string name="failed_to_load_expense">Չհաջողվեց բեռնել ծախսի</string>
+    <string name="failed_to_load_expense">Չհաջողվեց բեռնել ծախսը</string>
+    <string name="failed_to_delete_expense">Չհաջողվեց ջնջել ծախսը</string>
+    <string name="search_expenses">Փնտրել ծախսեր․․․</string>
+    <string name="expense_deleted_successfully">Ծախսը հաջողությամբ ջնջվեց</string>
+    <string name="undo">Չեղարկել</string>
 
     <string name="all">Բոլորը</string>
     <string name="food">Սնունդ</string>

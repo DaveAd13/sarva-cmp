@@ -43,6 +43,7 @@ fun TaskListScreen(
     onAction: (TaskListAction) -> Unit,
 ) {
     val containerColor = SarvaTheme.colors.taskContainer
+    val contentColor = SarvaTheme.colors.taskContent
 
     Box(
         modifier = Modifier
@@ -55,19 +56,14 @@ fun TaskListScreen(
         ) {
             Text(
                 text = "Detailed Tasks Here",
-                color = SarvaTheme.colors.taskContent
+                color = contentColor
             )
         }
     }
 }
 
-@Preview(
-    name = "Light",
-)
-@Preview(
-    name = "Dark",
-    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
-)
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
 private fun Preview() {
     SarvaTheme {

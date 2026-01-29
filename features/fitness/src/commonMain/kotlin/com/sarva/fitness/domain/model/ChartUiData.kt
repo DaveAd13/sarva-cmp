@@ -1,12 +1,12 @@
 package com.sarva.fitness.domain.model
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
 enum class ChartTransition {
     FORWARD, BACKWARD, DEFAULT
 }
 
-@Stable
+@Immutable
 data class ChartUiData(
     val bars: List<BarItem>,
     val maxRange: Float,

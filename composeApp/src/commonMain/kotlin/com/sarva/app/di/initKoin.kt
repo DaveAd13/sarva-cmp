@@ -3,6 +3,7 @@ package com.sarva.app.di
 import com.sarva.core.data.di.dataModule
 import com.sarva.core.data.di.platformDataModule
 import com.sarva.expenses.di.expensesModule
+import com.sarva.features.location.di.locationModule
 import com.sarva.fitness.di.fitnessModule
 import com.sarva.fitness.di.platformFitnessModule
 import org.koin.core.context.startKoin
@@ -16,6 +17,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             fitnessModule,
             platformFitnessModule,
             expensesModule,
+            locationModule,
             dataModule,
             platformDataModule,
         )

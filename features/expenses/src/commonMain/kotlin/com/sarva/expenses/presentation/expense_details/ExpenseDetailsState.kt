@@ -1,7 +1,11 @@
 package com.sarva.expenses.presentation.expense_details
 
-import com.sarva.core.domain.model.Expense
+import androidx.compose.runtime.Immutable
+import com.sarva.core.domain.model.expense.Expense
 
+@Immutable
 data class ExpenseDetailsState(
-    val expense: Expense? = null
+    val isLoading: Boolean = false,
+    val expense: Expense? = null,
+    val showDeleteDialog: Boolean = false
 )

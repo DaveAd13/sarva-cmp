@@ -62,6 +62,7 @@ kotlin {
 
             implementation(project(":features:fitness"))
             implementation(project(":features:expenses"))
+            implementation(project(":features:location"))
             implementation(project(":core:domain"))
             implementation(project(":core:presentation"))
             implementation(project(":core:designsystem"))

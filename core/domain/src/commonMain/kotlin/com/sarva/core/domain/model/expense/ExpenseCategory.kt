@@ -1,4 +1,4 @@
-package com.sarva.core.domain.model
+package com.sarva.core.domain.model.expense
 
 import kotlinx.serialization.Serializable
 

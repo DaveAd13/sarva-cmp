@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
     <string name="hour_symbol">h</string>
     <string name="minute_symbol">m</string>
     <string name="second_symbol">s</string>

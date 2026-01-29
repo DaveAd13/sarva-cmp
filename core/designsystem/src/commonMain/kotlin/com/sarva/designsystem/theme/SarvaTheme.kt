@@ -20,10 +20,9 @@ private val DarkColorScheme = darkColorScheme(
     secondary = VitaSecondary,
     onSecondary = Color.White,
     background = DarkBackground,
-    surface = DarkCard, // Default cards use this
-    onBackground = Color.White,
-    onSurface = Color.White,
-    surfaceVariant = DarkSurface,
+    surface = DarkSurface,
+    onBackground = DarkOnBackground,
+    onSurface = DarkOnSurface,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -32,10 +31,9 @@ private val LightColorScheme = lightColorScheme(
     secondary = VitaSecondary,
     onSecondary = Color.White,
     background = LightBackground,
-    surface = LightSurface, // Default cards use this
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    surfaceVariant = Color(0xFFE7E0EC),
+    surface = LightSurface,
+    onBackground = LightOnBackground,
+    onSurface = LightOnSurface,
 )
 
 @Immutable

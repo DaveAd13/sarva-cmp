@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="empty">Empty</string>
     <string name="expenses">Expenses</string>
+    <string name="expense_details">Expense Details</string>
     <string name="add_expense">Add Expense</string>
     <string name="edit_expense">Edit Expense</string>
     <string name="no_expenses_title">No expenses recorded yet</string>
     <string name="no_expenses_description">Track your spending by tapping the + button below.</string>
     <string name="date">Date</string>
+    <string name="location">Location</string>
     <string name="breakdown">Breakdown</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="amount_cannot_be_empty">Amount cannot be empty</string>
     <string name="title_cannot_be_empty">Title cannot be empty</string>
     <string name="expense_saved_successfully">Expense saved successfully</string>
+    <string name="expense_updated_successfully">Expense updated successfully</string>
     <string name="failed_to_save_expense">Failed to save expense</string>
     <string name="total_amount">Total amount</string>
     <string name="what_is_it_for">What is it for?</string>
@@ -19,6 +23,13 @@
     <string name="amount">Amount</string>
     <string name="save">Save</string>
     <string name="failed_to_load_expense">Failed to load expense</string>
+    <string name="failed_to_delete_expense">Failed to delete expense</string>
+    <string name="search_expenses">Search expenses...</string>
+    <string name="expense_deleted_successfully">Expense deleted successfully</string>
+    <string name="undo">Undo</string>
+    <string name="delete">Delete</string>
+    <string name="delete_expense">Delete Expense</string>
+    <string name="delete_expense_description">Are you sure you want to delete this expense?</string>
 
 
     <string name="all">All</string>

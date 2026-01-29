@@ -36,13 +36,8 @@ fun ProfileScreen(
 
 }
 
-@Preview(
-    name = "Light",
-)
-@Preview(
-    name = "Dark",
-    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
-)
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
 private fun Preview() {
     SarvaTheme {

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -63,6 +64,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -70,23 +72,23 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarva.core.domain.model.ExpenseCategory
+import com.sarva.core.domain.model.expense.ExpenseCategory
 import com.sarva.core.presentation.getIcon
 import com.sarva.core.presentation.getLabel
 import com.sarva.core.presentation.util.LocalBackHandler
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.core.presentation.util.ResultStore
-import com.sarva.core.presentation.util.formatToDisplay
+import com.sarva.core.presentation.util.formatToShortDisplay
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.expenses.presentation.expense_add_edit.components.CurrencyInputTransformation
 import com.sarva.expenses.presentation.expense_list.components.CategoryChip
@@ -97,10 +99,15 @@ import com.sarva.features.expenses.generated.resources.breakdown
 import com.sarva.features.expenses.generated.resources.cancel
 import com.sarva.features.expenses.generated.resources.date
 import com.sarva.features.expenses.generated.resources.edit_expense
+import com.sarva.features.expenses.generated.resources.empty
 import com.sarva.features.expenses.generated.resources.item_name
+import com.sarva.features.expenses.generated.resources.location
 import com.sarva.features.expenses.generated.resources.ok
 import com.sarva.features.expenses.generated.resources.total_amount
 import com.sarva.features.expenses.generated.resources.what_is_it_for
+import com.sarva.features.location.presentation.LocationSearchRoot
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -115,7 +122,7 @@ import kotlin.time.Instant
 fun ExpenseAddEditRoot(
     expenseId: Int? = null,
     resultStore: ResultStore,
-    viewModel: ExpenseAddEditViewModel = koinViewModel { parametersOf(expenseId ?: -1) },
+    viewModel: ExpenseAddEditViewModel = koinViewModel { parametersOf(expenseId ?: 0) },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val onBack = LocalBackHandler.current
@@ -127,6 +134,10 @@ fun ExpenseAddEditRoot(
         when (event) {
             ExpenseAddEditEvent.ExpenseSaved -> {
                 resultStore.setResult("expense_saved", true)
+                onBack()
+            }
+
+            ExpenseAddEditEvent.ExpenseUpdated -> {
                 onBack()
             }
 
@@ -170,7 +181,6 @@ fun ExpenseAddEditScreen(
         ),
         cursorColor = contentColor,
     )
-    val layoutDirection = LocalLayoutDirection.current
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -309,6 +319,17 @@ fun ExpenseAddEditScreen(
         )
     }
 
+    if (state.showLocationSearch) {
+        LocationSearchRoot(
+            onLocationSelected = { location ->
+                onAction(ExpenseAddEditAction.OnLocationSelected(location))
+            },
+            onDismiss = { onAction(ExpenseAddEditAction.OnLocationSearchDismissed) },
+            containerColor = containerColor,
+            contentColor = contentColor
+        )
+    }
+
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
@@ -323,6 +344,28 @@ private fun MainExpenseCard(
     textFieldColors: TextFieldColors,
     focusRequester: FocusRequester
 ) {
+    val rowState = rememberLazyListState()
+
+    LaunchedEffect(state.selectedCategory) {
+        val category = state.selectedCategory ?: return@LaunchedEffect
+        val index = ExpenseCategory.entries.indexOf(category)
+
+        if (index >= 0) {
+            snapshotFlow { rowState.layoutInfo.totalItemsCount }
+                .filter { it > index }
+                .first()
+
+            val viewportWidth = rowState.layoutInfo.viewportSize.width
+            val itemWidth = rowState.layoutInfo.visibleItemsInfo.firstOrNull()?.size ?: 0
+            val centerOffset = (viewportWidth - itemWidth) / 2
+
+            rowState.animateScrollToItem(
+                index = index,
+                scrollOffset = -centerOffset
+            )
+        }
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -359,10 +402,10 @@ private fun MainExpenseCard(
                 }
 
                 TextField(
+                    state = state.amountState,
                     modifier = Modifier
                         .weight(1f)
                         .focusRequester(focusRequester),
-                    state = state.amountState,
                     lineLimits = TextFieldLineLimits.SingleLine,
                     inputTransformation = CurrencyInputTransformation,
                     placeholder = {
@@ -394,8 +437,8 @@ private fun MainExpenseCard(
                 color = contentColor.copy(alpha = 0.1f)
             )
             TextField(
-                modifier = Modifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp),
                 state = state.titleState,
+                modifier = Modifier.fillMaxWidth().padding(start = 14.dp, end = 14.dp),
                 lineLimits = TextFieldLineLimits.SingleLine,
                 placeholder = {
                     Text(
@@ -428,6 +471,7 @@ private fun MainExpenseCard(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth(),
+                state = rowState,
                 contentPadding = PaddingValues(horizontal = 14.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -472,7 +516,40 @@ private fun MainExpenseCard(
 
                 Text(
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
-                    text = state.dateTime.formatToDisplay(),
+                    text = state.dateTime.formatToShortDisplay(),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = contentColor,
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.End,
+                    ),
+                )
+            }
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 14.dp),
+                color = contentColor.copy(alpha = 0.1f)
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = { onAction(ExpenseAddEditAction.OnLocationCLicked) }),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
+                    text = stringResource(Res.string.location),
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = contentColor.copy(alpha = 0.5f),
+                        fontWeight = FontWeight.Medium,
+                        textAlign = TextAlign.End,
+                    ),
+                )
+
+                Text(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
+                    text = state.location?.name ?: stringResource(Res.string.empty),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium.copy(
                         color = contentColor,
                         fontWeight = FontWeight.Medium,
@@ -669,13 +746,8 @@ private fun ExpenseDatePicker(
     }
 }
 
-@Preview(
-    name = "Light",
-)
-@Preview(
-    name = "Dark",
-    uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL,
-)
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
 private fun Preview() {
     SarvaTheme {

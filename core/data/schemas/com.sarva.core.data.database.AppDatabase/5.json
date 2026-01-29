@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "933c8a6ea5f4c4f0d7933def5453b73b",
+    "identityHash": "0203f863b38890f5bea266e0832d5d3c",
     "entities": [
       {
         "tableName": "expenses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `breakdown` TEXT NOT NULL, `participants` TEXT NOT NULL, `loc_name` TEXT, `loc_latitude` REAL, `loc_longitude` REAL, `loc_address` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `breakdown` TEXT NOT NULL, `participants` TEXT NOT NULL, `loc_name` TEXT, `loc_city` TEXT, `loc_country` TEXT, `loc_street` TEXT, `loc_latitude` REAL, `loc_longitude` REAL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -62,6 +62,21 @@
             "affinity": "TEXT"
           },
           {
+            "fieldPath": "location.city",
+            "columnName": "loc_city",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "location.country",
+            "columnName": "loc_country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "location.street",
+            "columnName": "loc_street",
+            "affinity": "TEXT"
+          },
+          {
             "fieldPath": "location.latitude",
             "columnName": "loc_latitude",
             "affinity": "REAL"
@@ -70,11 +85,6 @@
             "fieldPath": "location.longitude",
             "columnName": "loc_longitude",
             "affinity": "REAL"
-          },
-          {
-            "fieldPath": "location.address",
-            "columnName": "loc_address",
-            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -87,7 +97,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '933c8a6ea5f4c4f0d7933def5453b73b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0203f863b38890f5bea266e0832d5d3c')"
     ]
   }
 }

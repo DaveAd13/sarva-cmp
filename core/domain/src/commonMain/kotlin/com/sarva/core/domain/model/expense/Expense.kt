@@ -1,4 +1,4 @@
-package com.sarva.core.domain.model
+package com.sarva.core.domain.model.expense
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
@@ -11,7 +11,7 @@ data class Expense(
     val amount: Double,
     val currency: String,
     val dateTime: LocalDateTime,
-    val location: GeoLocation? = null,
+    val location: ExpenseLocation? = null,
     val entries: List<ExpenseEntry> = emptyList(),
     val participants: List<Participant> = emptyList(),
 )
@@ -32,9 +32,11 @@ data class Participant(
 )
 
 @Serializable
-data class GeoLocation(
+data class ExpenseLocation(
     val name: String,
-    val latitude: Double?,
-    val longitude: Double?,
-    val address: String? = null
+    val city: String? = null,
+    val country: String? = null,
+    val street: String? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
 )

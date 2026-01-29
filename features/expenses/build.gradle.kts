@@ -59,6 +59,7 @@ kotlin {
                 implementation(libs.components.resources)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
                 implementation(libs.compose.shimmer)
+                implementation(libs.navigationevent.compose)
 
                 // --- DI (Koin) ---
                 implementation(libs.bundles.koin.common)
@@ -69,6 +70,8 @@ kotlin {
                 implementation(project(":core:domain"))
                 implementation(project(":core:presentation"))
                 implementation(project(":core:designsystem"))
+                implementation(project(":core:common"))
+                implementation(project(":features:location"))
             }
         }
 

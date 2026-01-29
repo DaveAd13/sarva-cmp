@@ -1,12 +1,14 @@
 package com.sarva.expenses.presentation.expense_list
 
-import com.sarva.core.domain.model.Expense
-import com.sarva.core.domain.model.ExpenseCategory
-
+import androidx.compose.foundation.text.input.TextFieldState
+import com.sarva.core.domain.model.expense.Expense
+import com.sarva.core.domain.model.expense.ExpenseCategory
 
 data class ExpenseListState(
     val isLoading: Boolean = true,
+    val isSearchActive: Boolean = false,
     val expenses: List<Expense> = emptyList(),
     val selectedCategory: ExpenseCategory? = null,
     val groupedExpenses: Map<String, List<Expense>> = emptyMap(),
+    val searchTextFieldState: TextFieldState = TextFieldState(),
 )

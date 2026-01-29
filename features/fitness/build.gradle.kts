@@ -22,7 +22,6 @@ kotlin {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
-
         androidResources {
             enable = true
         }

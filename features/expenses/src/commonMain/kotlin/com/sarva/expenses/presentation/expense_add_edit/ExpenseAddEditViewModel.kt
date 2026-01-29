@@ -1,12 +1,16 @@
 package com.sarva.expenses.presentation.expense_add_edit
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarva.core.domain.model.Expense
-import com.sarva.core.domain.model.ExpenseCategory
-import com.sarva.core.domain.model.ExpenseEntry
+import com.sarva.core.domain.model.expense.Expense
+import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.model.expense.ExpenseEntry
+import com.sarva.core.domain.model.expense.ExpenseLocation
+import com.sarva.core.domain.util.Resource
 import com.sarva.core.domain.util.Result
 import com.sarva.core.presentation.util.UiText
+import com.sarva.expenses.domain.usecase.GetExpenseUseCase
 import com.sarva.expenses.domain.usecase.InsertExpenseUseCase
 import com.sarva.features.expenses.generated.resources.Res
 import com.sarva.features.expenses.generated.resources.amount_cannot_be_empty
@@ -15,9 +19,12 @@ import com.sarva.features.expenses.generated.resources.title_cannot_be_empty
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import org.koin.core.component.KoinComponent
@@ -29,6 +36,7 @@ class ExpenseAddEditViewModel(
 ) : ViewModel(), KoinComponent {
 
     private val insertExpenseUseCase: InsertExpenseUseCase by inject()
+    private val getExpenseUseCase: GetExpenseUseCase by inject()
 
     private val _state = MutableStateFlow(
         ExpenseAddEditState(
@@ -43,18 +51,39 @@ class ExpenseAddEditViewModel(
     init {
         _state.update {
             it.copy(
-                isEditMode = expenseId != -1,
+                isEditMode = expenseId != 0,
             )
         }
-        if (expenseId != -1) {
+
+        if (expenseId != 0) {
             loadExpense()
         }
     }
 
     private fun loadExpense() {
-        viewModelScope.launch {
+        getExpenseUseCase(expenseId)
+            .onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        val expense = result.data
+                        _state.value = mapFromDomain(expense)
+                    }
 
-        }
+                    is Resource.Failure -> {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
+                    }
+
+                    Resource.Loading -> _state.update {
+                        it.copy(
+                            isLoading = true
+                        )
+                    }
+                }
+            }.launchIn(viewModelScope)
     }
 
     private fun validateAndSave() {
@@ -79,14 +108,81 @@ class ExpenseAddEditViewModel(
 
         val expense = mapToDomain(currentState)
         saveExpense(expense)
+//        saveMockExpenses()
+    }
+
+    private fun saveMockExpenses() {
+        val mockExpenses = listOf(
+            Expense(
+                title = "Grocery Shopping",
+                amount = 12500.0,
+                category = ExpenseCategory.FOOD,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2024-09-12T18:30:00"),
+                location = ExpenseLocation(name = "Yerevan City Supermarket")
+            ),
+            Expense(
+                title = "Morning Coffee",
+                amount = 1800.0,
+                category = ExpenseCategory.FOOD,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2024-09-11T09:15:00"),
+                location = ExpenseLocation(name = "Lumen Coffee")
+            ),
+            Expense(
+                title = "Weekly Gym Membership",
+                amount = 150.0,
+                category = ExpenseCategory.HEALTH,
+                currency = "USD",
+                dateTime = LocalDateTime.parse("2024-09-08T10:00:00"),
+                location = ExpenseLocation(name = "Gold's Gym")
+            ),
+            Expense(
+                title = "Gas Refill",
+                amount = 8000.0,
+                category = ExpenseCategory.TRANSPORT,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2024-08-25T14:20:00"),
+                location = ExpenseLocation(name = "Flash Fuel Station")
+            ),
+            Expense(
+                title = "Dinner with Friends",
+                amount = 25000.0,
+                category = ExpenseCategory.FOOD,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2024-08-20T20:00:00"),
+                location = ExpenseLocation(name = "Lavash Restaurant")
+            ),
+            Expense(
+                title = "Netflix Subscription",
+                amount = 12.99,
+                category = ExpenseCategory.ENTERTAINMENT,
+                currency = "USD",
+                dateTime = LocalDateTime.parse("2024-08-15T00:00:00"),
+                location = null // Testing null location
+            ),
+            Expense(
+                title = "Pharmacy Visit",
+                amount = 4500.0,
+                category = ExpenseCategory.HEALTH,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2024-07-05T11:45:00"),
+                location = ExpenseLocation(name = "Alfa Pharm")
+            )
+        )
+
+        mockExpenses.forEach { saveExpense(it) }
     }
 
     private fun saveExpense(expense: Expense) {
         viewModelScope.launch {
-            val result = insertExpenseUseCase(expense)
-            when (result) {
+            when (insertExpenseUseCase(expense)) {
                 is Result.Success -> {
-                    eventChannel.send(ExpenseAddEditEvent.ExpenseSaved)
+                    if (expenseId == 0) {
+                        eventChannel.send(ExpenseAddEditEvent.ExpenseSaved)
+                    } else {
+                        eventChannel.send(ExpenseAddEditEvent.ExpenseUpdated)
+                    }
                 }
 
                 is Result.Failure -> {
@@ -96,27 +192,6 @@ class ExpenseAddEditViewModel(
 
             _state.update { it.copy(isLoading = false) }
         }
-    }
-
-    private fun mapToDomain(state: ExpenseAddEditState): Expense {
-        val entries = state.entries
-            .filter { it.name.text.isNotBlank() && it.amount.text.isNotBlank() }
-            .map { entry ->
-                ExpenseEntry(
-                    id = entry.id,
-                    name = entry.name.text.toString(),
-                    price = entry.amount.text.toString().toDouble()
-                )
-            }
-
-        return Expense(
-            title = state.titleState.text.toString().trim(),
-            amount = state.amountState.text.toString().toDouble(),
-            category = state.selectedCategory ?: ExpenseCategory.OTHER,
-            currency = "USD",
-            dateTime = state.dateTime,
-            entries = entries
-        )
     }
 
     private fun ensureTrailingEmptyRow() {
@@ -156,6 +231,15 @@ class ExpenseAddEditViewModel(
                 }
             }
 
+
+            ExpenseAddEditAction.OnLocationCLicked -> {
+                _state.update {
+                    it.copy(
+                        showLocationSearch = true
+                    )
+                }
+            }
+
             ExpenseAddEditAction.OnDatePickerDismissed -> {
                 _state.update {
                     it.copy(
@@ -188,6 +272,80 @@ class ExpenseAddEditViewModel(
                     )
                 }
             }
+
+            ExpenseAddEditAction.OnLocationSearchDismissed -> {
+                _state.update {
+                    it.copy(
+                        showLocationSearch = false
+                    )
+                }
+            }
+
+            is ExpenseAddEditAction.OnLocationSelected -> {
+                val result = action.location
+                val expenseLocation =  ExpenseLocation(
+                    name = result.name,
+                    country = result.country,
+                    city = result.city,
+                    street = result.street,
+                    latitude = result.latitude,
+                    longitude = result.longitude,
+                )
+
+                _state.update {
+                    it.copy(
+                        location = expenseLocation
+                    )
+                }
+            }
+        }
+    }
+
+    private fun mapToDomain(state: ExpenseAddEditState): Expense {
+        val entries = state.entries
+            .filter { it.name.text.isNotBlank() && it.amount.text.isNotBlank() }
+            .map { entry ->
+                ExpenseEntry(
+                    id = entry.id,
+                    name = entry.name.text.toString(),
+                    price = entry.amount.text.toString().toDouble()
+                )
+            }
+
+        return Expense(
+            id = expenseId,
+            title = state.titleState.text.toString().trim(),
+            amount = state.amountState.text.toString().toDouble(),
+            category = state.selectedCategory ?: ExpenseCategory.OTHER,
+            currency = state.currency,
+            location = state.location,
+            dateTime = state.dateTime,
+            entries = entries
+        )
+    }
+
+    private fun mapFromDomain(expense: Expense): ExpenseAddEditState {
+        val entryStates = if (expense.entries.isEmpty()) {
+            listOf(ExpenseEntryState())
+        } else {
+            expense.entries.map { entry ->
+                ExpenseEntryState(id = entry.id).apply {
+                    name.setTextAndPlaceCursorAtEnd(entry.name)
+                    amount.setTextAndPlaceCursorAtEnd(entry.price.toString())
+                }
+            }
+        }
+
+        return ExpenseAddEditState(
+            isEditMode = true,
+            selectedCategory = expense.category,
+            dateTime = expense.dateTime,
+            location = expense.location,
+            currency = expense.currency,
+            entries = entryStates
+        ).apply {
+            titleState.setTextAndPlaceCursorAtEnd(expense.title)
+            amountState.setTextAndPlaceCursorAtEnd(expense.amount.toString())
         }
     }
 }

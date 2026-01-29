@@ -1,7 +1,8 @@
 package com.sarva.expenses.presentation.expense_add_edit
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.sarva.core.domain.model.ExpenseCategory
+import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.model.expense.ExpenseLocation
 import kotlinx.datetime.LocalDateTime
 import kotlin.random.Random
 
@@ -12,7 +13,9 @@ data class ExpenseAddEditState(
     val titleState: TextFieldState = TextFieldState(),
     val selectedCategory: ExpenseCategory? = null,
     val dateTime: LocalDateTime,
+    val location: ExpenseLocation? = null,
     val isDatePickerVisible: Boolean = false,
+    val showLocationSearch: Boolean = false,
     val currency: String = "USD",
     val entries: List<ExpenseEntryState> = listOf(ExpenseEntryState()),
 )

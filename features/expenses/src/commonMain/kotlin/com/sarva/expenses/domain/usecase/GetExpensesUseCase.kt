@@ -1,10 +1,9 @@
 package com.sarva.expenses.domain.usecase
 
-import com.sarva.core.domain.model.Expense
+import com.sarva.common.DispatcherProvider
+import com.sarva.core.domain.model.expense.Expense
 import com.sarva.core.domain.repository.ExpenseRepository
 import com.sarva.core.domain.util.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -13,7 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
 class GetExpensesUseCase(
-    private val repository: ExpenseRepository
+    private val repository: ExpenseRepository,
+    private val dispatchers: DispatcherProvider
 ) {
     operator fun invoke(): Flow<Resource<List<Expense>>> = repository.getExpenses()
         .map { expenses ->
@@ -21,10 +21,10 @@ class GetExpensesUseCase(
         }
         .onStart {
             emit(Resource.Loading)
-            delay(350) //TODO REMOVE
+            delay(350)
         }
         .catch { e ->
             emit(Resource.Failure(e))
         }
-        .flowOn(Dispatchers.IO)
+        .flowOn(dispatchers.io)
 }

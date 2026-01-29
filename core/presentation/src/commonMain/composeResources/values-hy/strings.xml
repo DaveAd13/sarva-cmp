@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="cancel">Չեղարկել</string>
+    <string name="confirm">Հաստատել</string>
     <string name="hour_symbol">ժ</string>
     <string name="minute_symbol">ր</string>
     <string name="second_symbol">վ</string>

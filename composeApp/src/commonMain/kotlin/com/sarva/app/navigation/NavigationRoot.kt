@@ -117,7 +117,10 @@ fun NavigationRoot(
                     entry<Route.ExpenseDetails> { key ->
                         ExpenseDetailsRoot(
                             expenseId = key.expenseId,
-                            resultStore = resultStore
+                            resultStore = resultStore,
+                            onEditExpenseClicked = { expenseId ->
+                                navigator.navigate(Route.ExpenseAddEdit(expenseId = expenseId))
+                            }
                         )
                     }
 

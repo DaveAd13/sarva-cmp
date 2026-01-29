@@ -201,7 +201,7 @@ fun HomeScreen(
             item {
                 CalendarWidget(
                     event = state.event,
-                    onWidgetClick = { /* navigate */ },
+                    onWidgetClick = { onNavigate(HomeNavigationAction.OpenCalendar) },
                     modifier = Modifier
                         .aspectRatio(1f)
                 )
