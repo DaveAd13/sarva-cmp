@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.serialization)
-//    alias(libs.plugins.composeHotReload)
 }
 
 kotlin {
@@ -45,7 +44,7 @@ kotlin {
             implementation(libs.material3)
             implementation(libs.components.resources)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ui.tooling.preview)
+            implementation(libs.ui.tooling)
             implementation(libs.material.icons.extended)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
@@ -73,7 +72,6 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.koin.android)
             implementation(libs.androidx.connect.client)
-            implementation(libs.ui.tooling)
         }
 
         iosMain.dependencies {

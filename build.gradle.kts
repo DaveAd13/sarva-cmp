@@ -7,5 +7,4 @@ plugins {
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.android.lint) apply false
-    alias(libs.plugins.composeHotReload) apply false
 }

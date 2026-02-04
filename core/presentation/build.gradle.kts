@@ -54,7 +54,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.material3)
                 implementation(libs.material.icons.extended)
-                implementation(libs.ui.tooling.preview)
+                implementation(libs.ui.tooling)
                 implementation(libs.foundation)
                 implementation(libs.runtime)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
@@ -68,7 +68,7 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(libs.ui.tooling)
+
             }
         }
 

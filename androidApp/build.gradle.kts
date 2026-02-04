@@ -8,7 +8,6 @@ plugins {
 
 dependencies {
     implementation(projects.composeApp)
-    implementation(libs.ui.tooling.preview)
     implementation(libs.androidx.activity.compose)
     implementation(libs.bundles.koin.android)
     implementation(libs.androidx.core.splashscreen)
