@@ -9,6 +9,7 @@ import com.sarva.core.domain.model.expense.ExpenseEntry
 import com.sarva.core.domain.model.expense.ExpenseLocation
 import com.sarva.core.domain.util.Resource
 import com.sarva.core.domain.util.Result
+import com.sarva.core.presentation.formatting.toPlainString
 import com.sarva.core.presentation.util.UiText
 import com.sarva.expenses.domain.usecase.GetExpenseUseCase
 import com.sarva.expenses.domain.usecase.InsertExpenseUseCase
@@ -114,60 +115,106 @@ class ExpenseAddEditViewModel(
     private fun saveMockExpenses() {
         val mockExpenses = listOf(
             Expense(
-                title = "Grocery Shopping",
-                amount = 12500.0,
-                category = ExpenseCategory.FOOD,
-                currency = "AMD",
-                dateTime = LocalDateTime.parse("2024-09-12T18:30:00"),
-                location = ExpenseLocation(name = "Yerevan City Supermarket")
-            ),
-            Expense(
                 title = "Morning Coffee",
-                amount = 1800.0,
                 category = ExpenseCategory.FOOD,
+                amount = 1200.0,
                 currency = "AMD",
-                dateTime = LocalDateTime.parse("2024-09-11T09:15:00"),
-                location = ExpenseLocation(name = "Lumen Coffee")
+                dateTime = LocalDateTime.parse("2026-02-05T09:15:00"),
+                location = ExpenseLocation(name = "Lumiere Coffee"),
+                entries = listOf(ExpenseEntry(id = "e1", name = "Cappuccino", price = 1200.0))
             ),
+
             Expense(
-                title = "Weekly Gym Membership",
-                amount = 150.0,
-                category = ExpenseCategory.HEALTH,
-                currency = "USD",
-                dateTime = LocalDateTime.parse("2024-09-08T10:00:00"),
-                location = ExpenseLocation(name = "Gold's Gym")
+                title = "Grocery Run",
+                category = ExpenseCategory.GROCERIES,
+                amount = 8500.0,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2026-02-04T18:30:00"),
+                location = ExpenseLocation(name = "Carrefour", city = "Yerevan"),
+                entries = listOf(
+                    ExpenseEntry(id = "e2", name = "Fruit", price = 3000.0),
+                    ExpenseEntry(id = "e3", name = "Dairy", price = 5500.0)
+                )
             ),
+
             Expense(
-                title = "Gas Refill",
-                amount = 8000.0,
+                title = "Fuel",
                 category = ExpenseCategory.TRANSPORT,
+                amount = 15000.0,
                 currency = "AMD",
-                dateTime = LocalDateTime.parse("2024-08-25T14:20:00"),
-                location = ExpenseLocation(name = "Flash Fuel Station")
+                dateTime = LocalDateTime.parse("2026-02-02T14:00:00"),
+                location = ExpenseLocation(name = "Flash Gas"),
+                entries = listOf(ExpenseEntry(id = "e4", name = "Gasoline", price = 15000.0))
             ),
-            Expense(
-                title = "Dinner with Friends",
-                amount = 25000.0,
-                category = ExpenseCategory.FOOD,
-                currency = "AMD",
-                dateTime = LocalDateTime.parse("2024-08-20T20:00:00"),
-                location = ExpenseLocation(name = "Lavash Restaurant")
-            ),
+
             Expense(
                 title = "Netflix Subscription",
-                amount = 12.99,
                 category = ExpenseCategory.ENTERTAINMENT,
+                amount = 10.99,
                 currency = "USD",
-                dateTime = LocalDateTime.parse("2024-08-15T00:00:00"),
-                location = null // Testing null location
+                dateTime = LocalDateTime.parse("2026-01-30T00:00:00"),
+                entries = listOf(ExpenseEntry(id = "e5", name = "Monthly Plan", price = 10.99))
             ),
+
             Expense(
-                title = "Pharmacy Visit",
-                amount = 4500.0,
-                category = ExpenseCategory.HEALTH,
+                title = "Dinner with Friends",
+                category = ExpenseCategory.FOOD,
+                amount = 32000.0,
                 currency = "AMD",
-                dateTime = LocalDateTime.parse("2024-07-05T11:45:00"),
-                location = ExpenseLocation(name = "Alfa Pharm")
+                dateTime = LocalDateTime.parse("2026-01-15T20:45:00"),
+                location = ExpenseLocation(name = "Sherep", street = "Amiryan St"),
+                entries = listOf(ExpenseEntry(id = "e6", name = "Dinner", price = 32000.0))
+            ),
+
+            Expense(
+                title = "Gym Membership",
+                category = ExpenseCategory.HEALTH,
+                amount = 25000.0,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2026-01-05T10:00:00"),
+                location = ExpenseLocation(name = "Gold's Gym"),
+                entries = listOf(ExpenseEntry(id = "e7", name = "January Pass", price = 25000.0))
+            ),
+
+            Expense(
+                title = "New Year Party",
+                category = ExpenseCategory.FOOD,
+                amount = 55000.0,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2025-12-31T23:30:00"),
+                location = ExpenseLocation(name = "Republic Square"),
+                entries = listOf(ExpenseEntry(id = "e8", name = "Celebration", price = 55000.0))
+            ),
+
+            Expense(
+                title = "Amazon Tech Haul",
+                category = ExpenseCategory.SHOPPING,
+                amount = 145.50,
+                currency = "USD",
+                dateTime = LocalDateTime.parse("2025-12-20T15:30:00"),
+                entries = listOf(
+                    ExpenseEntry(id = "e9", name = "Mouse", price = 45.50),
+                    ExpenseEntry(id = "e10", name = "Keyboard", price = 100.0)
+                )
+            ),
+
+            Expense(
+                title = "Electricity Bill",
+                category = ExpenseCategory.BILLS,
+                amount = 12000.0,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2025-11-10T11:00:00"),
+                entries = emptyList()
+            ),
+
+            Expense(
+                title = "Weekend in Dilijan",
+                category = ExpenseCategory.TRAVEL,
+                amount = 45000.0,
+                currency = "AMD",
+                dateTime = LocalDateTime.parse("2025-10-12T14:00:00"),
+                location = ExpenseLocation(name = "Dilijan Park", city = "Dilijan"),
+                entries = listOf(ExpenseEntry(id = "e11", name = "Hotel", price = 45000.0))
             )
         )
 
@@ -345,7 +392,7 @@ class ExpenseAddEditViewModel(
             entries = entryStates
         ).apply {
             titleState.setTextAndPlaceCursorAtEnd(expense.title)
-            amountState.setTextAndPlaceCursorAtEnd(expense.amount.toString())
+            amountState.setTextAndPlaceCursorAtEnd(expense.amount.toPlainString())
         }
     }
 }

@@ -12,8 +12,7 @@ fun ExpenseEntity.toDomain() = Expense(
     currency = currency,
     dateTime = dateTime,
     location = location,
-    entries = breakdown,
-    participants = participants
+    entries = entries,
 )
 
 fun Expense.toEntity() = ExpenseEntity(
@@ -24,6 +23,5 @@ fun Expense.toEntity() = ExpenseEntity(
     currency = currency,
     dateTime = dateTime,
     location = location,
-    breakdown = entries,
-    participants = participants
+    entries = entries,
 )

@@ -13,7 +13,6 @@ data class Expense(
     val dateTime: LocalDateTime,
     val location: ExpenseLocation? = null,
     val entries: List<ExpenseEntry> = emptyList(),
-    val participants: List<Participant> = emptyList(),
 )
 
 @Serializable
@@ -21,14 +20,6 @@ data class ExpenseEntry(
     val id: String,
     val name: String,
     val price: Double,
-)
-
-@Serializable
-data class Participant(
-    val id: String,
-    val name: String,
-    val profilePictureUrl: String? = null,
-    val amountOwed: Double? = null
 )
 
 @Serializable

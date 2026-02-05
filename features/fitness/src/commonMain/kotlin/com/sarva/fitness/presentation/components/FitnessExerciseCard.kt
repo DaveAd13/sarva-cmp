@@ -24,7 +24,9 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarva.core.presentation.util.toFormattedDuration
+import com.sarva.core.presentation.formatting.DurationFormatter
+import com.sarva.core.presentation.formatting.DurationSymbols
+import com.sarva.core.presentation.formatting.rememberDurationSymbols
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.fitness.domain.model.FitnessExercise
 import kotlinx.datetime.LocalDateTime
@@ -32,6 +34,7 @@ import kotlinx.datetime.LocalDateTime
 @Composable
 fun FitnessExerciseCard(
     exercise: FitnessExercise,
+    symbols: DurationSymbols,
     modifier: Modifier = Modifier
 ) {
     val color = SarvaTheme.colors.fitnessContent
@@ -75,7 +78,7 @@ fun FitnessExerciseCard(
             }
 
             Text(
-                text = exercise.durationSeconds.toFormattedDuration(),
+                text = DurationFormatter.format(exercise.durationSeconds, symbols),
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontFeatureSettings = "tnum"
                 ),
@@ -107,6 +110,7 @@ private fun Preview() {
                 endTime = LocalDateTime.parse("2023-01-02T23:40"),
                 durationSeconds = 15
             ),
+            symbols = rememberDurationSymbols()
         )
     }
 }

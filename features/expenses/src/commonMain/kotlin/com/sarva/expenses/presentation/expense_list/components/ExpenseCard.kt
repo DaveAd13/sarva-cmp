@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.dp
 import com.sarva.core.domain.model.expense.Expense
 import com.sarva.core.domain.model.expense.ExpenseCategory
 import com.sarva.core.presentation.CategoryIcon
+import com.sarva.core.presentation.formatting.formatCurrency
+import com.sarva.core.presentation.formatting.formatToShortDisplay
 import com.sarva.core.presentation.getIcon
-import com.sarva.core.presentation.util.formatNumber
-import com.sarva.core.presentation.util.formatToShortDisplay
 import com.sarva.designsystem.theme.SarvaTheme
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDateTime
@@ -91,6 +91,7 @@ fun ExpenseCard(
                 swipeToDismissBoxState.snapTo(SwipeToDismissBoxValue.Settled)
             }
         },
+        gesturesEnabled = true,
         enableDismissFromStartToEnd = false,
     ) {
         Card(
@@ -129,6 +130,7 @@ fun ExpenseCard(
                         text = expense.title,
                         style = MaterialTheme.typography.titleSmall,
                         color = contentColor,
+                        overflow = Ellipsis,
                         maxLines = 1
                     )
                     Text(
@@ -141,7 +143,7 @@ fun ExpenseCard(
                 }
 
                 Text(
-                    text = "${formatNumber(expense.amount)} ${expense.currency}",
+                    text = formatCurrency(expense.amount, expense.currency),
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),

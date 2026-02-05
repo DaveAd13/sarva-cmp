@@ -53,12 +53,13 @@ import com.sarva.core.domain.model.expense.Expense
 import com.sarva.core.domain.model.expense.ExpenseCategory
 import com.sarva.core.presentation.CategoryIcon
 import com.sarva.core.presentation.dialogs.SimpleDialog
+import com.sarva.core.presentation.formatting.formatCurrency
+import com.sarva.core.presentation.formatting.formatToLongDisplay
 import com.sarva.core.presentation.getIcon
 import com.sarva.core.presentation.getLabel
 import com.sarva.core.presentation.util.LocalBackHandler
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.core.presentation.util.ResultStore
-import com.sarva.core.presentation.util.formatToLongDisplay
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.features.expenses.generated.resources.Res
 import com.sarva.features.expenses.generated.resources.breakdown
@@ -207,7 +208,7 @@ fun ExpenseDetailsScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "${expense.currency} ${expense.amount}",
+                            text = formatCurrency(expense.amount, expense.currency),
                             style = MaterialTheme.typography.displayMedium.copy(
                                 fontWeight = FontWeight.Black,
                                 color = contentColor

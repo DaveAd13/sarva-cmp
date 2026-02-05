@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.sarva.core.presentation.formatting.rememberDurationSymbols
 import com.sarva.core.presentation.util.LocalBackHandler
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.designsystem.theme.SarvaTheme
@@ -102,6 +103,7 @@ fun ActivityHistoryScreen(
     }
     val layoutDirection = LocalLayoutDirection.current
     val chartData = rememberChartDataLatched(state)
+    val durationSymbols = rememberDurationSymbols()
 
     Scaffold(
         topBar = {
@@ -309,6 +311,7 @@ fun ActivityHistoryScreen(
                 ) { exercise ->
                     FitnessExerciseCard(
                         exercise = exercise,
+                        symbols = durationSymbols,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)

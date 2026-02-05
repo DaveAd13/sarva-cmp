@@ -1,4 +1,4 @@
-package com.sarva.core.presentation.util
+package com.sarva.core.presentation.formatting
 
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -39,5 +39,13 @@ fun formatNumber(
             decimalPart
         }
         "$integerPart.$finalDecimal"
+    }
+}
+
+fun Double.toPlainString(): String {
+    return if (this % 1.0 == 0.0) {
+        this.toInt().toString()
+    } else {
+        this.toString()
     }
 }

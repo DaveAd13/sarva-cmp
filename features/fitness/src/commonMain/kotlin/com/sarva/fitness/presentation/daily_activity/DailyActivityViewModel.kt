@@ -3,7 +3,7 @@ package com.sarva.fitness.presentation.daily_activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarva.core.domain.util.Result
-import com.sarva.core.presentation.util.formatNumber
+import com.sarva.core.presentation.formatting.formatNumber
 import com.sarva.fitness.domain.usecase.GetDailyRecordsUseCase
 import com.sarva.fitness.domain.usecase.GetExercisesUseCase
 import kotlinx.collections.immutable.persistentListOf

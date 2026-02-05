@@ -29,7 +29,7 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sarva.core.presentation.util.formatNumber
+import com.sarva.core.presentation.formatting.formatNumber
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.fitness.domain.model.ChartTransition

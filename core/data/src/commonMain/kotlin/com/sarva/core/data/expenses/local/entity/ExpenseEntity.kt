@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 import com.sarva.core.domain.model.expense.ExpenseCategory
 import com.sarva.core.domain.model.expense.ExpenseEntry
 import com.sarva.core.domain.model.expense.ExpenseLocation
-import com.sarva.core.domain.model.expense.Participant
 import kotlinx.datetime.LocalDateTime
 
 @Entity(tableName = "expenses")
@@ -21,6 +20,5 @@ data class ExpenseEntity(
     @Embedded(prefix = "loc_")
     val location: ExpenseLocation?,
 
-    val breakdown: List<ExpenseEntry>,
-    val participants: List<Participant>
+    val entries: List<ExpenseEntry>,
 )

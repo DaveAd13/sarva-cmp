@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "0203f863b38890f5bea266e0832d5d3c",
+    "identityHash": "ffa328407d6e370936a6d7405f3d9b0c",
     "entities": [
       {
         "tableName": "expenses",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `breakdown` TEXT NOT NULL, `participants` TEXT NOT NULL, `loc_name` TEXT, `loc_city` TEXT, `loc_country` TEXT, `loc_street` TEXT, `loc_latitude` REAL, `loc_longitude` REAL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `category` TEXT NOT NULL, `amount` REAL NOT NULL, `currency` TEXT NOT NULL, `dateTime` TEXT NOT NULL, `entries` TEXT NOT NULL, `loc_name` TEXT, `loc_city` TEXT, `loc_country` TEXT, `loc_street` TEXT, `loc_latitude` REAL, `loc_longitude` REAL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -45,14 +45,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "breakdown",
-            "columnName": "breakdown",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "participants",
-            "columnName": "participants",
+            "fieldPath": "entries",
+            "columnName": "entries",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -97,7 +91,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0203f863b38890f5bea266e0832d5d3c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ffa328407d6e370936a6d7405f3d9b0c')"
     ]
   }
 }

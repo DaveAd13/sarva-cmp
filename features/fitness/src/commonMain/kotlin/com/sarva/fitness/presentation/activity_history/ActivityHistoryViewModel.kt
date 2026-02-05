@@ -3,8 +3,8 @@ package com.sarva.fitness.presentation.activity_history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarva.core.domain.util.Result
+import com.sarva.core.presentation.formatting.formatNumber
 import com.sarva.core.presentation.util.UiText
-import com.sarva.core.presentation.util.formatNumber
 import com.sarva.features.fitness.generated.resources.Res
 import com.sarva.features.fitness.generated.resources.cal
 import com.sarva.features.fitness.generated.resources.km
