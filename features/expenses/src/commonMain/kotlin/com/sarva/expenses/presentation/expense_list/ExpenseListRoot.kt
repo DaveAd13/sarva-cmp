@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -51,9 +54,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
@@ -188,7 +191,10 @@ fun ExpenseListScreen(
         containerColor = containerColor,
 
         topBar = {
-            Column(modifier = Modifier.background(containerColor)) {
+            Column(
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
+            ) {
                 AnimatedContent(
                     targetState = state.isSearchActive,
                     transitionSpec = { fadeIn() togetherWith fadeOut() },
@@ -237,7 +243,14 @@ fun ExpenseListScreen(
 
                 LazyRow(
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .background(
+                            brush = Brush.verticalGradient(
+                                0.0f to containerColor,
+                                0.65f to containerColor,
+                                1.0f to Color.Transparent
+                            )
+                        ),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
@@ -290,7 +303,6 @@ fun ExpenseListScreen(
             }
         }
     ) { contentPadding ->
-        val layoutDirection = LocalLayoutDirection.current
         if (!state.isLoading && state.expenses.isEmpty()) {
             NoDataView(
                 title = stringResource(Res.string.no_expenses_title),
@@ -308,15 +320,9 @@ fun ExpenseListScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
-                    .background(containerColor),
+                modifier = Modifier.fillMaxSize(),
                 state = listState,
-                contentPadding = PaddingValues(
-                    start = contentPadding.calculateStartPadding(layoutDirection),
-                    end = contentPadding.calculateEndPadding(layoutDirection),
-                    top = contentPadding.calculateTopPadding(),
-                    bottom = contentPadding.calculateBottomPadding() + 80.dp
-                ),
+                contentPadding = contentPadding
             ) {
                 if (state.isLoading) {
                     item {
@@ -327,7 +333,6 @@ fun ExpenseListScreen(
                         Spacer(modifier = Modifier.height(12.dp))
                     }
                 } else {
-                    //TODO: FIX RECOMPOSITIONS
                     state.groupedExpenses.forEach { (monthHeader, expensesInMonth) ->
                         item(
                             key = "header_$monthHeader",
@@ -348,7 +353,9 @@ fun ExpenseListScreen(
                             ) {
                                 Text(
                                     text = monthHeader.uppercase(),
-                                    style = MaterialTheme.typography.labelSmall.copy(letterSpacing = 1.2.sp),
+                                    style = MaterialTheme.typography.labelSmall.copy(
+                                        letterSpacing = 1.2.sp
+                                    ),
                                     color = contentColor.copy(alpha = 0.5f)
                                 )
                             }
@@ -375,6 +382,10 @@ fun ExpenseListScreen(
                             Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
+                }
+
+                item {
+                    Spacer(Modifier.height(80.dp))
                 }
             }
         }
