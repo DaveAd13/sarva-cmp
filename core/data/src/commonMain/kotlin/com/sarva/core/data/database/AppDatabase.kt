@@ -9,7 +9,7 @@ import com.sarva.core.data.expenses.local.dao.ExpenseDao
 import com.sarva.core.data.expenses.local.entity.ExpenseEntity
 
 
-@Database(entities = [ExpenseEntity::class], version = 7, exportSchema = false)
+@Database(entities = [ExpenseEntity::class], version = 8, exportSchema = false)
 @ConstructedBy(AppDatabaseConstructor::class)
 @TypeConverters(RoomConverters::class)
 abstract class AppDatabase : RoomDatabase() {

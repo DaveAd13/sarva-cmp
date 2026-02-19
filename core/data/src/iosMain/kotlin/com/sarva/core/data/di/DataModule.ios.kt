@@ -1,6 +1,7 @@
 package com.sarva.core.data.di
 
 import androidx.room.Room
+import com.sarva.core.data.currencies.local.createDataStore
 import com.sarva.core.data.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -18,5 +19,9 @@ actual val platformDataModule = module {
             .fallbackToDestructiveMigration(true)
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
+    }
+
+    single {
+        createDataStore()
     }
 }

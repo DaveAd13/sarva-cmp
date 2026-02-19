@@ -2,6 +2,7 @@ package com.sarva.core.data.di
 
 import androidx.room.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.sarva.core.data.currencies.local.createDataStore
 import com.sarva.core.data.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
@@ -22,5 +23,9 @@ actual val platformDataModule = module {
             .fallbackToDestructiveMigration(true)
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
+    }
+
+    single {
+        createDataStore()
     }
 }

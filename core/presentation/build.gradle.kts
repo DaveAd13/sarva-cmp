@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+dependencies {
+    androidRuntimeClasspath(libs.ui.tooling)
+}
+
 kotlin {
     androidLibrary {
         namespace = "com.sarva.core.presentation"
@@ -54,12 +58,16 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.material3)
                 implementation(libs.material.icons.extended)
-                implementation(libs.ui.tooling)
+                implementation(libs.ui.tooling.preview)
                 implementation(libs.foundation)
                 implementation(libs.runtime)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
                 implementation(libs.components.resources)
                 implementation(libs.kotlinx.datetime)
+                implementation(libs.navigationevent.compose)
+
+                // --- DI (Koin) ---
+                implementation(libs.bundles.koin.common)
 
                 implementation(project(":core:domain"))
                 implementation(project(":core:designsystem"))

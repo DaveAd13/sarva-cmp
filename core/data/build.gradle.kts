@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.composeCompiler)
 }
 
 room {
@@ -34,6 +36,10 @@ kotlin {
         }.configure {
             instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
+
+        androidResources {
+            enable = true
+        }
     }
 
     val xcfName = "core:dataKit"
@@ -59,43 +65,60 @@ kotlin {
     jvm()
 
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlin.stdlib)
-            implementation(libs.kotlinx.serialization.json)
+        commonMain {
+            dependencies {
+                implementation(libs.kotlin.stdlib)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.components.resources)
 
-            // --- Ktor ---
-            implementation(libs.bundles.ktor)
+                // --- Ktor ---
+                implementation(libs.bundles.ktor)
 
-            // --- DI (Koin) ---
-            implementation(libs.bundles.koin.common)
+                // --- DI (Koin) ---
+                implementation(libs.bundles.koin.common)
 
-            // --- Date ---
-            implementation(libs.kotlinx.datetime)
+                // --- Date ---
+                implementation(libs.kotlinx.datetime)
 
-            // --- DB ---
-            implementation(libs.androidx.room.runtime)
-            implementation(libs.androidx.sqlite.bundled)
+                // --- DB ---
+                implementation(libs.androidx.room.runtime)
+                implementation(libs.androidx.sqlite.bundled)
+                implementation(libs.androidx.datastore)
+                implementation(libs.androidx.datastore.preferences)
 
 
-            implementation(project(":core:domain"))
-            implementation(project(":core:common"))
+                implementation(project(":core:domain"))
+                implementation(project(":core:common"))
+            }
         }
 
 
-        androidMain.dependencies {
-            // --- Ktor ---
-            implementation(libs.ktor.client.okhttp)
+        androidMain {
+            dependencies {
+                // --- Ktor ---
+                implementation(libs.ktor.client.okhttp)
+            }
         }
 
 
-        iosMain.dependencies {
-            // --- Ktor ---
-            implementation(libs.ktor.client.darwin)
+        iosMain {
+            dependencies {
+                // --- Ktor ---
+                implementation(libs.ktor.client.darwin)
+            }
         }
 
-        jvmMain.dependencies {
-            // --- Ktor ---
-            implementation(libs.ktor.client.okhttp)
+        jvmMain {
+            dependencies {
+                // --- Ktor ---
+                implementation(libs.ktor.client.okhttp)
+            }
         }
     }
+}
+
+compose.resources {
+    publicResClass = false
+    packageOfResClass = "com.sarva.core.data.generated.resources"
+    generateResClass = auto
 }

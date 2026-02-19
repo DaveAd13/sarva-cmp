@@ -5,6 +5,10 @@
     <string name="hour_symbol">h</string>
     <string name="minute_symbol">m</string>
     <string name="second_symbol">s</string>
+    <string name="search_currencies">Search currencies</string>
+    <string name="no_currencies_found">No currencies found</string>
+    <string name="recent">Recent</string>
+    <string name="all_currencies">All currencies</string>
 
     <string name="food">Food</string>
     <string name="transport">Transport</string>

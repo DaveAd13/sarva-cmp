@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+dependencies {
+    androidRuntimeClasspath(libs.ui.tooling)
+}
+
 kotlin {
     androidLibrary {
         namespace = "com.sarva.fitness"
@@ -53,7 +57,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.kotlin.stdlib)
             implementation(libs.material3)
-            implementation(libs.ui.tooling)
+            implementation(libs.ui.tooling.preview)
             implementation(libs.material.icons.extended)
             implementation(libs.components.resources)
             implementation(libs.kotlinx.collections.immutable)

@@ -122,7 +122,6 @@ fun LocationSearchScreen(
     )
     val focusRequester = remember { FocusRequester() }
 
-
     Scaffold(
         containerColor = containerColor,
         topBar = {

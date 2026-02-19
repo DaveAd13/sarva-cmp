@@ -9,6 +9,10 @@ plugins {
     alias(libs.plugins.serialization)
 }
 
+dependencies {
+    androidRuntimeClasspath(libs.ui.tooling)
+}
+
 kotlin {
     androidLibrary {
         namespace = "com.sarva.app.shared"
@@ -44,7 +48,7 @@ kotlin {
             implementation(libs.material3)
             implementation(libs.components.resources)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.ui.tooling)
+            implementation(libs.ui.tooling.preview)
             implementation(libs.material.icons.extended)
             implementation(libs.androidx.lifecycle.runtimeCompose)
 

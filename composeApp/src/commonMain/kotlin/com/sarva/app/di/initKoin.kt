@@ -2,6 +2,7 @@ package com.sarva.app.di
 
 import com.sarva.core.data.di.dataModule
 import com.sarva.core.data.di.platformDataModule
+import com.sarva.core.presentation.di.presentationModule
 import com.sarva.expenses.di.expensesModule
 import com.sarva.features.location.di.locationModule
 import com.sarva.fitness.di.fitnessModule
@@ -20,6 +21,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             locationModule,
             dataModule,
             platformDataModule,
+            presentationModule
         )
     }
 }

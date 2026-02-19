@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+dependencies {
+    androidRuntimeClasspath(libs.ui.tooling)
+}
+
 kotlin {
     androidLibrary {
         namespace = "com.sarva.expenses"
@@ -55,7 +59,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.material3)
                 implementation(libs.material.icons.extended)
-                implementation(libs.ui.tooling)
+                implementation(libs.ui.tooling.preview)
                 implementation(libs.components.resources)
                 implementation(libs.androidx.lifecycle.runtimeCompose)
                 implementation(libs.compose.shimmer)

@@ -5,6 +5,10 @@
     <string name="hour_symbol">ժ</string>
     <string name="minute_symbol">ր</string>
     <string name="second_symbol">վ</string>
+    <string name="search_currencies">Որոնել արժույթներ</string>
+    <string name="no_currencies_found">Արժույթները չեն գտնվել</string>
+    <string name="recent">Վերջին</string>
+    <string name="all_currencies">Բոլոր արժույթները</string>
 
     <string name="food">Սնունդ</string>
     <string name="transport">Տրանսպորտ</string>

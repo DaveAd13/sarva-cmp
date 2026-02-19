@@ -2,9 +2,12 @@ package com.sarva.core.data.di
 
 import com.sarva.common.DefaultDispatcherProvider
 import com.sarva.common.DispatcherProvider
+import com.sarva.core.data.currencies.local.RecentCurrencyLocalDataSource
+import com.sarva.core.data.currencies.repository.CurrencyRepositoryImpl
 import com.sarva.core.data.expenses.repository.ExpenseRepositoryImpl
 import com.sarva.core.data.location.remote.LocationApi
 import com.sarva.core.data.location.repository.LocationRepositoryImpl
+import com.sarva.core.domain.repository.CurrencyRepository
 import com.sarva.core.domain.repository.ExpenseRepository
 import com.sarva.core.domain.repository.LocationRepository
 import io.ktor.client.HttpClient
@@ -39,4 +42,6 @@ val dataModule = module {
     singleOf(::LocationApi)
     factoryOf(::ExpenseRepositoryImpl) bind ExpenseRepository::class
     factoryOf(::LocationRepositoryImpl) bind LocationRepository::class
+    factoryOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
+    singleOf(::RecentCurrencyLocalDataSource)
 }

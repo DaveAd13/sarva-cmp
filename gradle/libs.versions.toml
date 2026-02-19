@@ -1,17 +1,18 @@
 [versions]
-agp = "9.0.0"
+agp = "9.0.1"
 android-compileSdk = "36"
 android-minSdk = "29"
 android-targetSdk = "36"
-androidx-activity = "1.12.2"
+androidx-activity = "1.12.4"
 androidx-lifecycle = "2.10.0-alpha07"
-componentsResources = "1.10.0"
+componentsResources = "1.10.1"
 composeShimmer = "1.3.3"
 coreSplashscreen = "1.2.0"
-foundation = "1.10.0"
-jetbrainsCompose = "1.10.0"
+datastore = "1.2.0"
+foundation = "1.10.1"
+jetbrainsCompose = "1.10.1"
 connectClient = "1.1.0"
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 kotlinx-coroutines = "1.10.2"
 kotlinx-collections-immutable = "0.4.0"
 kotlinx-serialization-json = "1.10.0"
@@ -21,15 +22,15 @@ ktor = "3.4.0"
 material3 = "1.9.0"
 materialIconsExtended = "1.7.3"
 navigation3 = "1.0.0"
-navigationeventCompose = "1.0.0"
+navigationeventCompose = "1.0.1"
 room = "2.8.4"
-runtime = "1.10.0"
+runtime = "1.10.1"
 sqlite = "2.6.2"
 ksp = "2.3.3"
 cmpNavigation3 = "1.0.0-alpha06"
-mapsCompose = "7.0.0"
+mapsCompose = "8.1.0"
 kotlinxDatetime = "0.7.1"
-haze = "1.7.1"
+haze = "1.7.2"
 
 material = "1.13.0"
 activity = "1.12.2"
@@ -37,7 +38,7 @@ constraintlayout = "2.2.1"
 kotlinStdlib = "2.3.0"
 runner = "1.7.0"
 core = "1.7.0"
-uiTooling = "1.10.0"
+uiTooling = "1.10.1"
 runnerVersion = "1.7.0"
 coreVersion = "1.7.0"
 junit = "1.3.0"
@@ -45,6 +46,8 @@ junit = "1.3.0"
 [libraries]
 androidx-connect-client = { module = "androidx.health.connect:connect-client", version.ref = "connectClient" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
 compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
 foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "foundation" }
@@ -98,6 +101,7 @@ material3 = { module = "org.jetbrains.compose.material3:material3", version.ref 
 navigationevent-compose = { module = "org.jetbrains.androidx.navigationevent:navigationevent-compose", version.ref = "navigationeventCompose" }
 runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "runtime" }
 ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "uiTooling" }
+ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "uiTooling" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runnerVersion" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "coreVersion" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }

@@ -278,11 +278,18 @@ class ExpenseAddEditViewModel(
                 }
             }
 
+            ExpenseAddEditAction.OnCurrencyClicked -> {
+                _state.update {
+                    it.copy(
+                        isCurrencyPickerVisible = true
+                    )
+                }
+            }
 
             ExpenseAddEditAction.OnLocationCLicked -> {
                 _state.update {
                     it.copy(
-                        showLocationSearch = true
+                        isLocationSearchVisible = true
                     )
                 }
             }
@@ -320,10 +327,28 @@ class ExpenseAddEditViewModel(
                 }
             }
 
+
+            ExpenseAddEditAction.OnCurrencyPickerDismissed -> {
+                _state.update {
+                    it.copy(
+                        isCurrencyPickerVisible = false
+                    )
+                }
+            }
+
+            is ExpenseAddEditAction.OnCurrencySelected -> {
+                val currency = action.currency
+                _state.update {
+                    it.copy(
+                        currency = currency.code,
+                    )
+                }
+            }
+
             ExpenseAddEditAction.OnLocationSearchDismissed -> {
                 _state.update {
                     it.copy(
-                        showLocationSearch = false
+                        isLocationSearchVisible = false
                     )
                 }
             }

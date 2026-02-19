@@ -42,30 +42,28 @@ class LocationSearchViewModel(
         }
     }
 
-    private fun getSearchResults(query: String) {
-        viewModelScope.launch {
-            _state.update {
-                it.copy(
-                    isSearching = true
-                )
-            }
-            when (val result = locationSearchUseCase(query)) {
-                is Result.Success -> {
-                    _state.update {
-                        it.copy(
-                            results = result.data,
-                            isSearching = false
-                        )
-                    }
+    private suspend fun getSearchResults(query: String) {
+        _state.update {
+            it.copy(
+                isSearching = true
+            )
+        }
+        when (val result = locationSearchUseCase(query)) {
+            is Result.Success -> {
+                _state.update {
+                    it.copy(
+                        results = result.data,
+                        isSearching = false
+                    )
                 }
+            }
 
-                is Result.Failure -> {
-                    _state.update {
-                        it.copy(
-                            results = emptyList(),
-                            isSearching = false
-                        )
-                    }
+            is Result.Failure -> {
+                _state.update {
+                    it.copy(
+                        results = emptyList(),
+                        isSearching = false
+                    )
                 }
             }
         }

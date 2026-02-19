@@ -83,6 +83,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.presentation.currency_picker.presentation.CurrencyPickerRoot
 import com.sarva.core.presentation.formatting.formatToShortDisplay
 import com.sarva.core.presentation.getIcon
 import com.sarva.core.presentation.getLabel
@@ -319,7 +320,18 @@ fun ExpenseAddEditScreen(
         )
     }
 
-    if (state.showLocationSearch) {
+    if (state.isCurrencyPickerVisible) {
+        CurrencyPickerRoot(
+            onCurrencySelected = { currency ->
+                onAction(ExpenseAddEditAction.OnCurrencySelected(currency))
+            },
+            onDismiss = { onAction(ExpenseAddEditAction.OnCurrencyPickerDismissed) },
+            containerColor = containerColor,
+            contentColor = contentColor
+        )
+    }
+
+    if (state.isLocationSearchVisible) {
         LocationSearchRoot(
             onLocationSelected = { location ->
                 onAction(ExpenseAddEditAction.OnLocationSelected(location))
@@ -384,7 +396,7 @@ private fun MainExpenseCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedButton(
-                    onClick = {},
+                    onClick = { onAction(ExpenseAddEditAction.OnCurrencyClicked) },
                     contentPadding = PaddingValues(
                         horizontal = 4.dp,
                         vertical = 2.dp
