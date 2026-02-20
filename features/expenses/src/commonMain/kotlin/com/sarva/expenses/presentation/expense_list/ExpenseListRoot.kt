@@ -49,12 +49,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
@@ -89,6 +89,10 @@ import com.sarva.features.expenses.generated.resources.no_expenses_title
 import com.sarva.features.expenses.generated.resources.undo
 import com.valentinilk.shimmer.ShimmerBounds
 import com.valentinilk.shimmer.rememberShimmer
+import dev.chrisbanes.haze.HazeProgressive
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
@@ -150,6 +154,11 @@ fun ExpenseListScreen(
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
 
+    val hazeState = rememberHazeState()
+    val isScrolled by remember {
+        derivedStateOf { scrollBehavior.state.contentOffset < -1f }
+    }
+
     ObserveAsEvents(events) { event ->
         when (event) {
             is ExpenseListEvent.ShowSnackbar -> {
@@ -194,6 +203,13 @@ fun ExpenseListScreen(
             Column(
                 modifier = Modifier
                     .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
+                    .hazeEffect(hazeState) {
+                        blurRadius = 15.dp
+                        progressive = HazeProgressive.verticalGradient(
+                            startIntensity = if (isScrolled) 1f else 0f,
+                            endIntensity = if (isScrolled) 0.3f else 0f,
+                        )
+                    },
             ) {
                 AnimatedContent(
                     targetState = state.isSearchActive,
@@ -230,8 +246,8 @@ fun ExpenseListScreen(
                                 }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = containerColor,
-                                scrolledContainerColor = containerColor,
+                                containerColor = Color.Transparent,
+                                scrolledContainerColor = Color.Transparent,
                                 titleContentColor = contentColor,
                                 navigationIconContentColor = contentColor,
                                 actionIconContentColor = contentColor
@@ -243,15 +259,15 @@ fun ExpenseListScreen(
 
                 LazyRow(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                0.0f to containerColor,
-                                0.65f to containerColor,
-                                1.0f to Color.Transparent
-                            )
-                        ),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        .fillMaxWidth(),
+//                        .background(
+//                            brush = Brush.verticalGradient(
+//                                0.0f to containerColor,
+//                                0.65f to containerColor,
+//                                1.0f to Color.Transparent
+//                            )
+//                        ),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     item {
@@ -320,7 +336,10 @@ fun ExpenseListScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .hazeSource(state = hazeState)
+                    .background(containerColor),
                 state = listState,
                 contentPadding = contentPadding
             ) {

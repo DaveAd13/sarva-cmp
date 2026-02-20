@@ -71,6 +71,10 @@ kotlin {
                 // --- Date ---
                 implementation(libs.kotlinx.datetime)
 
+                // --- Haze ---
+                implementation(libs.haze)
+                implementation(libs.haze.materials)
+
                 implementation(project(":core:domain"))
                 implementation(project(":core:presentation"))
                 implementation(project(":core:designsystem"))

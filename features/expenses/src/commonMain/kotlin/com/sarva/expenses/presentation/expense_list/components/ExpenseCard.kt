@@ -86,9 +86,11 @@ fun ExpenseCard(
             }
         },
         onDismiss = {
-            if (it == SwipeToDismissBoxValue.EndToStart) onDelete()
-            scope.launch {
-                swipeToDismissBoxState.snapTo(SwipeToDismissBoxValue.Settled)
+            if (it == SwipeToDismissBoxValue.EndToStart) {
+                onDelete()
+                scope.launch {
+                    swipeToDismissBoxState.snapTo(SwipeToDismissBoxValue.Settled)
+                }
             }
         },
         gesturesEnabled = true,

@@ -1,8 +1,10 @@
 package com.sarva.core.domain.model.expense
 
+import androidx.compose.runtime.Stable
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
+@Stable
 @Serializable
 data class Expense(
     val id: Int = 0,
