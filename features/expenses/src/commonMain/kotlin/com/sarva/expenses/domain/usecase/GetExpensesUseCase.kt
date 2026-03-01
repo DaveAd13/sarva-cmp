@@ -1,8 +1,8 @@
 package com.sarva.expenses.domain.usecase
 
 import com.sarva.common.DispatcherProvider
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.repository.ExpenseRepository
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.repository.ExpenseRepository
 import com.sarva.core.domain.util.Resource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow

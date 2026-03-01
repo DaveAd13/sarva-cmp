@@ -1,7 +1,7 @@
 package com.sarva.core.data.currencies.mapper
 
 import com.sarva.core.data.currencies.dto.CurrencyDto
-import com.sarva.core.domain.model.currency.Currency
+import com.sarva.core.domain.currencies.model.Currency
 
 internal fun CurrencyDto.toDomain(): Currency {
     return Currency(

@@ -1,8 +1,8 @@
 package com.sarva.core.data.database
 
 import androidx.room.TypeConverter
-import com.sarva.core.domain.model.expense.ExpenseCategory
-import com.sarva.core.domain.model.expense.ExpenseEntry
+import com.sarva.core.domain.expenses.model.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseEntry
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.json.Json
 

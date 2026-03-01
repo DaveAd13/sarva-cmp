@@ -1,7 +1,7 @@
 package com.sarva.features.location.domain.usecase
 
-import com.sarva.core.domain.model.location.LocationSearchResult
-import com.sarva.core.domain.repository.LocationRepository
+import com.sarva.core.domain.location.model.LocationSearchResult
+import com.sarva.core.domain.location.repository.LocationRepository
 import com.sarva.core.domain.util.Result
 import kotlin.coroutines.cancellation.CancellationException
 

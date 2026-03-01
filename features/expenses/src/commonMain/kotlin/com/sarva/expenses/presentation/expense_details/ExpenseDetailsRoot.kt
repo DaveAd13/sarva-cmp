@@ -49,8 +49,8 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 import com.sarva.core.presentation.CategoryIcon
 import com.sarva.core.presentation.dialogs.SimpleDialog
 import com.sarva.core.presentation.formatting.formatCurrency

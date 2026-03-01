@@ -1,7 +1,7 @@
 package com.sarva.core.data.expenses.mapper
 
 import com.sarva.core.data.expenses.local.entity.ExpenseEntity
-import com.sarva.core.domain.model.expense.Expense
+import com.sarva.core.domain.expenses.model.Expense
 
 
 fun ExpenseEntity.toDomain() = Expense(

@@ -3,10 +3,10 @@ package com.sarva.expenses.presentation.expense_add_edit
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.model.expense.ExpenseCategory
-import com.sarva.core.domain.model.expense.ExpenseEntry
-import com.sarva.core.domain.model.expense.ExpenseLocation
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.model.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseEntry
+import com.sarva.core.domain.expenses.model.ExpenseLocation
 import com.sarva.core.domain.util.Resource
 import com.sarva.core.domain.util.Result
 import com.sarva.core.presentation.formatting.toPlainString

@@ -3,4 +3,10 @@
     <string name="app_name">Sarva</string>
     <string name="home">Home</string>
     <string name="more">More</string>
+    <string name="steps">Steps</string>
+    <string name="cal">cal</string>
+    <string name="km">km</string>
+    <string name="connect_health">Connect Health</string>
+    <string name="connect_google_health">Connect Google Health</string>
+    <string name="connect_apple_health">Connect Apple Health</string>
 </resources>

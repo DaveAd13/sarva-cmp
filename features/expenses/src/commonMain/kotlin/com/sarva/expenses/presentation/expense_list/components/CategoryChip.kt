@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 import com.sarva.core.presentation.CategoryIcon
 import com.sarva.core.presentation.getIcon
 import com.sarva.core.presentation.getLabel

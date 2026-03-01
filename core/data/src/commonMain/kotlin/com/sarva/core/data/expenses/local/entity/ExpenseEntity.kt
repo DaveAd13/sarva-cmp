@@ -3,9 +3,9 @@ package com.sarva.core.data.expenses.local.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sarva.core.domain.model.expense.ExpenseCategory
-import com.sarva.core.domain.model.expense.ExpenseEntry
-import com.sarva.core.domain.model.expense.ExpenseLocation
+import com.sarva.core.domain.expenses.model.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseEntry
+import com.sarva.core.domain.expenses.model.ExpenseLocation
 import kotlinx.datetime.LocalDateTime
 
 @Entity(tableName = "expenses")

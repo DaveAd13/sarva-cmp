@@ -4,8 +4,8 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 import com.sarva.core.domain.util.Resource
 import com.sarva.core.domain.util.Result
 import com.sarva.core.presentation.util.UiText

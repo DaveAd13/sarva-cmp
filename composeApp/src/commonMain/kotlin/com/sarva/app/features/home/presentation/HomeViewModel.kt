@@ -2,7 +2,10 @@ package com.sarva.app.features.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarva.core.domain.settings.model.WidgetLayout
+import com.sarva.core.domain.settings.repository.UserSettingsRepository
 import com.sarva.core.domain.util.Result
+import com.sarva.core.presentation.formatting.formatNumber
 import com.sarva.fitness.domain.usecase.CheckHealthPermissionsUseCase
 import com.sarva.fitness.domain.usecase.GetDailyRecordsUseCase
 import kotlinx.coroutines.channels.Channel
@@ -14,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
-    private val hasHealthPermission: CheckHealthPermissionsUseCase
+    private val hasHealthPermission: CheckHealthPermissionsUseCase,
+    private val userSettingsRepository: UserSettingsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeState())
@@ -25,13 +29,22 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch {
+            val settings = userSettingsRepository.getUserSettings()
+            _state.update {
+                it.copy(
+                    widgetLayout = settings.homeLayout,
+                )
+            }
+        }
+
+        viewModelScope.launch {
             if (hasHealthPermission()) {
                 _state.update {
                     it.copy(
                         hasHealthPermission = true
                     )
                 }
-                loadSteps()
+                loadDailyRecords()
             }
         }
     }
@@ -43,11 +56,11 @@ class HomeViewModel(
             )
         }
         viewModelScope.launch {
-            loadSteps()
+            loadDailyRecords()
         }
     }
 
-    fun loadSteps() {
+    fun loadDailyRecords() {
         viewModelScope.launch {
             _state.update {
                 it.copy(
@@ -57,11 +70,15 @@ class HomeViewModel(
 
             when (val result = getDailyRecordsUseCase()) {
                 is Result.Success -> {
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            steps = result.data.steps.toInt()
-                        )
+                    result.data.run {
+                        _state.update {
+                            it.copy(
+                                isLoading = false,
+                                steps = steps.toInt(),
+                                distance = formatNumber(distance, 2),
+                                calories = formatNumber(calories.toInt()),
+                            )
+                        }
                     }
                 }
 
@@ -80,7 +97,7 @@ class HomeViewModel(
         when (action) {
             HomeAction.OnRefresh -> {
                 viewModelScope.launch {
-                    loadSteps()
+                    loadDailyRecords()
                 }
             }
 
@@ -101,6 +118,19 @@ class HomeViewModel(
             HomeAction.RequestHealthPermission -> {
                 viewModelScope.launch {
                     eventChannel.send(HomeEvent.RequestHealthPermission)
+                }
+            }
+
+            HomeAction.OnGridTypeClicked -> {
+                val newLayout = when (_state.value.widgetLayout) {
+                    WidgetLayout.TILED -> WidgetLayout.STACKED
+                    WidgetLayout.STACKED -> WidgetLayout.TILED
+                }
+
+                _state.update { it.copy(widgetLayout = newLayout) }
+
+                viewModelScope.launch {
+                    userSettingsRepository.updateHomeLayout(newLayout)
                 }
             }
         }

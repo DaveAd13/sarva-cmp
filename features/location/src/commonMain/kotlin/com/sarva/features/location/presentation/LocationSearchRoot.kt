@@ -54,7 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import com.sarva.core.domain.model.location.LocationSearchResult
+import com.sarva.core.domain.location.model.LocationSearchResult
 import com.sarva.core.presentation.textfields.ClearTextIcon
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.designsystem.theme.SarvaTheme

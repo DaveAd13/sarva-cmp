@@ -4,8 +4,8 @@ import com.sarva.common.DispatcherProvider
 import com.sarva.core.data.database.AppDatabase
 import com.sarva.core.data.expenses.mapper.toDomain
 import com.sarva.core.data.expenses.mapper.toEntity
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.repository.ExpenseRepository
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.repository.ExpenseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map

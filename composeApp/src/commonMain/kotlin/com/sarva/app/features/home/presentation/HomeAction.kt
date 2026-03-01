@@ -5,4 +5,5 @@ sealed interface HomeAction {
     data class OnTaskToggle(val id: String) : HomeAction
     data object OnRefresh : HomeAction
     data object RequestHealthPermission : HomeAction
+    data object OnGridTypeClicked : HomeAction
 }

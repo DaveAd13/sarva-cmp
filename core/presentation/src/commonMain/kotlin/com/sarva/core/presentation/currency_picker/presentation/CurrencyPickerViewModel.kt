@@ -3,9 +3,9 @@ package com.sarva.core.presentation.currency_picker.presentation
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sarva.core.domain.usecase.GetCurrenciesUseCase
-import com.sarva.core.domain.usecase.GetRecentCurrenciesUseCase
-import com.sarva.core.domain.usecase.SaveCurrencyToRecentsUseCase
+import com.sarva.core.domain.currencies.usecase.GetCurrenciesUseCase
+import com.sarva.core.domain.currencies.usecase.GetRecentCurrenciesUseCase
+import com.sarva.core.domain.currencies.usecase.SaveCurrencyToRecentsUseCase
 import com.sarva.core.domain.util.Result
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel

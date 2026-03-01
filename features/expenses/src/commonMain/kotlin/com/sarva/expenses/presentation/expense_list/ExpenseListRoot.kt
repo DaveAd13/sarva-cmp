@@ -63,7 +63,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 import com.sarva.core.presentation.getIcon
 import com.sarva.core.presentation.getLabel
 import com.sarva.core.presentation.util.LocalBackHandler

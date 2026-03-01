@@ -1,8 +1,8 @@
 package com.sarva.expenses.presentation.expense_add_edit
 
-import com.sarva.core.domain.model.currency.Currency
-import com.sarva.core.domain.model.expense.ExpenseCategory
-import com.sarva.core.domain.model.location.LocationSearchResult
+import com.sarva.core.domain.currencies.model.Currency
+import com.sarva.core.domain.expenses.model.ExpenseCategory
+import com.sarva.core.domain.location.model.LocationSearchResult
 import kotlinx.datetime.LocalDateTime
 
 sealed interface ExpenseAddEditAction {

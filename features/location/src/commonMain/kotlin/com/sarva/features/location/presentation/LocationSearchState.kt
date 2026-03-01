@@ -1,7 +1,7 @@
 package com.sarva.features.location.presentation
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.sarva.core.domain.model.location.LocationSearchResult
+import com.sarva.core.domain.location.model.LocationSearchResult
 
 data class LocationSearchState(
     val searchTextFieldState: TextFieldState = TextFieldState(""),

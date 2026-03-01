@@ -1,8 +1,8 @@
 package com.sarva.core.presentation.di
 
-import com.sarva.core.domain.usecase.GetCurrenciesUseCase
-import com.sarva.core.domain.usecase.GetRecentCurrenciesUseCase
-import com.sarva.core.domain.usecase.SaveCurrencyToRecentsUseCase
+import com.sarva.core.domain.currencies.usecase.GetCurrenciesUseCase
+import com.sarva.core.domain.currencies.usecase.GetRecentCurrenciesUseCase
+import com.sarva.core.domain.currencies.usecase.SaveCurrencyToRecentsUseCase
 import com.sarva.core.presentation.currency_picker.presentation.CurrencyPickerViewModel
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf

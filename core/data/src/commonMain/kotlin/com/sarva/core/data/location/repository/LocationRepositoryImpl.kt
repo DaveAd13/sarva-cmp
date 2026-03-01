@@ -3,8 +3,8 @@ package com.sarva.core.data.location.repository
 import com.sarva.common.DispatcherProvider
 import com.sarva.core.data.location.remote.LocationApi
 import com.sarva.core.data.location.remote.dto.toDomain
-import com.sarva.core.domain.model.location.LocationSearchResult
-import com.sarva.core.domain.repository.LocationRepository
+import com.sarva.core.domain.location.model.LocationSearchResult
+import com.sarva.core.domain.location.repository.LocationRepository
 import kotlinx.coroutines.withContext
 
 class LocationRepositoryImpl(

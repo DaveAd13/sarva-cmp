@@ -3,4 +3,10 @@
     <string name="app_name">Sarva</string>
     <string name="home">Տուն</string>
     <string name="more">Ավելին</string>
+    <string name="steps">Քայլեր</string>
+    <string name="cal">կալ</string>
+    <string name="km">կմ</string>
+    <string name="connect_health">Միացնել Health-ը</string>
+    <string name="connect_google_health">Միացնել Google Health-ը</string>
+    <string name="connect_apple_health">Միացնել Apple Health-ը</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.sarva.core.data.location.remote.dto
 
-import com.sarva.core.domain.model.location.LocationSearchResult
+import com.sarva.core.domain.location.model.LocationSearchResult
 import kotlinx.serialization.Serializable
 
 @Serializable

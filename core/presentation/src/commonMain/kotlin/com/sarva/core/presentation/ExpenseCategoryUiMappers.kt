@@ -13,7 +13,7 @@ import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.material.icons.rounded.Store
 import androidx.compose.material.icons.rounded.Subscriptions
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 import com.sarva.core.presentation.generated.resources.Res
 import com.sarva.core.presentation.generated.resources.bills
 import com.sarva.core.presentation.generated.resources.education

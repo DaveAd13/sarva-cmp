@@ -1,18 +1,18 @@
 package com.sarva.core.data.currencies.repository
 
 import com.sarva.core.data.currencies.dto.CurrencyDto
-import com.sarva.core.data.currencies.local.RecentCurrencyLocalDataSource
+import com.sarva.core.data.currencies.local.RecentCurrenciesDataSource
 import com.sarva.core.data.currencies.mapper.toDomain
 import com.sarva.core.data.generated.resources.Res
-import com.sarva.core.domain.model.currency.Currency
-import com.sarva.core.domain.repository.CurrencyRepository
+import com.sarva.core.domain.currencies.model.Currency
+import com.sarva.core.domain.currencies.repository.CurrencyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.cancellation.CancellationException
 
 class CurrencyRepositoryImpl(
-    private val localDataSource: RecentCurrencyLocalDataSource,
+    private val localDataSource: RecentCurrenciesDataSource,
 ) : CurrencyRepository {
 
     private var cachedCurrencies: List<Currency>? = null

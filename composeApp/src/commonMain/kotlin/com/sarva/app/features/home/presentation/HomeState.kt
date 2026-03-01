@@ -1,14 +1,20 @@
 package com.sarva.app.features.home.presentation
 
+import androidx.compose.runtime.Stable
 import com.sarva.app.features.calendar.domain.model.CalendarEvent
+import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.app.features.home.domain.model.SpentInfo
 import com.sarva.app.features.notes.domain.model.Note
 import com.sarva.app.features.tasks.domain.model.Task
 import com.sarva.fitness.presentation.daily_activity.DailyActivityViewModel.Companion.STEP_GOAL
 
+@Stable
 data class HomeState(
     val isLoading: Boolean = false,
+    val widgetLayout: WidgetLayout = WidgetLayout.TILED,
     val steps: Int = 0,
+    val calories: String = "0",
+    val distance: String = "0",
     val stepsGoal: Int = STEP_GOAL,
     val hasHealthPermission: Boolean = false,
     val tasks: List<Task> = listOf(

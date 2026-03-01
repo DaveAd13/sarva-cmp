@@ -1,7 +1,7 @@
 package com.sarva.expenses.presentation.expense_details
 
 import androidx.compose.runtime.Immutable
-import com.sarva.core.domain.model.expense.Expense
+import com.sarva.core.domain.expenses.model.Expense
 
 @Immutable
 data class ExpenseDetailsState(

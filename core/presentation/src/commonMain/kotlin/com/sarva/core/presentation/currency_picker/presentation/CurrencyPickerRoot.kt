@@ -55,7 +55,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigationevent.NavigationEventInfo
 import androidx.navigationevent.compose.NavigationBackHandler
 import androidx.navigationevent.compose.rememberNavigationEventState
-import com.sarva.core.domain.model.currency.Currency
+import com.sarva.core.domain.currencies.model.Currency
 import com.sarva.core.presentation.generated.resources.Res
 import com.sarva.core.presentation.generated.resources.all_currencies
 import com.sarva.core.presentation.generated.resources.flag_placeholder

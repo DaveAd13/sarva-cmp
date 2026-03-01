@@ -2,8 +2,8 @@ package com.sarva.expenses.presentation.expense_add_edit
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
-import com.sarva.core.domain.model.expense.ExpenseCategory
-import com.sarva.core.domain.model.expense.ExpenseLocation
+import com.sarva.core.domain.expenses.model.ExpenseCategory
+import com.sarva.core.domain.expenses.model.ExpenseLocation
 import kotlinx.datetime.LocalDateTime
 import kotlin.random.Random
 

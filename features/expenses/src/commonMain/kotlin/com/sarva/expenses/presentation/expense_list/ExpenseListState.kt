@@ -2,8 +2,8 @@ package com.sarva.expenses.presentation.expense_list
 
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Stable
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 
 @Stable
 data class ExpenseListState(

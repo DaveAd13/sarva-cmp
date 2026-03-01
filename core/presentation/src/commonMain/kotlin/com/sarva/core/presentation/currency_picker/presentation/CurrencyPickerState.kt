@@ -1,7 +1,7 @@
 package com.sarva.core.presentation.currency_picker.presentation
 
 import androidx.compose.foundation.text.input.TextFieldState
-import com.sarva.core.domain.model.currency.Currency
+import com.sarva.core.domain.currencies.model.Currency
 
 data class CurrencyPickerState(
     val searchTextFieldState: TextFieldState = TextFieldState(""),

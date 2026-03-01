@@ -1,7 +1,7 @@
 package com.sarva.expenses.presentation.expense_list
 
-import com.sarva.core.domain.model.expense.Expense
-import com.sarva.core.domain.model.expense.ExpenseCategory
+import com.sarva.core.domain.expenses.model.Expense
+import com.sarva.core.domain.expenses.model.ExpenseCategory
 
 sealed interface ExpenseListAction {
     data class CategoryClicked(val category: ExpenseCategory?) : ExpenseListAction
