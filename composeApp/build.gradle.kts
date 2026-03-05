@@ -14,7 +14,7 @@ dependencies {
 }
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.sarva.app.shared"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
