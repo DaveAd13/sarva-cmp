@@ -2,7 +2,6 @@ package com.sarva.app.features.home.presentation.components.widgets
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -38,28 +37,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.app.features.home.presentation.HomeState
 import com.sarva.app.generated.resources.Res
 import com.sarva.app.generated.resources.cal
 import com.sarva.app.generated.resources.connect_apple_health
 import com.sarva.app.generated.resources.connect_google_health
 import com.sarva.app.generated.resources.connect_health
-import com.sarva.app.generated.resources.ic_steps_24
 import com.sarva.app.generated.resources.km
 import com.sarva.app.generated.resources.steps
 import com.sarva.common.getPlatformName
+import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.core.presentation.formatting.formatNumber
+import com.sarva.core.presentation.generated.resources.ic_steps_24
 import com.sarva.designsystem.theme.SarvaTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import com.sarva.core.presentation.generated.resources.Res as CoreRes
 
 @Composable
 fun FitnessWidget(
@@ -104,8 +105,12 @@ private fun FitnessCard(
         modifier = Modifier.fillMaxSize(),
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = SarvaTheme.colors.fitnessContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+//        border = BorderStroke(
+//            1.dp,
+//            MaterialTheme.colorScheme.outline
+//        )
     ) {
         if (widgetLayout == WidgetLayout.TILED) {
             CardContentSmall(
@@ -152,13 +157,13 @@ private fun CardContentSmall(
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Bold,
             ),
-            color = SarvaTheme.colors.fitnessContent
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
             text = "${formatNumber(goal)} ${stringResource(Res.string.steps)}",
             style = MaterialTheme.typography.bodySmall,
-            color = SarvaTheme.colors.fitnessContent.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }
@@ -172,7 +177,6 @@ private fun CardContentBig(
 ) {
     val isGoalReached = steps >= goal
     val progressRaw = (steps.toFloat() / goal.toFloat()).coerceIn(0f, 1f)
-    val contentColor = SarvaTheme.colors.fitnessContent
 
     Row(
         modifier = Modifier
@@ -197,19 +201,19 @@ private fun CardContentBig(
                 Text(
                     text = formatNumber(steps),
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                    color = contentColor
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     text = " / ${formatNumber(goal)}",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = contentColor.copy(alpha = 0.6f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(start = 4.dp)
                 )
                 Spacer(Modifier.width(8.dp))
                 Icon(
-                    painter = painterResource(Res.drawable.ic_steps_24),
+                    painter = painterResource(CoreRes.drawable.ic_steps_24),
                     contentDescription = null,
-                    tint = contentColor,
+                    tint = SarvaTheme.colors.fitness,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -217,12 +221,10 @@ private fun CardContentBig(
             MetricRow(
                 icon = Icons.Rounded.Map,
                 text = "$distance ${stringResource(Res.string.km)}",
-                color = contentColor.copy(alpha = 0.9f)
             )
             MetricRow(
                 icon = Icons.Rounded.LocalFireDepartment,
                 text = "$calories ${stringResource(Res.string.cal)}",
-                color = contentColor.copy(alpha = 0.9f)
             )
         }
     }
@@ -236,8 +238,12 @@ private fun NeedPermissionCard(
         modifier = Modifier.fillMaxSize(),
         onClick = onClick,
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = SarvaTheme.colors.fitnessContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+//        border = BorderStroke(
+//            1.dp,
+//            MaterialTheme.colorScheme.outline
+//        )
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -247,13 +253,13 @@ private fun NeedPermissionCard(
             Icon(
                 imageVector = Icons.Rounded.HealthAndSafety,
                 contentDescription = null,
-                tint = SarvaTheme.colors.fitnessContent,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = getHealthProviderName(),
-                color = SarvaTheme.colors.fitnessContent,
+                color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
             )
@@ -276,17 +282,11 @@ private fun FitnessGauge(
     isGoalReached: Boolean,
     modifier: Modifier,
 ) {
-    val successColor = SarvaTheme.colors.fitnessSuccess
-    val contentColor = SarvaTheme.colors.fitnessContent
-
-    val animatedColor by animateColorAsState(
-        targetValue = if (isGoalReached) successColor else contentColor,
-        animationSpec = tween(500), label = "color"
-    )
+    val gaugeColor = if (isGoalReached) SarvaTheme.colors.fitnessSuccess else SarvaTheme.colors.fitness
 
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(durationMillis = 1000), label = "progress"
+        animationSpec = tween(durationMillis = 1000)
     )
 
     BoxWithConstraints(
@@ -298,8 +298,8 @@ private fun FitnessGauge(
         CircularProgressIndicator(
             progress = { animatedProgress },
             modifier = Modifier.fillMaxSize(),
-            color = animatedColor,
-            trackColor = animatedColor.copy(alpha = 0.2f),
+            color = gaugeColor,
+            trackColor = gaugeColor.copy(alpha = 0.2f),
             strokeWidth = (minOf(maxWidth, maxHeight) * 0.08f).coerceAtLeast(4.dp),
             strokeCap = StrokeCap.Round,
         )
@@ -311,7 +311,7 @@ private fun FitnessGauge(
             Icon(
                 imageVector = targetIcon,
                 contentDescription = null,
-                tint = animatedColor,
+                tint = gaugeColor,
                 modifier = Modifier
                     .size(iconSize)
             )
@@ -323,7 +323,6 @@ private fun FitnessGauge(
 private fun MetricRow(
     icon: ImageVector,
     text: String,
-    color: Color
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -332,21 +331,22 @@ private fun MetricRow(
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge,
-            color = color
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = color,
+            tint = SarvaTheme.colors.fitness,
             modifier = Modifier.size(18.dp)
         )
     }
 }
 
 @Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
+private fun Preview() {
+    SarvaTheme {
         FitnessWidget(
             state = HomeState(
                 hasHealthPermission = true,
@@ -354,21 +354,6 @@ private fun PreviewLight() {
             ),
             onWidgetClick = {},
             modifier = Modifier.aspectRatio(1f)
-        )
-    }
-}
-
-@Preview(name = "Dark")
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
-        FitnessWidget(
-            state = HomeState(
-                hasHealthPermission = true,
-                widgetLayout = WidgetLayout.STACKED
-            ),
-            onWidgetClick = {},
-            modifier = Modifier.aspectRatio(2f)
         )
     }
 }

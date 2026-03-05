@@ -5,65 +5,33 @@ import androidx.compose.ui.graphics.Color
 val Transparent = Color(0x00000000)
 val SemiTransparent = Color(0x3BFFFFFF)
 
-// --- Core Brand Colors ---
-val VitaPrimary = Color(0xFF00C9A7)
-val VitaSecondary = Color(0xFF845EC2)
-val VitaTertiary = Color(0xFFFF9671)
+// --- Core Brand & Neutrals ---
+val SarvaPrimary = Color(0xFF00C9A7)
 
-// --- Neutral / Backgrounds (Dark) ---
-val DarkBackground = Color(0xFF121212)
-val DarkSurface = Color(0xFF1E1E24)
-val DarkOnBackground = Color(0xFFE5E5E5)
-val DarkOnSurface = Color(0xFFE5E5E5)
-
-// --- Neutral / Backgrounds (Light) ---
-val LightBackground = Color(0xFFF4F6F8)
+// --- Light Palette ---
+val LightBackground = Color(0xFFF1F3F4)
 val LightSurface = Color(0xFFFFFFFF)
-val LightOnBackground = Color(0xFF1C1B1F)
-val LightOnSurface = Color(0xFF1C1B1F)
+val LightOnSurface = Color(0xFF1C1C1E)
+val LightOutline = Color(0xFFE0E0E0)
 
+// --- Dark Palette ---
+val DarkBackground = Color(0xFF202124)
+val DarkSurface = Color(0xFF2D2E30)
+val DarkOnSurface = Color(0xFFE8E8E8)
+val DarkOutline = Color(0xFF444444)
 
-// --- Dark Mode Feature Colors (Deep & Rich) ---
-val NoteDarkBg = Color(0xFF423B35)
-val NoteDarkContent = Color(0xFFFFE082)
+val LightAccentFitness = Color(0xFF0E8FA8)
+val LightAccentFitnessSuccess = Color(0xFF7AAF3A)
+val LightAccentExpenses = Color(0xFF3A7A4A)
+val LightAccentNotes = Color(0xFFFBBC04)
+val LightAccentTasks = Color(0xFF1B95FF)
+val LightAccentCalendar = Color(0xFF12B5CB)
+val LightAccentPlaces = Color(0xFF8E4468)
 
-val FitnessDarkBg = Color(0xFF1D4549)
-val FitnessDarkContent = Color(0xFF80DEEA)
-val FitnessDarkSuccess = Color(0xFFFFE082)
-
-val ExpenseDarkBg = Color(0xFF3E2723)
-val ExpenseDarkContent = Color(0xFFFFCCBC)
-val ExpenseCardDarkBg = Color(0xFF4E3434)
-
-val TaskDarkBg = Color(0xFF4A4475)
-val TaskDarkContent = Color(0xFFD1C4E9)
-val TaskDarkChecked = Color(0xFFA09ACF)
-
-val CalendarDarkBg = Color(0xFF324157)
-val CalendarDarkContent = Color(0xFFBBDEFB)
-
-val PlacesDarkBg = Color(0xFF3E2B2B)
-val PlacesDarkContent = Color(0xFFFFCCBC)
-
-
-// --- Light Mode Feature Colors (Soft & Pastel) ---
-val NoteLightBg = Color(0xFFFFF8E1)
-val NoteLightContent = Color(0xFF5D4037)
-
-val FitnessLightBg = Color(0xFFE0F2F1)
-val FitnessLightContent = Color(0xFF00695C)
-val FitnessLightSuccess = Color(0xFFF9A825)
-
-val ExpenseLightBg = Color(0xFFFBE9E7)
-val ExpenseLightContent = Color(0xFFBF360C)
-val ExpenseCardLightBg = Color(0xFFFFFFFF)
-
-val TaskLightBg = Color(0xFFEDE7F6)
-val TaskLightContent = Color(0xFF493776)
-val TaskLightChecked = Color(0xFFA09ACF)
-
-val CalendarLightBg = Color(0xFFE3F2FD)
-val CalendarLightContent = Color(0xFF1565C0)
-
-val PlacesLightBg = Color(0xFFFBE9E7)
-val PlacesLightContent = Color(0xFF4E342E)
+val DarkAccentFitness = Color(0xFF2EC4E0)
+val DarkAccentFitnessSuccess  = Color(0xFFA8D45A)
+val DarkAccentExpenses = Color(0xFF5AAE72)
+val DarkAccentNotes = Color(0xFFFDE293)
+val DarkAccentTasks = Color(0xFF8AB4F8)
+val DarkAccentCalendar = Color(0xFF80DEEA)
+val DarkAccentPlaces = Color(0xFFC47898)

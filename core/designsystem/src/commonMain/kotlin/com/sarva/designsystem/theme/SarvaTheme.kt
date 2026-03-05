@@ -9,70 +9,52 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.valentinilk.shimmer.defaultShimmerTheme
 import com.valentinilk.shimmer.shimmerSpec
 
 private val DarkColorScheme = darkColorScheme(
-    primary = VitaPrimary,
-    onPrimary = DarkBackground,
-    secondary = VitaSecondary,
-    onSecondary = Color.White,
+    primary = SarvaPrimary,
     background = DarkBackground,
     surface = DarkSurface,
-    onBackground = DarkOnBackground,
+    onBackground = DarkOnSurface,
     onSurface = DarkOnSurface,
+    onSurfaceVariant = DarkOnSurface.copy(alpha = 0.7f),
+    outline = DarkOutline
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = VitaPrimary,
-    onPrimary = Color.White,
-    secondary = VitaSecondary,
-    onSecondary = Color.White,
+    primary = SarvaPrimary,
     background = LightBackground,
     surface = LightSurface,
-    onBackground = LightOnBackground,
+    onBackground = LightOnSurface,
     onSurface = LightOnSurface,
+    onSurfaceVariant = LightOnSurface.copy(alpha = 0.7f),
+    outline = LightOutline
 )
 
 @Immutable
 data class SarvaFeatureColors(
-    val noteContainer: Color,
-    val noteContent: Color,
-    val fitnessContainer: Color,
-    val fitnessContent: Color,
+    val fitness: Color,
     val fitnessSuccess: Color,
-    val expenseContainer: Color,
-    val expenseContent: Color,
-    val expenseCardContainer: Color,
-    val taskContainer: Color,
-    val taskContent: Color,
-    val taskChecked: Color,
-    val calendarContainer: Color,
-    val calendarContent: Color,
-    val placesContainer: Color,
-    val placesContent: Color
+    val expenses: Color,
+    val notes: Color,
+    val tasks: Color,
+    val calendar: Color,
+    val places: Color
 )
 
 val LocalFeatureColors = staticCompositionLocalOf {
-    // Default fallback (usually won't be seen)
     SarvaFeatureColors(
-        noteContainer = Color.Unspecified,
-        noteContent = Color.Unspecified,
-        fitnessContainer = Color.Unspecified,
-        fitnessContent = Color.Unspecified,
+        fitness = Color.Unspecified,
         fitnessSuccess = Color.Unspecified,
-        expenseContainer = Color.Unspecified,
-        expenseContent = Color.Unspecified,
-        expenseCardContainer = Color.Unspecified,
-        taskContainer = Color.Unspecified,
-        taskContent = Color.Unspecified,
-        taskChecked = Color.Unspecified,
-        calendarContainer = Color.Unspecified,
-        calendarContent = Color.Unspecified,
-        placesContainer = Color.Unspecified,
-        placesContent = Color.Unspecified
+        expenses = Color.Unspecified,
+        notes = Color.Unspecified,
+        tasks = Color.Unspecified,
+        calendar = Color.Unspecified,
+        places = Color.Unspecified
     )
 }
 
@@ -89,50 +71,33 @@ val sarvaShimmerTheme = defaultShimmerTheme.copy(
 @Composable
 fun SarvaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
+    content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) {
-        DarkColorScheme
-    } else {
-        LightColorScheme
-    }
 
-    val featureColors = if (darkTheme) {
-        SarvaFeatureColors(
-            noteContainer = NoteDarkBg,
-            noteContent = NoteDarkContent,
-            fitnessContainer = FitnessDarkBg,
-            fitnessContent = FitnessDarkContent,
-            fitnessSuccess = FitnessDarkSuccess,
-            expenseContainer = ExpenseDarkBg,
-            expenseContent = ExpenseDarkContent,
-            expenseCardContainer = ExpenseCardDarkBg,
-            taskContainer = TaskDarkBg,
-            taskContent = TaskDarkContent,
-            taskChecked = TaskDarkChecked,
-            calendarContainer = CalendarDarkBg,
-            calendarContent = CalendarDarkContent,
-            placesContainer = PlacesDarkBg,
-            placesContent = PlacesDarkContent
-        )
-    } else {
-        SarvaFeatureColors(
-            noteContainer = NoteLightBg,
-            noteContent = NoteLightContent,
-            fitnessContainer = FitnessLightBg,
-            fitnessContent = FitnessLightContent,
-            fitnessSuccess = FitnessLightSuccess,
-            expenseContainer = ExpenseLightBg,
-            expenseCardContainer = ExpenseCardLightBg,
-            expenseContent = ExpenseLightContent,
-            taskContainer = TaskLightBg,
-            taskContent = TaskLightContent,
-            taskChecked = TaskLightChecked,
-            calendarContainer = CalendarLightBg,
-            calendarContent = CalendarLightContent,
-            placesContainer = PlacesLightBg,
-            placesContent = PlacesLightContent
-        )
+    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+
+    val featureColors = remember(darkTheme) {
+        if (darkTheme) {
+            SarvaFeatureColors(
+                fitness = DarkAccentFitness,
+                fitnessSuccess = DarkAccentFitnessSuccess,
+                expenses = DarkAccentExpenses,
+                notes = DarkAccentNotes,
+                tasks = DarkAccentTasks,
+                calendar = DarkAccentCalendar,
+                places = DarkAccentPlaces
+            )
+        } else {
+            SarvaFeatureColors(
+                fitness = LightAccentFitness,
+                fitnessSuccess = LightAccentFitnessSuccess,
+                expenses = LightAccentExpenses,
+                notes = LightAccentNotes,
+                tasks = LightAccentTasks,
+                calendar = LightAccentCalendar,
+                places = LightAccentPlaces
+            )
+        }
     }
 
     CompositionLocalProvider(LocalFeatureColors provides featureColors) {

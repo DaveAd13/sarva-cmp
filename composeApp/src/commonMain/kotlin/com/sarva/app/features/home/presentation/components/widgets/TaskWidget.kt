@@ -33,6 +33,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarva.app.features.home.presentation.HomeState
@@ -44,21 +46,21 @@ fun TaskWidget(
     tasks: List<Task>,
     onTaskToggle: (String) -> Unit,
     onWidgetClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    accentColor: Color = SarvaTheme.colors.tasks
 ) {
-    val containerColor = SarvaTheme.colors.taskContainer
-    val contentColor = SarvaTheme.colors.taskContent
-    val checkedColor = SarvaTheme.colors.taskChecked
-
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         onClick = onWidgetClick,
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = containerColor
+            containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+//        border = BorderStroke(
+//            1.dp,
+//            MaterialTheme.colorScheme.outline
+//        )
     ) {
         Column(
             modifier = Modifier
@@ -74,13 +76,13 @@ fun TaskWidget(
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(contentColor.copy(alpha = 0.1f)),
+                        .background(accentColor.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.FormatListBulleted,
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = accentColor,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -89,10 +91,8 @@ fun TaskWidget(
 
                 Text(
                     text = "${tasks.count { !it.isCompleted }} Remaining",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    color = contentColor.copy(alpha = 0.9f)
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -106,14 +106,13 @@ fun TaskWidget(
                     Text(
                         text = "All caught up!",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = contentColor.copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 } else {
                     tasks.take(3).forEach { task ->
                         TaskItem(
                             task = task,
-                            contentColor = contentColor,
-                            checkedColor = checkedColor,
+                            accentColor = accentColor,
                             onToggle = { onTaskToggle(task.id) }
                         )
                     }
@@ -126,8 +125,7 @@ fun TaskWidget(
 @Composable
 fun TaskItem(
     task: Task,
-    contentColor: Color,
-    checkedColor: Color,
+    accentColor: Color,
     onToggle: () -> Unit
 ) {
     Row(
@@ -139,28 +137,25 @@ fun TaskItem(
                 onClick = onToggle,
             )
     ) {
-        val checkboxModifier = if (task.isCompleted) {
-            Modifier
-                .size(24.dp)
-                .clip(CircleShape)
-                .background(checkedColor)
-        } else {
-            Modifier
-                .size(24.dp)
-                .clip(CircleShape)
-                .background(Color.Transparent)
-                .border(2.dp, contentColor.copy(alpha = 0.3f), CircleShape)
-        }
-
         Box(
-            modifier = checkboxModifier,
+            modifier = if (task.isCompleted) {
+                Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .background(accentColor)
+            } else {
+                Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, MaterialTheme.colorScheme.outline, CircleShape)
+            },
             contentAlignment = Alignment.Center
         ) {
             if (task.isCompleted) {
                 Icon(
                     imageVector = Icons.Rounded.Check,
                     contentDescription = null,
-                    tint = Color.White,
+                    tint = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.size(14.dp)
                 )
             }
@@ -176,28 +171,20 @@ fun TaskItem(
             ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            color = if (task.isCompleted) contentColor.copy(alpha = 0.5f) else contentColor
+            color = if (task.isCompleted) {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            }
         )
     }
 }
 
 @Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        TaskWidget(
-            tasks = HomeState().tasks,
-            onTaskToggle = {},
-            onWidgetClick = {},
-            modifier = Modifier.aspectRatio(1f)
-        )
-    }
-}
-
-@Preview(name = "Dark")
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
+private fun Preview() {
+    SarvaTheme {
         TaskWidget(
             tasks = HomeState().tasks,
             onTaskToggle = {},

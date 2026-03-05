@@ -62,6 +62,7 @@ kotlin {
             implementation(libs.components.resources)
             implementation(libs.kotlinx.collections.immutable)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.compose.shimmer)
 
             // --- DI (Koin) ---
             implementation(libs.bundles.koin.common)

@@ -4,5 +4,5 @@ data class UserSettings(
     val preferredCurrency: String = "USD",
     val stepGoal: Int = 10000,
     val homeLayout: WidgetLayout = WidgetLayout.TILED,
-    val themeConfig: ThemeConfig = ThemeConfig.FOLLOW_SYSTEM
+    val themeConfig: ThemeConfig = ThemeConfig.SYSTEM
 )

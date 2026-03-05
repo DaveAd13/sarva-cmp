@@ -25,7 +25,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -45,7 +44,6 @@ import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.app.features.home.presentation.components.HealthPermissionEffect
 import com.sarva.app.features.home.presentation.components.widgets.CalendarWidget
 import com.sarva.app.features.home.presentation.components.widgets.ExpensesWidget
@@ -55,7 +53,7 @@ import com.sarva.app.features.home.presentation.components.widgets.PlacesWidget
 import com.sarva.app.features.home.presentation.components.widgets.TaskWidget
 import com.sarva.app.generated.resources.Res
 import com.sarva.app.generated.resources.home
-import com.sarva.core.presentation.util.ObserveAsEvents
+import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.designsystem.theme.SarvaTheme
 import dev.chrisbanes.haze.HazeProgressive
 import dev.chrisbanes.haze.hazeEffect
@@ -253,7 +251,11 @@ fun HomeScreen(
                         val icon =
                             if (targetGridType == WidgetLayout.STACKED) Icons.Filled.Window
                             else Icons.Filled.ViewStream
-                        Icon(icon, null)
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
 
                     }
                 }
@@ -285,13 +287,11 @@ fun Modifier.widgetModifier(
 @Composable
 private fun Preview() {
     SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            HomeScreen(
-                state = HomeState(hasHealthPermission = true),
-                onAction = {},
-                onNavigate = {},
-                contentPadding = PaddingValues(),
-            )
-        }
+        HomeScreen(
+            state = HomeState(hasHealthPermission = true),
+            onAction = {},
+            onNavigate = {},
+            contentPadding = PaddingValues(),
+        )
     }
 }

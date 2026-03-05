@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.emptyPreferences
 import com.sarva.core.domain.settings.model.ThemeConfig
 import com.sarva.core.domain.settings.model.UserSettings
 import com.sarva.core.domain.settings.model.WidgetLayout
-import com.sarva.core.domain.settings.repository.UserSettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -33,7 +32,7 @@ class UserSettingsDataSource(
                     prefs[UserSettingsKeys.HOME_LAYOUT] ?: WidgetLayout.TILED.name
                 ),
                 themeConfig = ThemeConfig.valueOf(
-                    prefs[UserSettingsKeys.THEME_CONFIG] ?: ThemeConfig.FOLLOW_SYSTEM.name
+                    prefs[UserSettingsKeys.THEME_CONFIG] ?: ThemeConfig.SYSTEM.name
                 )
             )
         }

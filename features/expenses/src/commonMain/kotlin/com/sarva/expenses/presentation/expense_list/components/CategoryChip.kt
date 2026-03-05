@@ -1,10 +1,8 @@
 package com.sarva.expenses.presentation.expense_list.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FilterChip
@@ -19,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,69 +34,67 @@ fun CategoryChip(
     label: String,
     categoryIcon: CategoryIcon? = null,
     onClick: () -> Unit,
-    clickable: Boolean = true,
     isSelected: Boolean,
+    accentColor: Color,
+    modifier: Modifier = Modifier,
+    clickable: Boolean = true,
     shape: Shape = CircleShape,
-    containerColor: Color,
-    selectedContainerColor: Color,
-    contentColor: Color,
-    selectedContentColor: Color,
-    iconContainerColor: Color,
-    borderColor: Color
 ) {
     FilterChip(
-        modifier = Modifier.height(32.dp).padding(horizontal = 0.dp),
+        modifier = modifier.height(32.dp),
         selected = isSelected,
         onClick = { if (clickable) onClick() },
         label = {
             Text(
                 text = label,
-                style = MaterialTheme.typography.labelMedium
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
             )
         },
         leadingIcon = {
-            if (categoryIcon != null) {
-                val painter = when (categoryIcon) {
-                    is CategoryIcon.Vector -> rememberVectorPainter(categoryIcon.imageVector)
-                    is CategoryIcon.Custom -> painterResource(categoryIcon.resource)
+            categoryIcon?.let { icon ->
+                val painter = when (icon) {
+                    is CategoryIcon.Vector -> rememberVectorPainter(icon.imageVector)
+                    is CategoryIcon.Custom -> painterResource(icon.resource)
                 }
-                if (iconContainerColor == Color.Transparent) {
+
+                Surface(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .offset(x = (-5).dp),
+                    shape = CircleShape,
+                    color = if (isSelected) {
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)
+                    } else {
+                        accentColor.copy(alpha = 0.1f)
+                    }
+                ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
                             painter = painter,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                            tint = if (isSelected) selectedContentColor else contentColor
+                            modifier = Modifier.size(14.dp),
+                            tint = accentColor
                         )
-                    }
-                } else {
-                    Surface(
-                        modifier = Modifier
-                            .size(28.dp)
-                            .offset(x = (-6).dp),
-                        shape = CircleShape,
-                        color = iconContainerColor
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                painter = painter,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                                tint = contentColor
-                            )
-                        }
                     }
                 }
             }
         },
-        border = BorderStroke(1.dp, borderColor),
         shape = shape,
-        colors = FilterChipDefaults.filterChipColors(
-            containerColor = containerColor,
-            selectedContainerColor = selectedContainerColor,
-            selectedLabelColor = selectedContentColor,
-            labelColor = contentColor,
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = isSelected,
+            borderColor = MaterialTheme.colorScheme.outline,
+            selectedBorderColor = Color.Transparent,
+            borderWidth = 1.dp,
+            selectedBorderWidth = 0.dp
         ),
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            labelColor = MaterialTheme.colorScheme.onSurface,
+            selectedContainerColor = accentColor,
+            selectedLabelColor = MaterialTheme.colorScheme.surface
+        )
     )
 }
 
@@ -106,9 +103,6 @@ fun CategoryChip(
 @Composable
 private fun Preview() {
     SarvaTheme {
-        val containerColor = SarvaTheme.colors.expenseContainer
-        val contentColor = SarvaTheme.colors.expenseContent
-        val cardContainerColor = SarvaTheme.colors.expenseCardContainer
         val category = ExpenseCategory.FOOD
 
         CategoryChip(
@@ -116,13 +110,8 @@ private fun Preview() {
             categoryIcon = category.getIcon(),
             onClick = {},
             clickable = true,
-            isSelected = false,
-            containerColor = cardContainerColor,
-            selectedContainerColor = contentColor,
-            contentColor = contentColor,
-            selectedContentColor = cardContainerColor,
-            iconContainerColor = containerColor,
-            borderColor = contentColor
+            isSelected = true,
+            accentColor = MaterialTheme.colorScheme.primary
         )
     }
 }

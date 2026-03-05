@@ -42,13 +42,10 @@ fun PlacesScreen(
     state: PlacesState,
     onAction: (PlacesAction) -> Unit,
 ) {
-    val containerColor = SarvaTheme.colors.placesContainer
-    val contentColor = SarvaTheme.colors.placesContent
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(containerColor)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -56,7 +53,7 @@ fun PlacesScreen(
         ) {
             Text(
                 text = "Map Here",
-                color = contentColor
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -67,7 +64,7 @@ fun PlacesScreen(
 @Composable
 private fun Preview() {
     SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
             PlacesScreen(
                 state = PlacesState(),
                 onAction = {},

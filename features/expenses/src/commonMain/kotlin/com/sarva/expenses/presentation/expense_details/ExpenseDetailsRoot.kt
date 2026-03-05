@@ -127,12 +127,10 @@ fun ExpenseDetailsScreen(
     state: ExpenseDetailsState,
     snackbarHostState: SnackbarHostState,
     onAction: (ExpenseDetailsAction) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
     val expense = state.expense
-    val containerColor = SarvaTheme.colors.expenseContainer
-    val contentColor = SarvaTheme.colors.expenseContent
-    val cardContainerColor = SarvaTheme.colors.expenseCardContainer
+    val accentColor = SarvaTheme.colors.expenses
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -165,16 +163,17 @@ fun ExpenseDetailsScreen(
                         }
                     }
                 },
+                // Use Global Background roles
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = containerColor,
-                    scrolledContainerColor = containerColor,
-                    titleContentColor = contentColor,
-                    navigationIconContentColor = contentColor,
-                    actionIconContentColor = contentColor
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                    actionIconContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
         },
-        containerColor = containerColor
+        containerColor = MaterialTheme.colorScheme.background
     ) { contentPadding ->
         if (expense == null) {
             Box(
@@ -184,7 +183,8 @@ fun ExpenseDetailsScreen(
             ) {
                 Text(
                     text = stringResource(Res.string.failed_to_load_expense),
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
         } else {
@@ -198,9 +198,11 @@ fun ExpenseDetailsScreen(
             ) {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors(containerColor = cardContainerColor),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth()
@@ -210,8 +212,8 @@ fun ExpenseDetailsScreen(
                         Text(
                             text = formatCurrency(expense.amount, expense.currency),
                             style = MaterialTheme.typography.displayMedium.copy(
-                                fontWeight = FontWeight.Black,
-                                color = contentColor
+                                fontWeight = FontWeight.Black, // Preserving original weight
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         )
 
@@ -220,13 +222,14 @@ fun ExpenseDetailsScreen(
                         Text(
                             text = expense.title,
                             style = MaterialTheme.typography.titleLarge,
-                            color = contentColor
+                            color = MaterialTheme.colorScheme.onSurface
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Surface(
-                            color = contentColor.copy(alpha = 0.1f),
+                            // Badge uses accent for brand identity
+                            color = accentColor.copy(alpha = 0.1f),
                             shape = CircleShape
                         ) {
                             Row(
@@ -241,14 +244,14 @@ fun ExpenseDetailsScreen(
                                     painter = painter,
                                     contentDescription = null,
                                     modifier = Modifier.size(18.dp),
-                                    tint = contentColor
+                                    tint = accentColor
                                 )
                                 Spacer(Modifier.width(8.dp))
                                 Text(
                                     text = expense.category.getLabel().asStringC(),
                                     style = MaterialTheme.typography.labelLarge.copy(
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = contentColor
+                                        fontWeight = FontWeight.SemiBold, // Preserving original weight
+                                        color = accentColor
                                     ),
                                 )
                             }
@@ -259,12 +262,14 @@ fun ExpenseDetailsScreen(
                         Text(
                             text = expense.dateTime.formatToLongDisplay(),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = contentColor.copy(alpha = 0.7f)
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
 
                         if (expense.location != null) {
                             Spacer(modifier = Modifier.height(20.dp))
-                            HorizontalDivider(color = contentColor.copy(alpha = 0.1f))
+                            HorizontalDivider(
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                            )
                             Spacer(modifier = Modifier.height(16.dp))
 
                             Row(
@@ -275,7 +280,7 @@ fun ExpenseDetailsScreen(
                                     imageVector = Icons.Default.LocationOn,
                                     contentDescription = null,
                                     modifier = Modifier.size(22.dp),
-                                    tint = contentColor.copy(alpha = 0.7f)
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
                                 Spacer(Modifier.width(8.dp))
                                 Column {
@@ -283,13 +288,13 @@ fun ExpenseDetailsScreen(
                                         Text(
                                             text = location.name,
                                             style = MaterialTheme.typography.bodyLarge,
-                                            color = contentColor
+                                            color = MaterialTheme.colorScheme.onSurface
                                         )
                                         location.city?.let { city ->
                                             Text(
                                                 text = city,
                                                 style = MaterialTheme.typography.bodyMedium,
-                                                color = contentColor.copy(alpha = 0.7f)
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
                                     }
@@ -299,15 +304,17 @@ fun ExpenseDetailsScreen(
 
                         if (expense.entries.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(16.dp))
-                            HorizontalDivider(color = contentColor.copy(alpha = 0.1f))
+                            HorizontalDivider(
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                            )
                             Spacer(modifier = Modifier.height(20.dp))
 
                             Text(
                                 text = stringResource(Res.string.breakdown),
                                 modifier = Modifier.align(Alignment.Start),
                                 style = MaterialTheme.typography.titleSmall.copy(
-                                    color = contentColor.copy(alpha = 0.5f),
-                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontWeight = FontWeight.Medium, // Preserving original weight
                                 ),
                             )
 
@@ -323,14 +330,14 @@ fun ExpenseDetailsScreen(
                                     Text(
                                         entry.name,
                                         style = MaterialTheme.typography.bodyLarge,
-                                        color = contentColor
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
                                     Text(
                                         text = "${expense.currency} ${entry.price}",
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontFeatureSettings = "tnum",
                                         ),
-                                        color = contentColor
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
                                 }
                             }
@@ -348,10 +355,11 @@ fun ExpenseDetailsScreen(
             icon = Icons.Rounded.DeleteForever,
             confirmText = stringResource(Res.string.delete),
             dismissText = stringResource(Res.string.cancel),
-            containerColor = containerColor,
-            contentColor = contentColor,
-            confirmLabelColor = contentColor,
-            dismissLabelColor = contentColor,
+            // Dialog roles
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+            confirmLabelColor = accentColor, // Delete action uses brand accent
+            dismissLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
             onConfirm = { onAction(ExpenseDetailsAction.OnDeleteConfirmed) },
             onDismiss = { onAction(ExpenseDetailsAction.OnDeleteCancelled) }
         )

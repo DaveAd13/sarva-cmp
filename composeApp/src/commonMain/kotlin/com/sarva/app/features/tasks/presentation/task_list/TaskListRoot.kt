@@ -42,13 +42,10 @@ fun TaskListScreen(
     state: TaskListState,
     onAction: (TaskListAction) -> Unit,
 ) {
-    val containerColor = SarvaTheme.colors.taskContainer
-    val contentColor = SarvaTheme.colors.taskContent
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(containerColor)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -56,7 +53,7 @@ fun TaskListScreen(
         ) {
             Text(
                 text = "Detailed Tasks Here",
-                color = contentColor
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -67,7 +64,7 @@ fun TaskListScreen(
 @Composable
 private fun Preview() {
     SarvaTheme {
-        Surface(color = MaterialTheme.colorScheme.background) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
             TaskListScreen(
                 state = TaskListState(),
                 onAction = {}

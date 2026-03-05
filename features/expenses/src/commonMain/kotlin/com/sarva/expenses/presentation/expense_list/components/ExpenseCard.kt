@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
@@ -50,11 +49,9 @@ fun ExpenseCard(
     expense: Expense,
     onClick: () -> Unit,
     onDelete: () -> Unit,
-    cardContainerColor: Color,
-    contentColor: Color,
-    containerColor: Color,
     modifier: Modifier = Modifier
 ) {
+    val accentColor = SarvaTheme.colors.expenses
     val painter = when (val iconData = expense.category.getIcon()) {
         is CategoryIcon.Vector -> rememberVectorPainter(iconData.imageVector)
         is CategoryIcon.Custom -> painterResource(iconData.resource)
@@ -65,15 +62,15 @@ fun ExpenseCard(
 
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
-        modifier = modifier,
+        modifier = modifier.padding(bottom = 12.dp),
         backgroundContent = {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
                     .background(
-                        cardContainerColor.copy(alpha = 0.5f),
-                        shape = RoundedCornerShape(20.dp)
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                        shape = RoundedCornerShape(14.dp)
                     )
                     .padding(16.dp),
                 contentAlignment = Alignment.CenterEnd,
@@ -81,7 +78,7 @@ fun ExpenseCard(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = null,
-                    tint = contentColor.copy(alpha = 0.7f)
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                 )
             }
         },
@@ -99,12 +96,12 @@ fun ExpenseCard(
         Card(
             onClick = onClick,
             modifier = Modifier.padding(horizontal = 16.dp),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(14.dp),
             colors = CardDefaults.cardColors(
-                containerColor = cardContainerColor,
-                contentColor = contentColor
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
             ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         ) {
             Row(
                 modifier = Modifier
@@ -116,13 +113,13 @@ fun ExpenseCard(
                 Surface(
                     modifier = Modifier.size(48.dp),
                     shape = CircleShape,
-                    color = containerColor
+                    color = accentColor.copy(alpha = 0.2f),
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Icon(
                             painter = painter,
                             contentDescription = null,
-                            tint = contentColor
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -131,14 +128,14 @@ fun ExpenseCard(
                     Text(
                         text = expense.title,
                         style = MaterialTheme.typography.titleSmall,
-                        color = contentColor,
+                        color = MaterialTheme.colorScheme.onSurface,
                         overflow = Ellipsis,
                         maxLines = 1
                     )
                     Text(
                         text = expense.dateTime.formatToShortDisplay(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = contentColor.copy(alpha = 0.6f),
+                        color =  MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         overflow = Ellipsis,
                         maxLines = 1
                     )
@@ -149,7 +146,7 @@ fun ExpenseCard(
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.Bold
                     ),
-                    color = contentColor,
+                    color =  MaterialTheme.colorScheme.onSurface,
                     overflow = Ellipsis,
                     maxLines = 1
                 )
@@ -163,9 +160,6 @@ fun ExpenseCard(
 @Composable
 private fun Preview() {
     SarvaTheme {
-        val containerColor = SarvaTheme.colors.expenseContainer
-        val contentColor = SarvaTheme.colors.expenseContent
-        val cardContainerColor = SarvaTheme.colors.expenseCardContainer
         val expense = Expense(
             title = "Trip to Dilijan",
             amount = 370.0,
@@ -178,9 +172,6 @@ private fun Preview() {
             expense = expense,
             onClick = {},
             onDelete = {},
-            cardContainerColor = cardContainerColor,
-            contentColor = contentColor,
-            containerColor = containerColor,
         )
     }
 }

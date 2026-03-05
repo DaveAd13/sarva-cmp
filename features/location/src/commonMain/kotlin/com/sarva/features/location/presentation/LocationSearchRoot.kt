@@ -67,8 +67,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun LocationSearchRoot(
     onLocationSelected: (LocationSearchResult) -> Unit,
     onDismiss: () -> Unit,
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface,
     viewModel: LocationSearchViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -105,8 +105,8 @@ fun LocationSearchScreen(
     state: LocationSearchState,
     onAction: (LocationSearchAction) -> Unit,
     onDismiss: () -> Unit = {},
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = MaterialTheme.colorScheme.onBackground
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface
 ) {
     val textFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
@@ -308,8 +308,6 @@ private fun Preview() {
                 ),
                 onAction = {},
                 onDismiss = {},
-                containerColor = SarvaTheme.colors.expenseContainer,
-                contentColor = SarvaTheme.colors.expenseContent,
             )
         }
     }

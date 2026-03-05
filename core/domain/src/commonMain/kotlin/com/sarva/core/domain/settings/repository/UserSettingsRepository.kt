@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserSettingsRepository {
 
+    val userSettings: Flow<UserSettings>
     suspend fun getUserSettings(): UserSettings
 
     suspend fun updateCurrency(currencyCode: String)

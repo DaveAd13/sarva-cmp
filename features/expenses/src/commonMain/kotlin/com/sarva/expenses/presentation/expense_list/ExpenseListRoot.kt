@@ -57,6 +57,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
@@ -145,11 +146,9 @@ fun ExpenseListScreen(
     events: Flow<ExpenseListEvent>,
     onExpenseClick: (Int) -> Unit,
     onAddExpenseClick: () -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    accentColor: Color = SarvaTheme.colors.expenses
 ) {
-    val containerColor = SarvaTheme.colors.expenseContainer
-    val contentColor = SarvaTheme.colors.expenseContent
-    val cardContainerColor = SarvaTheme.colors.expenseCardContainer
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -197,8 +196,7 @@ fun ExpenseListScreen(
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        containerColor = containerColor,
-
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             Column(
                 modifier = Modifier
@@ -248,9 +246,9 @@ fun ExpenseListScreen(
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = Color.Transparent,
                                 scrolledContainerColor = Color.Transparent,
-                                titleContentColor = contentColor,
-                                navigationIconContentColor = contentColor,
-                                actionIconContentColor = contentColor
+                                titleContentColor = MaterialTheme.colorScheme.onBackground,
+                                navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                                actionIconContentColor = MaterialTheme.colorScheme.onBackground
                             ),
                             scrollBehavior = scrollBehavior
                         )
@@ -258,15 +256,7 @@ fun ExpenseListScreen(
                 }
 
                 LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-//                        .background(
-//                            brush = Brush.verticalGradient(
-//                                0.0f to containerColor,
-//                                0.65f to containerColor,
-//                                1.0f to Color.Transparent
-//                            )
-//                        ),
+                    modifier = Modifier.fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
@@ -276,13 +266,7 @@ fun ExpenseListScreen(
                             onClick = { onAction(ExpenseListAction.CategoryClicked(null)) },
                             clickable = !state.isLoading,
                             isSelected = state.selectedCategory == null,
-                            shape = CircleShape,
-                            containerColor = cardContainerColor,
-                            selectedContainerColor = contentColor,
-                            contentColor = contentColor,
-                            selectedContentColor = cardContainerColor,
-                            iconContainerColor = containerColor,
-                            borderColor = Color.Transparent
+                            accentColor = accentColor, // Pass the finance accent
                         )
                     }
 
@@ -293,13 +277,7 @@ fun ExpenseListScreen(
                             onClick = { onAction(ExpenseListAction.CategoryClicked(category)) },
                             clickable = !state.isLoading,
                             isSelected = state.selectedCategory == category,
-                            shape = CircleShape,
-                            containerColor = cardContainerColor,
-                            selectedContainerColor = contentColor,
-                            contentColor = contentColor,
-                            selectedContentColor = cardContainerColor,
-                            iconContainerColor = containerColor,
-                            borderColor = Color.Transparent
+                            accentColor = accentColor,
                         )
                     }
                 }
@@ -309,8 +287,8 @@ fun ExpenseListScreen(
             FloatingActionButton(
                 onClick = { onAddExpenseClick() },
                 shape = CircleShape,
-                containerColor = contentColor,
-                contentColor = containerColor
+                containerColor = accentColor,
+                contentColor = MaterialTheme.colorScheme.surface
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -324,7 +302,7 @@ fun ExpenseListScreen(
                 title = stringResource(Res.string.no_expenses_title),
                 description = stringResource(Res.string.no_expenses_description),
                 icon = Icons.AutoMirrored.Rounded.ReceiptLong,
-                color = contentColor,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
@@ -339,7 +317,7 @@ fun ExpenseListScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .hazeSource(state = hazeState)
-                    .background(containerColor),
+                    .background(MaterialTheme.colorScheme.background),
                 state = listState,
                 contentPadding = contentPadding
             ) {
@@ -349,7 +327,6 @@ fun ExpenseListScreen(
                     }
                     items(15) {
                         ExpenseCardShimmer(shimmerInstance)
-                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 } else {
                     state.groupedExpenses.forEach { (monthHeader, expensesInMonth) ->
@@ -360,12 +337,7 @@ fun ExpenseListScreen(
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(containerColor)
-                                    .animateItem(
-                                        fadeInSpec = tween(durationMillis = 300),
-                                        fadeOutSpec = tween(durationMillis = 300),
-                                        placementSpec = spring(stiffness = Spring.StiffnessLow)
-                                    )
+                                    .background(MaterialTheme.colorScheme.background)
                                     .padding(horizontal = 16.dp, vertical = 12.dp),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween
@@ -373,9 +345,10 @@ fun ExpenseListScreen(
                                 Text(
                                     text = monthHeader.uppercase(),
                                     style = MaterialTheme.typography.labelSmall.copy(
-                                        letterSpacing = 1.2.sp
+                                        letterSpacing = 1.2.sp,
+                                        fontWeight = FontWeight.Bold
                                     ),
-                                    color = contentColor.copy(alpha = 0.5f)
+                                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f)
                                 )
                             }
                         }
@@ -389,16 +362,12 @@ fun ExpenseListScreen(
                                 expense = expense,
                                 onClick = { onExpenseClick(expense.id) },
                                 onDelete = { onAction(ExpenseListAction.DeleteExpense(expense)) },
-                                cardContainerColor = cardContainerColor,
-                                contentColor = contentColor,
-                                containerColor = containerColor,
                                 modifier = Modifier.animateItem(
                                     fadeInSpec = tween(durationMillis = 300),
                                     fadeOutSpec = tween(durationMillis = 300),
                                     placementSpec = spring(stiffness = Spring.StiffnessLow)
                                 )
                             )
-                            Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
                 }

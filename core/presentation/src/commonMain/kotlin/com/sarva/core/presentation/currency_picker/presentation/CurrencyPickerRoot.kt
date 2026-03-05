@@ -73,8 +73,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun CurrencyPickerRoot(
     onCurrencySelected: (Currency) -> Unit,
     onDismiss: () -> Unit,
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = MaterialTheme.colorScheme.onBackground,
+    accentColor: Color = SarvaTheme.colors.expenses,
     viewModel: CurrencyPickerViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -95,12 +94,12 @@ fun CurrencyPickerRoot(
         isBackEnabled = true,
         onBackCompleted = { onDismiss() }
     )
+
     CurrencyPickerScreen(
         state = state,
         onAction = viewModel::onAction,
         onDismiss = onDismiss,
-        containerColor = containerColor,
-        contentColor = contentColor
+        accentColor = accentColor
     )
 }
 
@@ -110,8 +109,7 @@ fun CurrencyPickerScreen(
     state: CurrencyPickerState,
     onAction: (CurrencyPickerAction) -> Unit,
     onDismiss: () -> Unit = {},
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = MaterialTheme.colorScheme.onBackground
+    accentColor: Color = SarvaTheme.colors.expenses
 ) {
     val textFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
@@ -120,15 +118,16 @@ fun CurrencyPickerScreen(
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
         selectionColors = TextSelectionColors(
-            handleColor = contentColor,
-            backgroundColor = contentColor.copy(alpha = 0.2f)
+            handleColor = accentColor, // Cursor handle uses accent
+            backgroundColor = accentColor.copy(alpha = 0.2f)
         ),
-        cursorColor = contentColor,
+        cursorColor = accentColor, // Cursor uses accent
     )
     val focusRequester = remember { FocusRequester() }
 
     Scaffold(
-        containerColor = containerColor,
+        // Scaffold uses the global background color
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -150,7 +149,7 @@ fun CurrencyPickerScreen(
                             Text(
                                 text = stringResource(Res.string.search_currencies),
                                 style = MaterialTheme.typography.titleMedium.copy(
-                                    color = contentColor.copy(alpha = 0.5f),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant, // Semantic hint color
                                     fontWeight = FontWeight.Medium,
                                 ),
                                 modifier = Modifier.fillMaxWidth(),
@@ -163,10 +162,10 @@ fun CurrencyPickerScreen(
                                         .size(48.dp)
                                         .padding(14.dp),
                                     strokeWidth = 2.dp,
-                                    color = contentColor
+                                    color = accentColor // Progress uses accent
                                 )
                             } else {
-                                ClearTextIcon(color = contentColor) {
+                                ClearTextIcon(color = MaterialTheme.colorScheme.onBackground) {
                                     if (state.searchTextFieldState.text.isNotEmpty()) {
                                         state.searchTextFieldState.clearText()
                                     } else {
@@ -176,7 +175,7 @@ fun CurrencyPickerScreen(
                             }
                         },
                         textStyle = MaterialTheme.typography.titleMedium.copy(
-                            color = contentColor,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontWeight = FontWeight.Normal,
                         ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -184,11 +183,11 @@ fun CurrencyPickerScreen(
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = containerColor,
-                    scrolledContainerColor = containerColor,
-                    titleContentColor = contentColor,
-                    navigationIconContentColor = contentColor,
-                    actionIconContentColor = contentColor
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                    actionIconContentColor = MaterialTheme.colorScheme.onBackground
                 ),
             )
         },
@@ -203,12 +202,12 @@ fun CurrencyPickerScreen(
                         imageVector = Icons.Default.SearchOff,
                         contentDescription = null,
                         modifier = Modifier.size(64.dp),
-                        tint = contentColor.copy(alpha = 0.3f)
+                        tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
                     )
                     Text(
-                        text = "No places found",
+                        text = "No currencies found",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = contentColor.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -221,43 +220,23 @@ fun CurrencyPickerScreen(
                     .imePadding(),
             ) {
                 if (state.recentCurrencies.isNotEmpty()) {
-                    item {
-                        SectionHeader(
-                            text = stringResource(Res.string.recent),
-                            contentColor = contentColor
-                        )
-                    }
+                    item { SectionHeader(text = stringResource(Res.string.recent)) }
                     items(
                         items = state.recentCurrencies,
                         key = { "recent_${it.code}" },
                         contentType = { "currency_row" }
                     ) { currency ->
-                        CurrencyRow(
-                            currency = currency,
-                            onAction = onAction,
-                            containerColor = containerColor,
-                            contentColor = contentColor
-                        )
+                        CurrencyRow(currency = currency, onAction = onAction)
                     }
                 }
 
-                item {
-                    SectionHeader(
-                        text = stringResource(Res.string.all_currencies),
-                        contentColor = contentColor
-                    )
-                }
+                item { SectionHeader(text = stringResource(Res.string.all_currencies)) }
                 items(
                     items = state.currencies,
                     key = { "all_${it.code}" },
                     contentType = { "currency_row" }
                 ) { currency ->
-                    CurrencyRow(
-                        currency = currency,
-                        onAction = onAction,
-                        containerColor = containerColor,
-                        contentColor = contentColor
-                    )
+                    CurrencyRow(currency = currency, onAction = onAction)
                 }
             }
         }
@@ -269,26 +248,17 @@ fun CurrencyPickerScreen(
 }
 
 @Composable
-fun SectionHeader(
-    text: String,
-    contentColor: Color
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
+fun SectionHeader(text: String) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Text(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                top = 16.dp,
-                bottom = 8.dp
-            ),
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp),
             text = text,
             style = MaterialTheme.typography.bodyLarge.copy(
-                color = contentColor.copy(alpha = 0.5f)
+                color = MaterialTheme.colorScheme.onSurfaceVariant // Role-based color
             )
         )
         HorizontalDivider(
-            color = contentColor.copy(alpha = 0.1f)
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
         )
     }
 }
@@ -297,8 +267,6 @@ fun SectionHeader(
 fun CurrencyRow(
     currency: Currency,
     onAction: (CurrencyPickerAction) -> Unit,
-    containerColor: Color,
-    contentColor: Color
 ) {
     val flagResource = remember(currency.code) {
         FlagRegistry.getFlag(currency.code)
@@ -309,18 +277,19 @@ fun CurrencyRow(
             Text(
                 text = currency.code,
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    color = contentColor,
+                    color = MaterialTheme.colorScheme.onSurface, // Unified Row text
                     fontWeight = FontWeight.Medium,
                 ),
             )
         },
-        modifier = Modifier
-            .clickable { onAction(CurrencyPickerAction.OnCurrencySelected(currency)) },
+        modifier = Modifier.clickable {
+            onAction(CurrencyPickerAction.OnCurrencySelected(currency))
+        },
         supportingContent = {
             Text(
                 text = currency.name,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = contentColor.copy(alpha = 0.7f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
             )
         },
@@ -329,27 +298,25 @@ fun CurrencyRow(
                 Icon(
                     painter = painterResource(flagResource),
                     contentDescription = "${currency.name} flag",
-                    tint = contentColor.copy(alpha = 0.7f),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             } else {
                 Image(
                     painter = painterResource(flagResource),
                     contentDescription = "${currency.name} flag",
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
+                    modifier = Modifier.size(40.dp).clip(CircleShape)
                 )
             }
         },
-        colors = ListItemDefaults.colors().copy(
-            containerColor = containerColor,
-            headlineColor = contentColor,
-            leadingIconColor = contentColor,
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.background, // Items sit on background
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant
         )
     )
     HorizontalDivider(
-        color = contentColor.copy(alpha = 0.1f)
+        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
     )
 }
 
@@ -395,8 +362,6 @@ private fun Preview() {
             ),
             onAction = {},
             onDismiss = {},
-            containerColor = SarvaTheme.colors.expenseContainer,
-            contentColor = SarvaTheme.colors.expenseContent,
         )
     }
 }

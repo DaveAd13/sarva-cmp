@@ -39,10 +39,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun SearchTopBar(
     state: TextFieldState,
-    onCancelSearch: () -> Unit
+    onCancelSearch: () -> Unit,
+    accentColor: Color = SarvaTheme.colors.expenses
 ) {
-    val containerColor = SarvaTheme.colors.expenseContainer
-    val contentColor = SarvaTheme.colors.expenseContent
+    val onBackgroundColor = MaterialTheme.colorScheme.onBackground
+
     val textFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
@@ -50,10 +51,10 @@ fun SearchTopBar(
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
         selectionColors = TextSelectionColors(
-            handleColor = contentColor,
-            backgroundColor = contentColor.copy(alpha = 0.2f)
+            handleColor = accentColor,
+            backgroundColor = accentColor.copy(alpha = 0.2f)
         ),
-        cursorColor = contentColor,
+        cursorColor = accentColor,
     )
     val focusRequester = remember { FocusRequester() }
 
@@ -77,7 +78,7 @@ fun SearchTopBar(
                     Text(
                         text = stringResource(Res.string.search_expenses),
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = contentColor.copy(alpha = 0.5f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium,
                         ),
                         modifier = Modifier.fillMaxWidth(),
@@ -85,7 +86,7 @@ fun SearchTopBar(
                 },
                 trailingIcon = {
                     ClearTextIcon(
-                        color = contentColor
+                        color = onBackgroundColor
                     ) {
                         if (state.text.isNotEmpty()) {
                             state.clearText()
@@ -95,7 +96,7 @@ fun SearchTopBar(
                     }
                 },
                 textStyle = MaterialTheme.typography.titleMedium.copy(
-                    color = contentColor,
+                    color = onBackgroundColor,
                     fontWeight = FontWeight.Normal,
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -103,11 +104,11 @@ fun SearchTopBar(
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = containerColor,
-            scrolledContainerColor = containerColor,
-            titleContentColor = contentColor,
-            navigationIconContentColor = contentColor,
-            actionIconContentColor = contentColor
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = onBackgroundColor,
+            navigationIconContentColor = onBackgroundColor,
+            actionIconContentColor = onBackgroundColor
         ),
     )
 

@@ -2,10 +2,10 @@ package com.sarva.app.features.home.presentation
 
 import androidx.compose.runtime.Stable
 import com.sarva.app.features.calendar.domain.model.CalendarEvent
-import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.app.features.home.domain.model.SpentInfo
 import com.sarva.app.features.notes.domain.model.Note
 import com.sarva.app.features.tasks.domain.model.Task
+import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.fitness.presentation.daily_activity.DailyActivityViewModel.Companion.STEP_GOAL
 
 @Stable

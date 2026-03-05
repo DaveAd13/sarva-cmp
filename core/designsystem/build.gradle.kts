@@ -60,7 +60,7 @@ kotlin {
 
         androidMain {
             dependencies {
-
+                implementation(libs.core)
             }
         }
 

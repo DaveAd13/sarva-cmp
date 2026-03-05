@@ -5,7 +5,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -106,8 +105,7 @@ fun DailyActivityScreen(
     onOpenFitnessDetails: (FitnessRecordType) -> Unit,
     onBack: () -> Unit
 ) {
-    val containerColor = SarvaTheme.colors.fitnessContainer
-    val contentColor = SarvaTheme.colors.fitnessContent
+    val accentColor = SarvaTheme.colors.fitness
     val successColor = SarvaTheme.colors.fitnessSuccess
 
     val durationSymbols = rememberDurationSymbols()
@@ -116,7 +114,7 @@ fun DailyActivityScreen(
     }
 
     val animatedColor by animateColorAsState(
-        targetValue = if (isGoalReached) successColor else contentColor,
+        targetValue = if (isGoalReached) successColor else accentColor,
         animationSpec = tween(500),
         label = "ColorAnimation"
     )
@@ -128,6 +126,7 @@ fun DailyActivityScreen(
     )
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = {
@@ -145,20 +144,20 @@ fun DailyActivityScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = containerColor,
-                    titleContentColor = contentColor,
-                    navigationIconContentColor = contentColor,
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
                 )
             )
         },
     ) { contentPadding ->
         val layoutDirection = LocalLayoutDirection.current
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
-                .background(containerColor),
+            modifier = Modifier
+                .fillMaxSize(),
             contentPadding = PaddingValues(
                 start = contentPadding.calculateStartPadding(layoutDirection) + 24.dp,
-                top = contentPadding.calculateTopPadding(),
+                top = contentPadding.calculateTopPadding() + 24.dp,
                 end = contentPadding.calculateEndPadding(layoutDirection) + 24.dp,
                 bottom = contentPadding.calculateBottomPadding()
             ),
@@ -166,81 +165,70 @@ fun DailyActivityScreen(
         ) {
 
             item {
-                Column(
+                Box(
+                    contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxWidth()
                 ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
+                    CircularProgressIndicator(
+                        progress = { animatedProgress },
                         modifier = Modifier
                             .size(220.dp)
                             .clip(CircleShape)
                             .clickable(
                                 onClick = { onOpenFitnessDetails(FitnessRecordType.STEPS) },
                                 role = Role.Button
-                            )
-                    ) {
-                        CircularProgressIndicator(
-                            progress = { animatedProgress },
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            color = animatedColor,
-                            trackColor = animatedColor.copy(alpha = 0.2f),
-                            strokeWidth = 12.dp,
-                            strokeCap = StrokeCap.Round
-                        )
+                            ),
+                        color = animatedColor,
+                        trackColor = animatedColor.copy(alpha = 0.2f),
+                        strokeWidth = 14.dp,
+                        strokeCap = StrokeCap.Round
+                    )
 
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            val iconVector = remember(isGoalReached) {
-                                if (isGoalReached) Icons.Rounded.EmojiEvents
-                                else Icons.AutoMirrored.Rounded.DirectionsRun
-                            }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        val iconVector = if (isGoalReached) Icons.Rounded.EmojiEvents
+                        else Icons.AutoMirrored.Rounded.DirectionsRun
 
-                            Crossfade(
-                                targetState = iconVector,
-                                label = "IconFade"
-                            ) { targetIcon ->
-                                Icon(
-                                    imageVector = targetIcon,
-                                    contentDescription = null,
-                                    tint = animatedColor,
-                                    modifier = Modifier.size(48.dp)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Text(
-                                text = formatNumber(state.steps),
-                                style = MaterialTheme.typography.displayMedium.copy(
-                                    fontWeight = FontWeight.Bold,
-                                    color = contentColor
-                                )
-                            )
-                            Text(
-                                text = "${formatNumber(state.goal)} ${stringResource(Res.string.steps).lowercase()}",
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    color = contentColor.copy(alpha = 0.7f)
-                                )
+                        Crossfade(
+                            targetState = iconVector,
+                            label = "IconFade"
+                        ) { targetIcon ->
+                            Icon(
+                                imageVector = targetIcon,
+                                contentDescription = null,
+                                tint = animatedColor,
+                                modifier = Modifier.size(48.dp)
                             )
                         }
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = formatNumber(state.steps),
+                            style = MaterialTheme.typography.displayMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                        Text(
+                            text = "${formatNumber(state.goal)} ${stringResource(Res.string.steps).lowercase()}",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
             }
 
             item {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     FitnessStatCard(
                         icon = Icons.Rounded.LocalFireDepartment,
                         value = state.calories,
                         label = stringResource(Res.string.cal),
-                        color = contentColor,
+                        accentColor = accentColor,
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(24.dp))
@@ -251,7 +239,7 @@ fun DailyActivityScreen(
                         icon = Icons.Rounded.Map,
                         value = state.distance,
                         label = stringResource(Res.string.km),
-                        color = contentColor,
+                        accentColor = accentColor,
                         modifier = Modifier
                             .weight(1f)
                             .clip(RoundedCornerShape(24.dp))
@@ -259,11 +247,13 @@ fun DailyActivityScreen(
                     )
                 }
             }
+
             item {
                 Text(
                     text = stringResource(if (state.exercises.isEmpty()) Res.string.no_exercises else Res.string.recent_exercises),
                     style = MaterialTheme.typography.titleLarge.copy(
-                        color = contentColor
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Bold
                     ),
                     modifier = Modifier.padding(start = 4.dp, top = 16.dp)
                 )

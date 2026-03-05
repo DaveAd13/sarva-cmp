@@ -31,29 +31,32 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarva.app.features.home.domain.model.SpentInfo
 import com.sarva.app.features.home.presentation.HomeState
 import com.sarva.designsystem.theme.SarvaTheme
 
-
 @Composable
 fun ExpensesWidget(
     spentInfo: SpentInfo,
     onWidgetClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    accentColor: Color = SarvaTheme.colors.expenses
 ) {
-    val containerColor = SarvaTheme.colors.expenseContainer
-    val contentColor = SarvaTheme.colors.expenseContent
-
     Card(
         modifier = modifier
             .fillMaxWidth(),
         onClick = onWidgetClick,
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+//        border = BorderStroke(
+//            1.dp,
+//            MaterialTheme.colorScheme.outline
+//        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -64,18 +67,17 @@ fun ExpensesWidget(
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Icon
                 Box(
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(contentColor.copy(alpha = 0.1f)),
+                        .background(accentColor.copy(alpha = 0.15f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.AttachMoney,
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = accentColor,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -86,12 +88,12 @@ fun ExpensesWidget(
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold,
                         ),
-                        color = contentColor
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = "Spent Today",
                         style = MaterialTheme.typography.labelSmall,
-                        color = contentColor.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -106,13 +108,13 @@ fun ExpensesWidget(
                 if (spentInfo.recentSpendingTrend.isNotEmpty()) {
                     MiniBarChart(
                         dataPoints = spentInfo.recentSpendingTrend,
-                        barColor = contentColor
+                        barColor = accentColor
                     )
                 } else {
                     Text(
                         text = "No recent data",
                         style = MaterialTheme.typography.labelSmall,
-                        color = contentColor.copy(alpha = 0.5f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -150,21 +152,10 @@ private fun MiniBarChart(
 }
 
 @Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        ExpensesWidget(
-            spentInfo = HomeState().spentInfo,
-            onWidgetClick = {},
-            modifier = Modifier.aspectRatio(1f)
-        )
-    }
-}
-
-@Preview(name = "Dark")
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
+private fun Preview() {
+    SarvaTheme {
         ExpensesWidget(
             spentInfo = HomeState().spentInfo,
             onWidgetClick = {},

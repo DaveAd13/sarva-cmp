@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,7 +38,6 @@ import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -50,7 +48,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -70,7 +67,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -90,6 +86,7 @@ import com.sarva.core.presentation.getLabel
 import com.sarva.core.presentation.util.LocalBackHandler
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.core.presentation.util.ResultStore
+import com.sarva.core.presentation.util.fadingEdges
 import com.sarva.designsystem.theme.SarvaTheme
 import com.sarva.expenses.presentation.expense_add_edit.components.CurrencyInputTransformation
 import com.sarva.expenses.presentation.expense_list.components.CategoryChip
@@ -166,10 +163,9 @@ fun ExpenseAddEditScreen(
     onAction: (ExpenseAddEditAction) -> Unit,
     onBack: () -> Unit
 ) {
-    val containerColor = SarvaTheme.colors.expenseContainer
-    val contentColor = SarvaTheme.colors.expenseContent
-    val cardContainerColor = SarvaTheme.colors.expenseCardContainer
+    val accentColor = SarvaTheme.colors.expenses
     val focusRequester = remember { FocusRequester() }
+
     val textFieldColors = TextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
@@ -177,15 +173,16 @@ fun ExpenseAddEditScreen(
         focusedIndicatorColor = Color.Transparent,
         unfocusedIndicatorColor = Color.Transparent,
         selectionColors = TextSelectionColors(
-            handleColor = contentColor,
-            backgroundColor = contentColor.copy(alpha = 0.2f)
+            handleColor = accentColor,
+            backgroundColor = accentColor.copy(alpha = 0.2f)
         ),
-        cursorColor = contentColor,
+        cursorColor = accentColor,
     )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -203,11 +200,11 @@ fun ExpenseAddEditScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = containerColor,
-                    scrolledContainerColor = containerColor,
-                    titleContentColor = contentColor,
-                    navigationIconContentColor = contentColor,
-                    actionIconContentColor = contentColor
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                    actionIconContentColor = MaterialTheme.colorScheme.onBackground
                 )
             )
         },
@@ -216,13 +213,12 @@ fun ExpenseAddEditScreen(
                 onClick = { onAction(ExpenseAddEditAction.OnSaveClicked) },
                 modifier = Modifier.imePadding(),
                 shape = CircleShape,
-                containerColor = contentColor,
-                contentColor = containerColor
+                containerColor = accentColor,
+                contentColor = MaterialTheme.colorScheme.surface
             ) {
                 Icon(Icons.Default.Save, contentDescription = null)
             }
-        },
-        containerColor = containerColor
+        }
     ) { contentPadding ->
 
         LazyColumn(
@@ -241,69 +237,57 @@ fun ExpenseAddEditScreen(
                 MainExpenseCard(
                     state = state,
                     onAction = onAction,
-                    contentColor = contentColor,
-                    cardContainerColor = cardContainerColor,
+                    accentColor = accentColor,
                     textFieldColors = textFieldColors,
                     focusRequester = focusRequester
                 )
             }
 
             item {
-                val shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
-
-                Surface(
-                    modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
-                    shape = shape,
-                    color = cardContainerColor
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 ) {
-                    Text(
-                        modifier = Modifier.padding(
-                            start = 14.dp,
-                            top = 16.dp,
-                            end = 14.dp,
-                            bottom = 8.dp
-                        ),
-                        text = stringResource(Res.string.breakdown),
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            color = contentColor.copy(alpha = 0.5f),
-                            fontWeight = FontWeight.Medium,
-                        ),
-                    )
-                }
-            }
-
-            itemsIndexed(
-                items = state.entries,
-                key = { _, entry -> entry.id }
-            ) { index, entry ->
-                val (shape, bottomPadding) = when {
-                    index == state.entries.lastIndex -> RoundedCornerShape(
-                        bottomStart = 8.dp,
-                        bottomEnd = 8.dp
-                    ) to 8.dp
-
-                    else -> RectangleShape to 0.dp
-                }
-
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = shape,
-                    color = cardContainerColor
-                ) {
-                    Column(modifier = Modifier.padding(bottom = bottomPadding)) {
-                        BreakdownEntryRow(
-                            index = index,
-                            entry = entry,
-                            contentColor = contentColor,
-                            onChange = { onAction(ExpenseAddEditAction.OnEntryChanged) },
-                            onRemove = { onAction(ExpenseAddEditAction.OnEntryRemoved(index)) }
+                    Column {
+                        Text(
+                            modifier = Modifier.padding(
+                                start = 14.dp,
+                                top = 16.dp,
+                                end = 14.dp,
+                                bottom = 8.dp
+                            ),
+                            text = stringResource(Res.string.breakdown),
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontWeight = FontWeight.Medium,
+                            ),
                         )
 
-                        if (index < state.entries.lastIndex) {
-                            HorizontalDivider(
-//                                modifier = Modifier.padding(horizontal = 14.dp),
-                                color = contentColor.copy(alpha = 0.1f)
-                            )
+                        state.entries.forEachIndexed { index, entry ->
+                            Column {
+                                BreakdownEntryRow(
+                                    index = index,
+                                    entry = entry,
+                                    accentColor = accentColor,
+                                    onChange = { onAction(ExpenseAddEditAction.OnEntryChanged) },
+                                    onRemove = { onAction(ExpenseAddEditAction.OnEntryRemoved(index)) }
+                                )
+
+                                if (index < state.entries.lastIndex) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(horizontal = 14.dp), // Optional: inset dividers
+                                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+                                    )
+                                } else {
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                            }
                         }
                     }
                 }
@@ -315,8 +299,7 @@ fun ExpenseAddEditScreen(
         ExpenseDatePicker(
             dateTime = state.dateTime,
             onAction = onAction,
-            containerColor = containerColor,
-            contentColor = contentColor
+            accentColor = accentColor
         )
     }
 
@@ -326,8 +309,7 @@ fun ExpenseAddEditScreen(
                 onAction(ExpenseAddEditAction.OnCurrencySelected(currency))
             },
             onDismiss = { onAction(ExpenseAddEditAction.OnCurrencyPickerDismissed) },
-            containerColor = containerColor,
-            contentColor = contentColor
+            accentColor = accentColor
         )
     }
 
@@ -337,8 +319,6 @@ fun ExpenseAddEditScreen(
                 onAction(ExpenseAddEditAction.OnLocationSelected(location))
             },
             onDismiss = { onAction(ExpenseAddEditAction.OnLocationSearchDismissed) },
-            containerColor = containerColor,
-            contentColor = contentColor
         )
     }
 
@@ -351,8 +331,7 @@ fun ExpenseAddEditScreen(
 private fun MainExpenseCard(
     state: ExpenseAddEditState,
     onAction: (ExpenseAddEditAction) -> Unit,
-    contentColor: Color,
-    cardContainerColor: Color,
+    accentColor: Color,
     textFieldColors: TextFieldColors,
     focusRequester: FocusRequester
 ) {
@@ -379,16 +358,14 @@ private fun MainExpenseCard(
     }
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = cardContainerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier.fillMaxWidth()
                     .padding(start = 14.dp, top = 8.dp, end = 14.dp),
@@ -397,17 +374,14 @@ private fun MainExpenseCard(
             ) {
                 OutlinedButton(
                     onClick = { onAction(ExpenseAddEditAction.OnCurrencyClicked) },
-                    contentPadding = PaddingValues(
-                        horizontal = 4.dp,
-                        vertical = 2.dp
-                    ),
-                    border = BorderStroke(1.dp, contentColor.copy(alpha = 0.5f)),
+                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                     shape = RoundedCornerShape(8.dp),
                 ) {
                     Text(
                         text = state.currency,
                         style = MaterialTheme.typography.bodyLarge.copy(
-                            color = contentColor,
+                            color = accentColor,
                             fontWeight = FontWeight.Bold,
                         ),
                     )
@@ -415,16 +389,14 @@ private fun MainExpenseCard(
 
                 TextField(
                     state = state.amountState,
-                    modifier = Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester),
+                    modifier = Modifier.weight(1f).focusRequester(focusRequester),
                     lineLimits = TextFieldLineLimits.SingleLine,
                     inputTransformation = CurrencyInputTransformation,
                     placeholder = {
                         Text(
                             text = stringResource(Res.string.total_amount),
                             style = MaterialTheme.typography.titleMedium.copy(
-                                color = contentColor.copy(alpha = 0.5f),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 fontWeight = FontWeight.Medium,
                                 textAlign = TextAlign.End,
                             ),
@@ -432,8 +404,8 @@ private fun MainExpenseCard(
                         )
                     },
                     textStyle = MaterialTheme.typography.titleMedium.copy(
-                        color = contentColor,
-                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.End
                     ),
                     keyboardOptions = KeyboardOptions(
@@ -446,7 +418,7 @@ private fun MainExpenseCard(
             }
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 14.dp),
-                color = contentColor.copy(alpha = 0.1f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
             TextField(
                 state = state.titleState,
@@ -456,7 +428,7 @@ private fun MainExpenseCard(
                     Text(
                         text = stringResource(Res.string.what_is_it_for),
                         style = MaterialTheme.typography.titleMedium.copy(
-                            color = contentColor.copy(alpha = 0.5f),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             fontWeight = FontWeight.Medium,
                             textAlign = TextAlign.End,
                         ),
@@ -464,8 +436,8 @@ private fun MainExpenseCard(
                     )
                 },
                 textStyle = MaterialTheme.typography.titleMedium.copy(
-                    color = contentColor,
-                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.End
                 ),
                 keyboardOptions = KeyboardOptions(
@@ -477,15 +449,19 @@ private fun MainExpenseCard(
             )
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 14.dp),
-                color = contentColor.copy(alpha = 0.1f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
-            Spacer(modifier = Modifier.height(14.dp))
             LazyRow(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .fadingEdges(
+                        listState = rowState,
+                        contentPadding = PaddingValues(14.dp),
+                    ),
                 state = rowState,
-                contentPadding = PaddingValues(horizontal = 14.dp),
+                contentPadding = PaddingValues(14.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 items(ExpenseCategory.entries) { category ->
                     CategoryChip(
@@ -494,20 +470,13 @@ private fun MainExpenseCard(
                         onClick = { onAction(ExpenseAddEditAction.OnCategoryClicked(category)) },
                         clickable = !state.isLoading,
                         isSelected = state.selectedCategory == category,
-                        shape = FilterChipDefaults.shape,
-                        containerColor = Color.Transparent,
-                        selectedContainerColor = contentColor,
-                        contentColor = contentColor,
-                        selectedContentColor = cardContainerColor,
-                        iconContainerColor = Color.Transparent,
-                        borderColor = contentColor.copy(alpha = 0.5f)
+                        accentColor = accentColor
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(14.dp))
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 14.dp),
-                color = contentColor.copy(alpha = 0.1f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
             Row(
                 modifier = Modifier
@@ -520,7 +489,7 @@ private fun MainExpenseCard(
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
                     text = stringResource(Res.string.date),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = contentColor.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.End,
                     ),
@@ -530,7 +499,7 @@ private fun MainExpenseCard(
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
                     text = state.dateTime.formatToShortDisplay(),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = contentColor,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.End,
                     ),
@@ -538,7 +507,7 @@ private fun MainExpenseCard(
             }
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 14.dp),
-                color = contentColor.copy(alpha = 0.1f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
             )
             Row(
                 modifier = Modifier
@@ -551,7 +520,7 @@ private fun MainExpenseCard(
                     modifier = Modifier.padding(horizontal = 14.dp, vertical = 16.dp),
                     text = stringResource(Res.string.location),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = contentColor.copy(alpha = 0.5f),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.End,
                     ),
@@ -563,7 +532,7 @@ private fun MainExpenseCard(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleMedium.copy(
-                        color = contentColor,
+                        color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Medium,
                         textAlign = TextAlign.End,
                     ),
@@ -577,7 +546,7 @@ private fun MainExpenseCard(
 private fun BreakdownEntryRow(
     index: Int,
     entry: ExpenseEntryState,
-    contentColor: Color,
+    accentColor: Color,
     onChange: () -> Unit,
     onRemove: () -> Unit
 ) {
@@ -589,7 +558,7 @@ private fun BreakdownEntryRow(
             text = "${(index + 1)}.",
             modifier = Modifier.width(40.dp),
             style = MaterialTheme.typography.labelLarge.copy(
-                color = contentColor.copy(alpha = 0.5f),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
         )
@@ -601,8 +570,8 @@ private fun BreakdownEntryRow(
         }
 
         val customSelectionColors = TextSelectionColors(
-            handleColor = contentColor,
-            backgroundColor = contentColor.copy(alpha = 0.2f)
+            handleColor = accentColor,
+            backgroundColor = accentColor.copy(alpha = 0.2f)
         )
 
         CompositionLocalProvider(LocalTextSelectionColors provides customSelectionColors) {
@@ -611,7 +580,7 @@ private fun BreakdownEntryRow(
                 modifier = Modifier.weight(1f),
                 lineLimits = TextFieldLineLimits.SingleLine,
                 textStyle = MaterialTheme.typography.labelLarge.copy(
-                    color = contentColor,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.Start
                 ),
@@ -619,7 +588,7 @@ private fun BreakdownEntryRow(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next
                 ),
-                cursorBrush = SolidColor(contentColor),
+                cursorBrush = SolidColor(accentColor),
                 decorator = { innerTextField ->
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -629,7 +598,7 @@ private fun BreakdownEntryRow(
                             Text(
                                 text = stringResource(Res.string.item_name),
                                 style = MaterialTheme.typography.labelLarge.copy(
-                                    color = contentColor.copy(alpha = 0.5f),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontWeight = FontWeight.Medium,
                                     textAlign = TextAlign.Start
                                 )
@@ -642,21 +611,13 @@ private fun BreakdownEntryRow(
 
             Spacer(modifier = Modifier.width(10.dp))
 
-//            VerticalDivider(
-//                modifier = Modifier
-//                    .height(16.dp)
-//                    .padding(horizontal = 8.dp),
-//                thickness = 1.dp,
-//                color = contentColor.copy(alpha = 0.1f)
-//            )
-
             BasicTextField(
                 state = entry.amount,
                 modifier = Modifier.weight(1f),
                 lineLimits = TextFieldLineLimits.SingleLine,
                 inputTransformation = CurrencyInputTransformation,
                 textStyle = MaterialTheme.typography.labelLarge.copy(
-                    color = contentColor,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     textAlign = TextAlign.End
                 ),
@@ -664,7 +625,7 @@ private fun BreakdownEntryRow(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next
                 ),
-                cursorBrush = SolidColor(contentColor),
+                cursorBrush = SolidColor(accentColor),
                 decorator = { innerTextField ->
                     Box(
                         modifier = Modifier.fillMaxWidth(),
@@ -674,7 +635,7 @@ private fun BreakdownEntryRow(
                             Text(
                                 text = stringResource(Res.string.amount),
                                 style = MaterialTheme.typography.labelLarge.copy(
-                                    color = contentColor.copy(alpha = 0.5f),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     fontWeight = FontWeight.Medium,
                                     textAlign = TextAlign.End
                                 )
@@ -694,7 +655,7 @@ private fun BreakdownEntryRow(
                 Icon(
                     imageVector = Icons.Rounded.Cancel,
                     contentDescription = null,
-                    tint = contentColor.copy(alpha = 0.5f),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(20.dp)
                 )
             }
@@ -706,8 +667,7 @@ private fun BreakdownEntryRow(
 private fun ExpenseDatePicker(
     dateTime: LocalDateTime,
     onAction: (ExpenseAddEditAction) -> Unit,
-    containerColor: Color,
-    contentColor: Color
+    accentColor: Color
 ) {
     val datePickerState = rememberDatePickerState(
         initialSelectedDateMillis = dateTime.toInstant(TimeZone.currentSystemDefault())
@@ -716,7 +676,8 @@ private fun ExpenseDatePicker(
 
     MaterialTheme(
         colorScheme = MaterialTheme.colorScheme.copy(
-            primary = contentColor,
+            primary = accentColor,
+            onPrimary = MaterialTheme.colorScheme.surface
         )
     ) {
         @OptIn(ExperimentalMaterial3Api::class)
@@ -732,7 +693,7 @@ private fun ExpenseDatePicker(
                 }) {
                     Text(
                         text = stringResource(Res.string.ok),
-                        color = contentColor
+                        color = accentColor
                     )
                 }
             },
@@ -740,18 +701,24 @@ private fun ExpenseDatePicker(
                 TextButton(onClick = { onAction(ExpenseAddEditAction.OnDatePickerDismissed) }) {
                     Text(
                         text = stringResource(Res.string.cancel),
-                        color = contentColor
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             },
             colors = DatePickerDefaults.colors(
-                containerColor = containerColor,
+                containerColor = MaterialTheme.colorScheme.surface,
             )
         ) {
             DatePicker(
                 state = datePickerState,
                 colors = DatePickerDefaults.colors(
-                    containerColor = containerColor,
+                    containerColor = MaterialTheme.colorScheme.surface,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    headlineContentColor = MaterialTheme.colorScheme.onSurface,
+                    selectedDayContainerColor = accentColor,
+                    selectedDayContentColor = MaterialTheme.colorScheme.surface,
+                    todayContentColor = accentColor,
+                    todayDateBorderColor = accentColor
                 )
             )
         }

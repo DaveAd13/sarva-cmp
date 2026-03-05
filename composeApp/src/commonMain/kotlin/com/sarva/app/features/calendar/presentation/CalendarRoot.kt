@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,13 +41,10 @@ fun CalendarScreen(
     state: CalendarState,
     onAction: (CalendarAction) -> Unit,
 ) {
-    val containerColor = SarvaTheme.colors.calendarContainer
-    val contentColor = SarvaTheme.colors.calendarContent
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(containerColor)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -54,7 +52,7 @@ fun CalendarScreen(
         ) {
             Text(
                 text = "Calendar Here",
-                color = contentColor
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }

@@ -5,11 +5,15 @@ import com.sarva.core.domain.settings.model.ThemeConfig
 import com.sarva.core.domain.settings.model.UserSettings
 import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.core.domain.settings.repository.UserSettingsRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 
 class UserSettingsRepositoryImpl(
     private val dataSource: UserSettingsDataSource
 ) : UserSettingsRepository {
+
+    override val userSettings: Flow<UserSettings>
+        get() = dataSource.getUserSettings()
 
     override suspend fun getUserSettings(): UserSettings {
         return dataSource.getUserSettings().first()

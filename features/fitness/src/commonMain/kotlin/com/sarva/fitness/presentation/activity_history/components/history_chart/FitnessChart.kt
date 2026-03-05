@@ -94,7 +94,7 @@ fun FitnessChart(
     data: ChartUiData,
     modifier: Modifier = Modifier,
 ) {
-    val contentColor = SarvaTheme.colors.fitnessContent
+    val contentColor = SarvaTheme.colors.fitness
     val gridLineColor = contentColor.copy(alpha = 0.2f)
     val textMeasurer = rememberTextMeasurer()
     val textStyle = MaterialTheme.typography.labelSmall.copy(
@@ -197,7 +197,7 @@ private fun Preview() {
                 transition = ChartTransition.DEFAULT
             ),
             modifier = Modifier
-                .background(color = SarvaTheme.colors.fitnessContainer)
+                .background(color = SarvaTheme.colors.fitness)
                 .padding(16.dp)
         )
     }

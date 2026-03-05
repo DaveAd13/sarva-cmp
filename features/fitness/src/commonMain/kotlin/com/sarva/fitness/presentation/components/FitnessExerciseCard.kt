@@ -1,6 +1,5 @@
 package com.sarva.fitness.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,64 +36,66 @@ import kotlinx.datetime.LocalDateTime
 fun FitnessExerciseCard(
     exercise: FitnessExercise,
     symbols: DurationSymbols,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val color = SarvaTheme.colors.fitnessContent
-
-    Column(
-        modifier = modifier
-            .background(
-                color = color.copy(alpha = 0.1f),
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f, fill = false)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = exercise.icon,
-                    contentDescription = null,
-                    tint = color,
-                    modifier = Modifier.size(20.dp)
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f, fill = false)
+                ) {
+                    Icon(
+                        imageVector = exercise.icon,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.size(20.dp)
+                    )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = exercise.type,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
                 Text(
-                    text = exercise.type,
+                    text = DurationFormatter.format(exercise.durationSeconds, symbols),
                     style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.Bold
+                        fontFeatureSettings = "tnum"
                     ),
-                    color = color,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
 
             Text(
-                text = DurationFormatter.format(exercise.durationSeconds, symbols),
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontFeatureSettings = "tnum"
-                ),
-                color = color,
-                modifier = Modifier.padding(start = 8.dp)
+                text = "${exercise.startTime.time} - ${exercise.endTime.time}",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 28.dp)
             )
         }
-
-        Text(
-            text = "${exercise.startTime.time} - ${exercise.endTime.time}",
-            style = MaterialTheme.typography.labelMedium,
-            color = color.copy(alpha = 0.7f),
-            modifier = Modifier.padding(start = 28.dp)
-        )
     }
 }
 

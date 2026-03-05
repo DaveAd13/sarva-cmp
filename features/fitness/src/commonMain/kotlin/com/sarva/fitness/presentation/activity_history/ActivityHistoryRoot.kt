@@ -1,7 +1,6 @@
 package com.sarva.fitness.presentation.activity_history
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -96,8 +95,7 @@ fun ActivityHistoryScreen(
     onAction: (ActivityHistoryAction) -> Unit,
     onBack: () -> Unit
 ) {
-    val containerColor = SarvaTheme.colors.fitnessContainer
-    val contentColor = SarvaTheme.colors.fitnessContent
+    val accentColor = SarvaTheme.colors.fitness
     val periodTabSelection = remember(state.period) {
         PERIOD_TABS.indexOfFirst { it.activityPeriod == state.period }
     }
@@ -106,6 +104,7 @@ fun ActivityHistoryScreen(
     val durationSymbols = rememberDurationSymbols()
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = {
@@ -123,9 +122,9 @@ fun ActivityHistoryScreen(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = containerColor,
-                    titleContentColor = contentColor,
-                    navigationIconContentColor = contentColor,
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
                 )
             )
         },
@@ -133,7 +132,6 @@ fun ActivityHistoryScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(containerColor)
                 .padding(
                     start = contentPadding.calculateStartPadding(layoutDirection),
                     top = contentPadding.calculateTopPadding(),
@@ -143,8 +141,8 @@ fun ActivityHistoryScreen(
             PrimaryTabRow(
                 selectedTabIndex = periodTabSelection,
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = containerColor,
-                contentColor = contentColor,
+                containerColor = MaterialTheme.colorScheme.background,
+                contentColor = accentColor,
                 indicator = {
                     TabRowDefaults.PrimaryIndicator(
                         modifier = Modifier.tabIndicatorOffset(
@@ -152,7 +150,7 @@ fun ActivityHistoryScreen(
                             matchContentSize = true
                         ),
                         width = Dp.Unspecified,
-                        color = contentColor,
+                        color = accentColor,
                     )
                 }
             ) {
@@ -192,7 +190,7 @@ fun ActivityHistoryScreen(
                         IconButton(
                             onClick = { onAction(ActivityHistoryAction.GoBack) },
                             colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = contentColor
+                                contentColor = MaterialTheme.colorScheme.onSurface
                             )
                         ) {
                             Icon(
@@ -210,7 +208,7 @@ fun ActivityHistoryScreen(
                                 text = state.periodDateLabel,
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontWeight = FontWeight.Bold,
-                                    color = contentColor
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             )
 
@@ -219,7 +217,7 @@ fun ActivityHistoryScreen(
                                     state.periodOverallLabel.asStringC().lowercase()
                                 }",
                                 style = MaterialTheme.typography.bodyMedium.copy(
-                                    color = contentColor
+                                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                                 )
                             )
                         }
@@ -228,8 +226,10 @@ fun ActivityHistoryScreen(
                             onClick = { onAction(ActivityHistoryAction.GoForward) },
                             enabled = state.canGoForward,
                             colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = contentColor,
-                                disabledContentColor = contentColor.copy(alpha = 0.4f)
+                                contentColor = MaterialTheme.colorScheme.onSurface,
+                                disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(
+                                    alpha = 0.3f
+                                )
                             )
                         ) {
                             Icon(
@@ -269,12 +269,12 @@ fun ActivityHistoryScreen(
                                     onAction(ActivityHistoryAction.ChangeRecordType(type))
                                 },
                                 colors = ButtonDefaults.outlinedButtonColors(
-                                    containerColor = if (isSelected) contentColor else Color.Transparent,
-                                    contentColor = if (isSelected) containerColor else contentColor
+                                    containerColor = if (isSelected) accentColor.copy(alpha = 0.15f) else Color.Transparent,
+                                    contentColor = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurface
                                 ),
                                 border = BorderStroke(
                                     width = 1.dp,
-                                    color = contentColor.copy(alpha = if (isSelected) 1f else 0.3f)
+                                    color = if (isSelected) Color.Transparent else MaterialTheme.colorScheme.outline
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 contentPadding = PaddingValues(0.dp)
@@ -299,7 +299,7 @@ fun ActivityHistoryScreen(
                     Text(
                         text = stringResource(if (state.fitnessActivity.exercises.isEmpty()) Res.string.no_exercises else Res.string.recent_exercises),
                         style = MaterialTheme.typography.titleLarge.copy(
-                            color = contentColor
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         ),
                         modifier = Modifier.padding(horizontal = 20.dp).padding(top = 12.dp)
                     )

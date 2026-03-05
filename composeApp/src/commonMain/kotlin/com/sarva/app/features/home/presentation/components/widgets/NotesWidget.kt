@@ -26,11 +26,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarva.app.features.home.presentation.HomeState
@@ -42,18 +44,21 @@ fun NotesWidget(
     count: Int,
     recentNote: Note?,
     onWidgetClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    accentColor: Color = SarvaTheme.colors.notes
 ) {
-    val containerColor = SarvaTheme.colors.noteContainer
-    val contentColor = SarvaTheme.colors.noteContent
-
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         onClick = onWidgetClick,
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+//        border = BorderStroke(
+//            1.dp,
+//            MaterialTheme.colorScheme.outline
+//        )
     ) {
         Column(
             modifier = Modifier
@@ -69,25 +74,21 @@ fun NotesWidget(
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(contentColor.copy(alpha = 0.1f)),
+                        .background(accentColor.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Description,
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = accentColor,
                         modifier = Modifier.size(18.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
-
                 Text(
                     text = "$count Notes",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    color = contentColor.copy(alpha = 0.8f)
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -98,7 +99,7 @@ fun NotesWidget(
                     Text(
                         text = "Recent:",
                         style = MaterialTheme.typography.labelSmall,
-                        color = contentColor.copy(alpha = 0.6f)
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -107,8 +108,8 @@ fun NotesWidget(
                         text = recentNote.title,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Medium,
-                            color = contentColor
                         ),
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -116,12 +117,11 @@ fun NotesWidget(
             } else {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.alpha(0.7f)
                 ) {
                     Icon(
                         imageVector = Icons.Rounded.Edit,
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -129,8 +129,8 @@ fun NotesWidget(
                         text = "Jot something down...",
                         style = MaterialTheme.typography.bodyMedium.copy(
                             fontStyle = FontStyle.Italic,
-                            color = contentColor
-                        )
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -139,22 +139,10 @@ fun NotesWidget(
 }
 
 @Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        NotesWidget(
-            count = HomeState().notesCount,
-            recentNote = HomeState().recentNote,
-            onWidgetClick = {},
-            modifier = Modifier.aspectRatio(1f)
-        )
-    }
-}
-
-@Preview(name = "Dark")
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
+private fun Preview() {
+    SarvaTheme {
         NotesWidget(
             count = HomeState().notesCount,
             recentNote = HomeState().recentNote,

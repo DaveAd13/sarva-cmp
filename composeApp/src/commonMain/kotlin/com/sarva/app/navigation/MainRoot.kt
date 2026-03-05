@@ -69,20 +69,18 @@ fun MainScreen(
                             navigator.navigate(topLevelDestination)
                         },
                         icon = {
+                            val tint =
+                                MaterialTheme.colorScheme.onSurface.copy(if (isSelected) 1f else 0.4f)
+
                             Icon(
                                 imageVector = if (isSelected) data.selectedIcon else data.unselectedIcon,
                                 contentDescription = data.contentDescription.asStringC(),
                                 modifier = Modifier
                                     .size(32.dp),
+                                tint = tint
                             )
                         },
                         colors = NavigationBarItemDefaults.colors(
-                            unselectedIconColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                            selectedIconColor = MaterialTheme.colorScheme.onSurface,
-                            unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                                alpha = 0.5f
-                            ),
-                            selectedTextColor = MaterialTheme.colorScheme.onSurface,
                             indicatorColor = Color.Transparent
                         )
                     )

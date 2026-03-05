@@ -29,7 +29,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
+import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarva.designsystem.theme.SarvaTheme
@@ -37,19 +40,21 @@ import com.sarva.designsystem.theme.SarvaTheme
 @Composable
 fun PlacesWidget(
     onWidgetClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    accentColor: Color = SarvaTheme.colors.places
 ) {
-
-    val containerColor = SarvaTheme.colors.placesContainer
-    val contentColor = SarvaTheme.colors.placesContent
-
     Card(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         onClick = onWidgetClick,
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = containerColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+//        border = BorderStroke(
+//            1.dp,
+//            MaterialTheme.colorScheme.outline
+//        )
     ) {
         Column(
             modifier = Modifier
@@ -59,20 +64,19 @@ fun PlacesWidget(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Box(
                     modifier = Modifier
                         .size(32.dp)
                         .clip(CircleShape)
-                        .background(contentColor.copy(alpha = 0.1f)),
+                        .background(accentColor.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Place,
                         contentDescription = null,
-                        tint = contentColor,
+                        tint = accentColor,
                         modifier = Modifier.size(18.dp)
                     )
                 }
@@ -81,10 +85,8 @@ fun PlacesWidget(
 
                 Text(
                     text = "Places",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    color = contentColor.copy(alpha = 0.9f)
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
@@ -92,34 +94,30 @@ fun PlacesWidget(
                 Text(
                     text = "Discover",
                     style = MaterialTheme.typography.labelMedium,
-                    color = contentColor.copy(alpha = 0.7f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
                     text = "Nearby Spots",
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Medium,
-                    ),
-                    color = contentColor
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Medium),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             Button(
                 onClick = onWidgetClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = contentColor,
-                    contentColor = containerColor
+                    containerColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.1f),
+                    contentColor = MaterialTheme.colorScheme.onSurface
                 ),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(16.dp),
                 contentPadding = PaddingValues(horizontal = 12.dp),
                 modifier = Modifier
-                    .height(40.dp)
+                    .height(44.dp)
                     .fillMaxWidth()
             ) {
                 Text(
                     text = "Open Map",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    )
+                    style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
                 )
             }
         }
@@ -127,20 +125,10 @@ fun PlacesWidget(
 }
 
 @Preview(name = "Light")
+@Preview(name = "Dark", uiMode = UI_MODE_NIGHT_YES or UI_MODE_TYPE_NORMAL)
 @Composable
-private fun PreviewLight() {
-    SarvaTheme(darkTheme = false) {
-        PlacesWidget(
-            onWidgetClick = {},
-            modifier = Modifier.aspectRatio(1f)
-        )
-    }
-}
-
-@Preview(name = "Dark")
-@Composable
-private fun PreviewDark() {
-    SarvaTheme(darkTheme = true) {
+private fun Preview() {
+    SarvaTheme {
         PlacesWidget(
             onWidgetClick = {},
             modifier = Modifier.aspectRatio(1f)

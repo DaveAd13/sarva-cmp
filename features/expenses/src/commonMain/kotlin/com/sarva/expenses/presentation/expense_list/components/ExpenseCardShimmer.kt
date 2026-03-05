@@ -62,9 +62,9 @@ fun ExpenseCardShimmer(
 
     Card(
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
             .shimmer(shimmerInstance),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(containerColor = glassBase),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -73,14 +73,12 @@ fun ExpenseCardShimmer(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Icon
             Box(modifier = Modifier.size(48.dp).background(itemFill, CircleShape))
 
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Title & Date lines
                 Box(
                     modifier = Modifier.fillMaxWidth(0.6f).height(16.dp)
                         .background(itemFill, RoundedCornerShape(4.dp))
@@ -91,7 +89,6 @@ fun ExpenseCardShimmer(
                 )
             }
 
-            // Price block
             Box(
                 modifier = Modifier.width(60.dp).height(20.dp)
                     .background(itemFill, RoundedCornerShape(4.dp))
