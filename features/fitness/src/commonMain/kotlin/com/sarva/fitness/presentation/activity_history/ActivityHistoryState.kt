@@ -3,7 +3,6 @@ package com.sarva.fitness.presentation.activity_history
 import androidx.compose.runtime.Immutable
 import com.sarva.core.presentation.util.UiText
 import com.sarva.fitness.domain.model.ActivityPeriod
-import com.sarva.fitness.domain.model.ChartTransition
 import com.sarva.fitness.domain.model.FitnessActivity
 import com.sarva.fitness.domain.model.FitnessRecordType
 import kotlinx.collections.immutable.persistentListOf
@@ -25,5 +24,4 @@ data class ActivityHistoryState(
     val periodOverall: String = "0",
     val periodOverallLabel: UiText = UiText.DynamicString(""),
     val canGoForward: Boolean = false,
-    val transition: ChartTransition = ChartTransition.DEFAULT
 )

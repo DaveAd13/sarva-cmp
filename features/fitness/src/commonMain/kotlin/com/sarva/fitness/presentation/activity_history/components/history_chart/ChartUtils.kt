@@ -1,20 +1,15 @@
 package com.sarva.fitness.presentation.activity_history.components.history_chart
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.sarva.features.fitness.generated.resources.Res
 import com.sarva.features.fitness.generated.resources.months
 import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.fitness.domain.model.BarItem
-import com.sarva.fitness.domain.model.ChartTransition
 import com.sarva.fitness.domain.model.ChartUiData
 import com.sarva.fitness.domain.model.FitnessActivity
 import com.sarva.fitness.domain.model.FitnessRecordType
 import com.sarva.fitness.domain.model.FitnessRecords
-import com.sarva.fitness.presentation.activity_history.ActivityHistoryState
 import com.sarva.fitness.presentation.util.getDaysInMonth
 import com.sarva.fitness.presentation.util.getShortDayName
 import kotlinx.collections.immutable.persistentListOf
@@ -30,40 +25,11 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 @Composable
-fun rememberChartDataLatched(
-    state: ActivityHistoryState
-): ChartUiData {
-    // 1. Calculate the potential new data
-    val newData = rememberChartData(
-        fitnessActivity = state.fitnessActivity,
-        period = state.period,
-        anchorDate = state.anchorDate,
-        recordType = state.recordType,
-        transition = state.transition
-
-    )
-
-    // 2. Create a holder for the last *valid* data
-    // We initialize it with empty, but once it has data, we hold it.
-    var latchedData by remember { mutableStateOf(newData) }
-
-    // 3. Only update the latch if the new data is NOT empty and NOT loading
-    // This prevents the "empty flash" when switching periods
-    if (!state.isLoading && newData.bars.isNotEmpty()) {
-        latchedData = newData
-    }
-
-    // 4. Always return the latched data (which is the old valid data during loading)
-    return latchedData
-}
-
-@Composable
 fun rememberChartData(
     fitnessActivity: FitnessActivity,
     period: ActivityPeriod,
     anchorDate: LocalDate,
     recordType: FitnessRecordType,
-    transition: ChartTransition
 ): ChartUiData {
 
     val months = stringArrayResource(Res.array.months)
@@ -79,7 +45,7 @@ fun rememberChartData(
         }
 
         if (isDataMismatched) {
-            return@remember ChartUiData(persistentListOf(), 1f, transition)
+            return@remember ChartUiData(persistentListOf(), 1f)
         }
 
         fun getValue(record: FitnessRecords): Float = when (recordType) {
@@ -160,7 +126,7 @@ fun rememberChartData(
         val maxVal = bars.maxOfOrNull { it.value } ?: 0f
         val maxY = calculateMaxY(maxVal * 1.2f)
 
-        ChartUiData(bars, maxY, transition)
+        ChartUiData(bars, maxY)
     }
 }
 

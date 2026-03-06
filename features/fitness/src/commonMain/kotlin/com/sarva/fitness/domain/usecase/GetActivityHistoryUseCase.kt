@@ -7,8 +7,10 @@ import com.sarva.fitness.domain.model.calculateRange
 import com.sarva.fitness.domain.repository.FitnessRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
+import kotlin.coroutines.cancellation.CancellationException
 
 class GetActivityHistoryUseCase(
     private val repository: FitnessRepository
@@ -19,14 +21,15 @@ class GetActivityHistoryUseCase(
     ): Result<FitnessActivity> = withContext(Dispatchers.IO) {
         try {
             val (from, to) = period.calculateRange(anchorDate)
-            val records = repository.getRecordsHistory(period, anchorDate)
-            val exercises = repository.getExercises(from, to)
+            val records = async { repository.getRecordsHistory(period, anchorDate) }
+            val exercises = async { repository.getExercises(from, to) }
 
             Result.Success(
-                FitnessActivity(records, exercises)
+                FitnessActivity(records.await(), exercises.await())
             )
 
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             e.printStackTrace()
             Result.Failure(e)
         }

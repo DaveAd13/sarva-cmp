@@ -55,7 +55,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sarva.core.presentation.formatting.formatNumber
-import com.sarva.core.presentation.formatting.rememberDurationSymbols
 import com.sarva.core.presentation.util.LocalBackHandler
 import com.sarva.core.presentation.util.ObserveAsEvents
 import com.sarva.designsystem.theme.SarvaTheme
@@ -108,7 +107,6 @@ fun DailyActivityScreen(
     val accentColor = SarvaTheme.colors.fitness
     val successColor = SarvaTheme.colors.fitnessSuccess
 
-    val durationSymbols = rememberDurationSymbols()
     val isGoalReached = remember(state.steps, state.goal) {
         state.steps >= state.goal
     }
@@ -265,7 +263,6 @@ fun DailyActivityScreen(
             ) { exercise ->
                 FitnessExerciseCard(
                     exercise = exercise,
-                    symbols = durationSymbols,
                     modifier = Modifier
                         .fillMaxWidth()
                         .animateItem()

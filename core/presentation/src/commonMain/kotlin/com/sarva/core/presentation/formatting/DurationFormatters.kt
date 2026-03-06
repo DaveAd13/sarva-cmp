@@ -14,12 +14,12 @@ object DurationFormatter {
         val minutes = (secondsTotal % 3600) / 60
         val seconds = secondsTotal % 60
 
-        val h = hours.toString().padStart(2, '0')
+//        val h = hours.toString().padStart(2, '0')
         val m = minutes.toString().padStart(2, '0')
         val s = seconds.toString().padStart(2, '0')
 
         return if (hours > 0) {
-            "$h${symbols.hour} $m${symbols.minute} $s${symbols.second}"
+            "$hours${symbols.hour} $m${symbols.minute} $s${symbols.second}"
         } else {
             "$m${symbols.minute} $s${symbols.second}"
         }

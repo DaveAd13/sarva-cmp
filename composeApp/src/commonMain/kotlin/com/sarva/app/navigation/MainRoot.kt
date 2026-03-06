@@ -56,7 +56,7 @@ fun MainScreen(
                 modifier = Modifier
                     .hazeEffect(
                         state = hazeState,
-                        style = HazeMaterials.thick()
+                        style = HazeMaterials.thin()
                     ),
                 containerColor = Color.Transparent
             ) {

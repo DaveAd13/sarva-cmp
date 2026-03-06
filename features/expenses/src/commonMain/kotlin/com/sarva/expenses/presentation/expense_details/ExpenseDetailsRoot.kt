@@ -228,7 +228,6 @@ fun ExpenseDetailsScreen(
                         Spacer(modifier = Modifier.height(12.dp))
 
                         Surface(
-                            // Badge uses accent for brand identity
                             color = accentColor.copy(alpha = 0.1f),
                             shape = CircleShape
                         ) {
@@ -333,7 +332,7 @@ fun ExpenseDetailsScreen(
                                         color = MaterialTheme.colorScheme.onSurface
                                     )
                                     Text(
-                                        text = "${expense.currency} ${entry.price}",
+                                        text = formatCurrency(entry.price, expense.currency),
                                         style = MaterialTheme.typography.bodyLarge.copy(
                                             fontFeatureSettings = "tnum",
                                         ),
