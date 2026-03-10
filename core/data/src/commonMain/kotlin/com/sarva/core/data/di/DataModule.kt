@@ -18,6 +18,9 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
@@ -29,6 +32,7 @@ import org.koin.dsl.module
 expect val platformDataModule: Module
 
 val dataModule = module {
+    single { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
     single<DispatcherProvider> { DefaultDispatcherProvider() }
     single {
         HttpClient {

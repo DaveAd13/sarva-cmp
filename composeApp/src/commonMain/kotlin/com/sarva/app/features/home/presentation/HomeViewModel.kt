@@ -28,14 +28,7 @@ class HomeViewModel(
     val events = eventChannel.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
-            val settings = userSettingsRepository.getUserSettings()
-            _state.update {
-                it.copy(
-                    widgetLayout = settings.homeLayout,
-                )
-            }
-        }
+        observeUserSettings()
 
         viewModelScope.launch {
             if (hasHealthPermission()) {
@@ -45,6 +38,19 @@ class HomeViewModel(
                     )
                 }
                 loadDailyRecords()
+            }
+        }
+    }
+
+    private fun observeUserSettings() {
+        viewModelScope.launch {
+            userSettingsRepository.userSettings.collect { settings ->
+                _state.update {
+                    it.copy(
+                        widgetLayout = settings.homeLayout,
+                        stepGoal = settings.stepGoal,
+                    )
+                }
             }
         }
     }
@@ -126,8 +132,6 @@ class HomeViewModel(
                     WidgetLayout.TILED -> WidgetLayout.STACKED
                     WidgetLayout.STACKED -> WidgetLayout.TILED
                 }
-
-                _state.update { it.copy(widgetLayout = newLayout) }
 
                 viewModelScope.launch {
                     userSettingsRepository.updateHomeLayout(newLayout)

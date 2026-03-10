@@ -80,7 +80,7 @@ fun FitnessWidget(
                 FitnessCard(
                     onClick = onWidgetClick,
                     steps = state.steps,
-                    goal = state.stepsGoal,
+                    goal = state.stepGoal,
                     distance = state.distance,
                     calories = state.calories,
                     widgetLayout = state.widgetLayout

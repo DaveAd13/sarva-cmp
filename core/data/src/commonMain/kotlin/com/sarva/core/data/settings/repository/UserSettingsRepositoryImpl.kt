@@ -5,15 +5,23 @@ import com.sarva.core.domain.settings.model.ThemeConfig
 import com.sarva.core.domain.settings.model.UserSettings
 import com.sarva.core.domain.settings.model.WidgetLayout
 import com.sarva.core.domain.settings.repository.UserSettingsRepository
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 
 class UserSettingsRepositoryImpl(
-    private val dataSource: UserSettingsDataSource
+    private val dataSource: UserSettingsDataSource,
+    private val scope: CoroutineScope
 ) : UserSettingsRepository {
 
-    override val userSettings: Flow<UserSettings>
-        get() = dataSource.getUserSettings()
+    override val userSettings: StateFlow<UserSettings> = dataSource.getUserSettings()
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = UserSettings()
+        )
 
     override suspend fun getUserSettings(): UserSettings {
         return dataSource.getUserSettings().first()

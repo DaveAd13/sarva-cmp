@@ -6,7 +6,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class DailyActivityState(
     val isLoading: Boolean = false,
-    val goal: Int = DailyActivityViewModel.STEP_GOAL,
+    val goal: Int = 10000,
     val steps: Int = 0,
     val calories: String = "0",
     val distance: String = "0",

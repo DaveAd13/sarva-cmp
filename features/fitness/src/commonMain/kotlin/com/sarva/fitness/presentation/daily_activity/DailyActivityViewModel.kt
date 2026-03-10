@@ -2,6 +2,7 @@ package com.sarva.fitness.presentation.daily_activity
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarva.core.domain.settings.repository.UserSettingsRepository
 import com.sarva.core.domain.util.Result
 import com.sarva.core.presentation.formatting.formatNumber
 import com.sarva.fitness.domain.usecase.GetDailyRecordsUseCase
@@ -13,6 +14,8 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -25,16 +28,14 @@ import kotlin.time.Clock.System.now
 
 class DailyActivityViewModel(
     private val getDailyRecordsUseCase: GetDailyRecordsUseCase,
-    private val getExercisesUseCase: GetExercisesUseCase
+    private val getExercisesUseCase: GetExercisesUseCase,
+    private val userSettingsRepository: UserSettingsRepository
 ) : ViewModel() {
-
-    companion object {
-        const val STEP_GOAL = 10000
-    }
 
     private val _state = MutableStateFlow(DailyActivityState())
     val state = _state
         .onStart {
+            observeSettings()
             loadRecords()
             loadExercises()
         }.stateIn(
@@ -45,6 +46,22 @@ class DailyActivityViewModel(
 
     private val eventChannel = Channel<DailyActivityEvent>()
     val events = eventChannel.receiveAsFlow()
+
+    private fun observeSettings() {
+        viewModelScope.launch {
+            userSettingsRepository.userSettings
+                .map { it.stepGoal }
+                .distinctUntilChanged()
+                .collect { goal ->
+                    _state.update {
+                        it.copy(
+                            goal = goal,
+                            progress =  it.steps.toFloat() / goal
+                        )
+                    }
+                }
+        }
+    }
 
     fun loadRecords() {
         viewModelScope.launch(context = Dispatchers.IO) {
@@ -63,7 +80,7 @@ class DailyActivityViewModel(
                                 steps = steps.toInt(),
                                 distance = formatNumber(distance, 2),
                                 calories = formatNumber(calories.toInt()),
-                                progress = (steps.toFloat() / STEP_GOAL)
+                                progress = (steps.toFloat() / it.goal)
                             )
                         }
                     }
