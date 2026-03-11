@@ -12,7 +12,6 @@ import com.sarva.fitness.domain.model.FitnessRecordType
 import com.sarva.fitness.domain.model.FitnessRecords
 import com.sarva.fitness.presentation.util.getDaysInMonth
 import com.sarva.fitness.presentation.util.getShortDayName
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
@@ -30,23 +29,13 @@ fun rememberChartData(
     period: ActivityPeriod,
     anchorDate: LocalDate,
     recordType: FitnessRecordType,
+    stepGoal: Int = 0
 ): ChartUiData {
 
     val months = stringArrayResource(Res.array.months)
 
     return remember(fitnessActivity, period, anchorDate, recordType, months) {
         val records = fitnessActivity.records
-
-        val isDataMismatched = when (period) {
-            ActivityPeriod.DAY -> records.isNotEmpty() && records.size < 24
-            ActivityPeriod.WEEK -> records.isNotEmpty() && records.size != 7
-            ActivityPeriod.MONTH -> records.isNotEmpty() && (records.size !in 28..31)
-            ActivityPeriod.YEAR -> records.isNotEmpty() && records.size != 12
-        }
-
-        if (isDataMismatched) {
-            return@remember ChartUiData(persistentListOf(), 1f)
-        }
 
         fun getValue(record: FitnessRecords): Float = when (recordType) {
             FitnessRecordType.STEPS -> record.steps.toFloat()
@@ -56,12 +45,12 @@ fun rememberChartData(
 
         val bars = when (period) {
             ActivityPeriod.DAY -> {
-                (0..24).map { hour ->
+                (0 until 24).map { hour ->
                     val record = records.getOrNull(hour)
                     val value = record?.let { getValue(it) } ?: 0f
                     val label = when {
-                        hour % 4 == 0 -> "$hour"
-                        hour % 2 == 0 -> "•"
+                        hour == 0 || hour == 23 -> "$hour"
+                        hour % 4 == 0 && hour != 24 -> "$hour"
                         else -> ""
                     }
                     BarItem(value, label, anchorDate)
@@ -124,23 +113,52 @@ fun rememberChartData(
         }
 
         val maxVal = bars.maxOfOrNull { it.value } ?: 0f
-        val maxY = calculateMaxY(maxVal * 1.2f)
+        val showGoal = recordType == FitnessRecordType.STEPS && (period == ActivityPeriod.WEEK || period == ActivityPeriod.MONTH)
+        val maxY = calculateMaxY(maxVal, stepGoal.toFloat(), showGoal, recordType, period)
 
-        ChartUiData(bars, maxY)
+        ChartUiData(bars, maxY, showGoal, stepGoal)
     }
 }
 
-fun calculateMaxY(maxVal: Float): Float {
-    if (maxVal <= 0f) return 10f
-    if (maxVal < 10f) return maxVal
+fun calculateMaxY(
+    maxVal: Float,
+    goalValue: Float,
+    showGoal: Boolean,
+    recordType: FitnessRecordType,
+    period: ActivityPeriod
+): Float {
+    val referenceValue = if (showGoal) maxOf(maxVal, goalValue) else maxVal
 
-    val magnitude = 10f.pow(floor(log10(maxVal)))
+    val minFloor = when (recordType) {
+        FitnessRecordType.STEPS -> when (period) {
+            ActivityPeriod.DAY -> 50f
+            ActivityPeriod.YEAR -> 100000f
+            else -> 2000f
+        }
+        FitnessRecordType.CALORIES -> when (period) {
+            ActivityPeriod.DAY -> 50f
+            ActivityPeriod.YEAR -> 30000f
+            else -> 500f
+        }
+        FitnessRecordType.DISTANCE -> when (period) {
+            ActivityPeriod.DAY -> 0.5f
+            ActivityPeriod.YEAR -> 50f
+            else -> 2f
+        }
+    }
+
+    val rawMax = maxOf(referenceValue, minFloor) * 1.1f
+    val magnitude = 10f.pow(floor(log10(rawMax)))
 
     val step = when {
-        maxVal < 100f -> 10f
-        maxVal < 1000f -> 100f
+        rawMax < 10f -> 1f
+        rawMax < 50f -> 5f
+        rawMax < 200f -> 20f
+        rawMax < 1000f -> 100f
+        rawMax < 5000f -> 500f
+        period == ActivityPeriod.YEAR -> (magnitude / 2f)
         else -> magnitude / 10f
     }
 
-    return ceil(maxVal / step) * step
+    return ceil(rawMax / step) * step
 }

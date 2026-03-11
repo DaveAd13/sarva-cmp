@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_NIGHT_YES
 import androidx.compose.ui.tooling.preview.AndroidUiModes.UI_MODE_TYPE_NORMAL
@@ -98,6 +101,7 @@ fun ActivityHistoryScreen(
 ) {
     val scope = rememberCoroutineScope()
     val listState = rememberLazyListState()
+    val layoutDirection = LocalLayoutDirection.current
     val periodTabSelection = remember(state.period) {
         PERIOD_TABS.indexOfFirst { it.activityPeriod == state.period }
     }
@@ -106,6 +110,7 @@ fun ActivityHistoryScreen(
         period = state.period,
         anchorDate = state.anchorDate,
         recordType = state.recordType,
+        stepGoal = state.stepGoal
     )
 
     var showLoadingUI by remember { mutableStateOf(false) }
@@ -193,7 +198,9 @@ fun ActivityHistoryScreen(
             state = listState,
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(
+                start = contentPadding.calculateStartPadding(layoutDirection),
                 top = contentPadding.calculateTopPadding() + 18.dp,
+                end = contentPadding.calculateEndPadding(layoutDirection),
                 bottom = contentPadding.calculateBottomPadding() + 24.dp
             ),
         ) {

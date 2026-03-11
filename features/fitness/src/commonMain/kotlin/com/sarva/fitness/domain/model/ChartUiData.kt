@@ -6,4 +6,6 @@ import androidx.compose.runtime.Immutable
 data class ChartUiData(
     val bars: List<BarItem>,
     val maxRange: Float,
+    val showGoalLine: Boolean,
+    val stepGoal: Int
 )

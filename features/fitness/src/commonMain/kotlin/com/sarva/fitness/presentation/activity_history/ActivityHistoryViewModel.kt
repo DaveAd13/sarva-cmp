@@ -2,6 +2,7 @@ package com.sarva.fitness.presentation.activity_history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarva.core.domain.settings.repository.UserSettingsRepository
 import com.sarva.core.domain.util.Result
 import com.sarva.fitness.domain.model.ActivityPeriod
 import com.sarva.fitness.domain.model.FitnessRecordType
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
@@ -28,7 +30,8 @@ import kotlin.time.Clock
 @OptIn(ExperimentalCoroutinesApi::class)
 class ActivityHistoryViewModel(
     private val recordType: FitnessRecordType,
-    private val getActivityHistoryUseCase: GetActivityHistoryUseCase
+    private val getActivityHistoryUseCase: GetActivityHistoryUseCase,
+    private val userSettingsRepository: UserSettingsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ActivityHistoryState())
@@ -36,6 +39,8 @@ class ActivityHistoryViewModel(
 
     init {
         _state.update { it.copy(recordType = recordType) }
+
+        observeSettings()
 
         state
             .map { it.period to it.anchorDate }
@@ -58,6 +63,21 @@ class ActivityHistoryViewModel(
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun observeSettings() {
+        viewModelScope.launch {
+            userSettingsRepository.userSettings
+                .map { it.stepGoal }
+                .distinctUntilChanged()
+                .collect { goal ->
+                    _state.update {
+                        it.copy(
+                            stepGoal = goal
+                        )
+                    }
+                }
+        }
     }
 
     private fun updateState(

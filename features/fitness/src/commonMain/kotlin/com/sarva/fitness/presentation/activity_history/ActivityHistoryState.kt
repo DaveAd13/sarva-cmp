@@ -24,4 +24,5 @@ data class ActivityHistoryState(
     val periodOverall: String = "0",
     val periodOverallLabel: UiText = UiText.DynamicString(""),
     val canGoForward: Boolean = false,
+    val stepGoal: Int = 10000
 )
