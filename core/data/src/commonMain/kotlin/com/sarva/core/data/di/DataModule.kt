@@ -23,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
@@ -48,10 +47,10 @@ val dataModule = module {
         }
     }
     singleOf(::LocationApi)
-    factoryOf(::ExpenseRepositoryImpl) bind ExpenseRepository::class
-    factoryOf(::LocationRepositoryImpl) bind LocationRepository::class
-    factoryOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
-    factoryOf(::UserSettingsRepositoryImpl) bind UserSettingsRepository::class
+    singleOf(::ExpenseRepositoryImpl) bind ExpenseRepository::class
+    singleOf(::LocationRepositoryImpl) bind LocationRepository::class
+    singleOf(::CurrencyRepositoryImpl) bind CurrencyRepository::class
+    singleOf(::UserSettingsRepositoryImpl) bind UserSettingsRepository::class
     single {
         RecentCurrenciesDataSource(get(named("currency_ds")))
     }

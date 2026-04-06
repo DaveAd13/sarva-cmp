@@ -2,6 +2,7 @@ package com.sarva.app.di
 
 import com.sarva.app.features.calendar.presentation.CalendarViewModel
 import com.sarva.app.features.home.presentation.HomeViewModel
+import com.sarva.app.features.more.presentation.MoreViewModel
 import com.sarva.app.features.notes.presentation.note_add_edit.NoteAddEditViewModel
 import com.sarva.app.features.notes.presentation.note_details.NoteDetailsViewModel
 import com.sarva.app.features.notes.presentation.note_list.NoteListViewModel
@@ -16,6 +17,7 @@ import org.koin.dsl.module
 val appModule = module {
 
     viewModelOf(::HomeViewModel)
+    viewModelOf(::MoreViewModel)
 
     viewModelOf(::NoteListViewModel)
     viewModelOf(::NoteAddEditViewModel)
